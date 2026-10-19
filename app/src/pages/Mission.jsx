@@ -73,7 +73,7 @@ export default function Mission({ go }) {
 
   return (
     <>
-      <h2>{t('Mission 90')}</h2>
+      <h2>{t('Mission RRB')}</h2>
       {game.won && (
         <section className="card victory">
           <div className="lab2">{t('Victory')}</div>
@@ -109,7 +109,7 @@ export default function Mission({ go }) {
 
       <section className={'card station' + (s.cleared ? ' cleared' : '')}>
         <div className="row" style={{ justifyContent: 'space-between' }}>
-          <div><span className="lab2">{t('Station {k} of 13', { k: s.k })} · {t('Week {n}', { n: s.k })}</span><h2 style={{ marginTop: 2 }}>{t(s.name)}</h2></div>
+          <div><span className="lab2">{t('Station {k} of 13', { k: s.k })} · {t('Days {a} to {b}', { a: s.first, b: s.last })}</span><h2 style={{ marginTop: 2 }}>{t(s.name)}</h2></div>
           <span className={'pill ' + (s.cleared ? 'ok' : s.unlocked ? 'prio-Medium' : 'prio-Low')}>{t(s.cleared ? 'Cleared' : s.unlocked ? 'Open' : 'Locked')}</span>
         </div>
         <p className="small" style={{ margin: '6px 0 12px' }}>{t(s.focus)}</p>

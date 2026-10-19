@@ -2,7 +2,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { xpParts, rankInfo, BADGES } from './gamify.js'
 import { buildGame } from './game.js'
 import { notify, confetti, sfx } from './fx.jsx'
-import { useExam } from './exam.jsx'
+import { useExam, ExamCtx } from './exam.jsx'
+import { buildPlan, planDays } from './plan.js'
 import { useT } from './i18n.jsx'
 import { todayIso, parse, addDays } from './lib.js'
 
@@ -34,10 +35,14 @@ const Ctx = createContext(null)
 export const useApp = () => useContext(Ctx)
 
 export function Provider({ children }) {
-  const X = useExam()
+  const X0 = useExam()
   const t = useT()
+  const [state, setState] = useState(() => load(X0.id))
+  // The plan is built from the user's start date, exam date and daily hours.
+  const total = planDays(state.start, state.settings.examDate)
+  const hours = state.settings.dailyHours
+  const X = useMemo(() => ({ ...X0, ...buildPlan(X0.plan, { total, hours }) }), [X0, total, hours])
   const { DAYS, TOTAL } = X
-  const [state, setState] = useState(() => load(X.id))
   const [saveError, setSaveError] = useState(false)
   const first = useRef(true)
 
@@ -114,5 +119,5 @@ export function Provider({ children }) {
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const value = useMemo(() => ({ state, update, replace, saveError, xp: xpInfo, rank, game, ...derived }), [state, update, replace, saveError, xpInfo, rank, game, derived])
-  return <Ctx.Provider value={value}>{children}</Ctx.Provider>
+  return <Ctx.Provider value={value}><ExamCtx.Provider value={X}>{children}</ExamCtx.Provider></Ctx.Provider>
 }

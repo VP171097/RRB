@@ -39,7 +39,7 @@ export function xpParts(s, g, X) {
 
 const learned = (c) => c.X.TOPICS.filter((t) => c.s.topics[t.k]?.[0]).length
 const bestMock = (c) => (c.s.mocks.length ? Math.max(...c.s.mocks.map((m) => mockTotal(m, c.X.sections))) : 0)
-const perfectWeeks = (dayFull) => { let n = 0; for (let w = 0; w < 13; w++) { let ok = true; for (let d = 1; d <= 7; d++) if (!dayFull(w * 7 + d)) ok = false; if (ok) n++ } return n }
+const perfectWeeks = (dayFull, total) => { let n = 0; for (let w = 0; w * 7 + 7 <= total; w++) { let ok = true; for (let d = 1; d <= 7; d++) if (!dayFull(w * 7 + d)) ok = false; if (ok) n++ } return n }
 const tricksLearned = (s) => Object.values(s.tricks || {}).filter(Boolean).length
 
 // c = { s: state, X: exam data, streak, dayFull, game }
@@ -49,7 +49,7 @@ export const BADGES = [
   { id: 'st3', name: 'Three on Track', desc: 'Keep a 3-day streak', color: 'maths', test: (c) => c.streak >= 3 },
   { id: 'st7', name: 'Week on the Rails', desc: 'Keep a 7-day streak', color: 'maths', test: (c) => c.streak >= 7 },
   { id: 'st21', name: 'Express Service', desc: 'Keep a 21-day streak', color: 'maths', test: (c) => c.streak >= 21 },
-  { id: 'wk', name: 'Perfect Week', desc: 'Finish every task in a full week', color: 'ok', test: (c) => perfectWeeks(c.dayFull) >= 1 },
+  { id: 'wk', name: 'Perfect Week', desc: 'Finish every task in a full week', color: 'ok', test: (c) => perfectWeeks(c.dayFull, c.X.TOTAL) >= 1 },
   { id: 't50', name: 'Fifty Tasks', desc: 'Tick off 50 tasks', color: 'rev', test: (c) => tasksDone(c.s) >= 50 },
   { id: 't250', name: 'Long Haul', desc: 'Tick off 250 tasks', color: 'rev', test: (c) => tasksDone(c.s) >= 250 },
   { id: 'l10', name: 'Ten Topics', desc: 'Learn 10 topics', color: 'reas', test: (c) => learned(c) >= 10 },

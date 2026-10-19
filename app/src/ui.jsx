@@ -1,4 +1,4 @@
-import { planT } from './planText.js'
+import { planT, timeT } from './planText.js'
 import { useApp } from './store.jsx'
 import { useT } from './i18n.jsx'
 import { useExam } from './exam.jsx'
@@ -33,7 +33,7 @@ export function TaskList({ n }) {
                   onChange={(e) => update((s) => { if (e.target.checked) s.done[k] = 1; else delete s.done[k] })} />
                 <span className="box" />
                 <span className="tx">{planT(t, x.label)}{x.subs && <span className="tiny muted subcount"> · {sd}/{x.subs.length}</span>}</span>
-                <span className="tm">{t(x.t)}</span>
+                <span className="tm">{timeT(t, x.t)}</span>
               </label>
               {x.subs && (
                 <ul className="subtasks" aria-label={t('Sub-topics of {name}', { name: planT(t, x.label) })}>

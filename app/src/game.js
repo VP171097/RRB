@@ -1,6 +1,6 @@
 import { iso, addDays, parse, mockTotal } from './lib.js'
 
-// Mission 90: the 13 weeks are 13 stations. Clear a station by finishing 80% of its tasks
+// Mission RRB: the plan is split into 13 stations of equal length. Clear a station by finishing 80% of its tasks
 // and defeating its boss (log a mock or previous-year paper that beats the boss target).
 export const STATIONS = [
   { name: 'Platform One', boss: 'Baseline Beast', target: null, focus: 'Take your baseline mock. Any score counts.' },
@@ -27,21 +27,21 @@ export function buildGame(state, d, X) {
   ]
   const stations = STATIONS.map((st, i) => {
     const s = { ...st, focus: X.stationFocus?.[i] || st.focus }
-    const k = i + 1, first = i * 7 + 1
-    const days = DAYS.slice(i * 7, i * 7 + 7)
+    const k = i + 1, first = Math.floor((i * TOTAL) / 13) + 1, last = Math.max(first, Math.floor(((i + 1) * TOTAL) / 13))
+    const days = DAYS.slice(first - 1, last)
     const all = days.reduce((a, x) => a + x.tasks.length, 0)
     const done = days.reduce((a, x) => a + d.dayDone(x.n), 0)
     const taskPct = all ? Math.round((done * 100) / all) : 0
-    const startIso = iso(d.dateOf(first)), endIso = iso(d.dateOf(first + 6))
+    const startIso = iso(d.dateOf(first)), endIso = iso(d.dateOf(last))
     const mine = attacks.filter((a) => a.date >= startIso)
     const best = mine.length ? Math.max(...mine.map((a) => a.score)) : null
     const bossDown = s.target == null ? mine.length > 0 : best !== null && best >= s.target
-    const topics = TOPICS.filter((t) => t.day >= first && t.day <= first + 6)
+    const topics = TOPICS.filter((t) => t.day >= first && t.day <= last)
     const learned = topics.filter((t) => state.topics[t.k]?.[0]).length
     const tasksOk = taskPct >= STAR_TASK_PCT
     const cleared = tasksOk && bossDown
     const stars = (tasksOk ? 1 : 0) + (bossDown ? 1 : 0) + (taskPct === 100 && bossDown ? 1 : 0)
-    return { k, ...s, first, startIso, endIso, all, done, taskPct, best, bossDown, topics: topics.length, learned, tasksOk, cleared, stars }
+    return { k, ...s, first, last, startIso, endIso, all, done, taskPct, best, bossDown, topics: topics.length, learned, tasksOk, cleared, stars }
   })
   stations.forEach((s, i) => { s.unlocked = i === 0 || stations[i - 1].cleared || d.today >= s.first })
   const current = stations.find((s) => s.unlocked && !s.cleared) || stations[stations.length - 1]

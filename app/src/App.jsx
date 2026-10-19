@@ -28,10 +28,13 @@ import Rewards from './pages/Rewards.jsx'
 import Settings from './pages/Settings.jsx'
 import Lesson from './pages/Lesson.jsx'
 import Community from './pages/Community.jsx'
-import { CloudProvider } from './cloud.jsx'
+import { CloudProvider, useCloud } from './cloud.jsx'
+import { SignIn } from './pages/Community.jsx'
 import CloudSync from './CloudSync.jsx'
 import SyncDot from './SyncDot.jsx'
 import { LangSync } from './LangPicker.jsx'
+import AuthGate from './AuthGate.jsx'
+import { InstallButton } from './install.jsx'
 
 const PAGES = {
   today: Dashboard, mission: Mission, days: Days, topics: Topics, syllabus: Syllabus, tricks: Tricks, notes: Notes, pyq: Pyq, pyqpdf: PaperPdfs, library: Library,
@@ -49,6 +52,7 @@ function Shell() {
 
 function Inner() {
   const { g, set } = useGlobal()
+  const cloud = useCloud()
   const { t, packs } = useI18n()
   const X = useMemo(() => localizeExam(loadExam(g.exam), packs), [g.exam, packs])
   const [route, setRoute] = useState(readHash)
@@ -58,17 +62,20 @@ function Inner() {
     window.addEventListener('hashchange', on)
     return () => window.removeEventListener('hashchange', on)
   }, [])
-  useEffect(() => { document.title = `Mission 90 · ${t(X.name)}` }, [X.name, t])
+  useEffect(() => { document.title = `Mission RRB · ${t(X.name)}` }, [X.name, t])
   const go = (p) => { window.location.hash = '#/' + p; window.scrollTo(0, 0) }
   const grp = groupOf(page === 'lesson' ? 'days' : page)
   const Page = PAGES[page]
+  // Signing in is required whenever the cloud service is set up.
+  if (cloud?.enabled && cloud.ready && !cloud.user) return <AuthGate cloud={cloud} />
+  if (cloud?.enabled && !cloud.ready) return <div className="empty" style={{ margin: 40 }}>{t('Connecting…')}</div>
 
   return (
     <ExamCtx.Provider value={X}>
       <Provider key={X.id}>
         <header className="top">
           <div className="brand">
-            <h1>Mission 90 <SyncDot go={go} /></h1>
+            <h1>Mission RRB <SyncDot go={go} /></h1>
             <label className="examsel"><span className="sr">{t('Exam')}</span>
               <select value={g.exam} onChange={(e) => set({ exam: e.target.value })} aria-label={t('Choose exam')}>
                 {EXAM_LIST.map((e) => <option key={e.id} value={e.id}>{t(e.name)}</option>)}

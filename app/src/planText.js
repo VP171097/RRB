@@ -42,3 +42,11 @@ export function planT(t, s) {
   if (s.includes(' · ')) return s.split(' · ').map((p) => planT(t, p)).join(' · ')
   return t(s)
 }
+
+// Task times ("1.25 h", "50 min", "all day") scale with the daily hours, so translate them by pattern.
+export function timeT(t, s) {
+  const h = typeof s === 'string' && s.match(/^([\d.]+) h$/), m = typeof s === 'string' && s.match(/^(\d+) min$/)
+  if (h) return t('{n} h', { n: h[1] })
+  if (m) return t('{n} min', { n: m[1] })
+  return t(s)
+}

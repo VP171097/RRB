@@ -1,4 +1,15 @@
 export default {
+  'Install the app': 'ऐप इंस्टॉल करें',
+  'Add Mission RRB to your home screen or desktop. It opens like an app and keeps working offline with your last saved data.': 'Mission RRB को अपनी होम स्क्रीन या डेस्कटॉप पर जोड़ें। यह ऐप की तरह खुलता है और आपके आखिरी सेव डेटा के साथ ऑफ़लाइन भी चलता है।',
+
+  'Exam date (last day of the plan)': 'परीक्षा की तारीख (योजना का आखिरी दिन)',
+  'Your plan: {n} days ({w} weeks)': 'आपकी योजना: {n} दिन ({w} सप्ताह)',
+  'The plan has {n} days from the start date to the exam date, split into foundation, practice, previous-year papers, mocks and a final week. Task times are sized to {h} hours a day. Day {n} falls on {date}.': 'शुरू की तारीख से परीक्षा की तारीख तक योजना में {n} दिन हैं, जो नींव, प्रैक्टिस, पिछले वर्ष के पेपर, मॉक और आखिरी सप्ताह में बँटे हैं। कार्यों का समय रोज़ {h} घंटे के हिसाब से रखा गया है। दिन {n} की तारीख {date} है।',
+  'The plan needs at least {n} days. Pick a later exam date.': 'योजना के लिए कम से कम {n} दिन चाहिए। परीक्षा की तारीख आगे चुनें।',
+  'Plans longer than {n} days are shortened to {n} days.': '{n} दिन से लंबी योजना छोटी करके {n} दिन की कर दी जाती है।',
+  'Tight plan: about {n} topics per subject each study day. A later exam date gives you more room.': 'कसी हुई योजना: हर पढ़ाई वाले दिन हर विषय के लगभग {n} टॉपिक। परीक्षा की तारीख आगे रखने से ज़्यादा जगह मिलेगी।',
+  'Changing the dates rebuilds the plan. Ticks stay attached to their day and task number, so they may move to different work.': 'तारीख बदलने पर योजना फिर से बनती है। टिक दिन और कार्य संख्या से जुड़े रहते हैं, इसलिए वे दूसरे काम पर जा सकते हैं।',
+
   'Language': 'भाषा',
   'Everything on the site, including lessons, switches to this language. It is saved on your account if you are signed in.': 'लेसन सहित पूरी साइट इसी भाषा में दिखेगी। साइन इन होने पर यह आपके खाते में सेव हो जाती है।',
 

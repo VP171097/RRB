@@ -27,7 +27,7 @@ function SetupCard() {
 
 const MIN_PW = 8
 
-function SignIn({ cloud }) {
+export function SignIn({ cloud, bare = false }) {
   const { g, set } = useGlobal()
   const t = useT()
   const [mode, setMode] = useState('in')            // in | up | link | reset
@@ -55,9 +55,9 @@ function SignIn({ cloud }) {
   }
   const titles = { in: 'Sign in', up: 'Create an account', link: 'Email me a sign-in link', reset: 'Reset your password' }
   return (
-    <section className="card">
-      <h3>{t(titles[mode])}</h3>
-      <p className="small muted" style={{ margin: '4px 0 10px' }}>{t('Your progress saves to your account and follows you across devices. Groups only see your XP, streak, task percentage and best mock score.')}</p>
+    <section className={bare ? 'authform' : 'card'}>
+      {!bare && <h3>{t(titles[mode])}</h3>}
+      {!bare && <p className="small muted" style={{ margin: '4px 0 10px' }}>{t('Your progress saves to your account and follows you across devices. Groups only see your XP, streak, task percentage and best mock score.')}</p>}
       {(mode === 'in' || mode === 'up') && (
         <div className="seg" role="tablist" style={{ marginBottom: 10 }}>
           <button className="btn ghost sm" role="tab" aria-pressed={mode === 'in'} onClick={() => switchTo('in')}>{t('Sign in')}</button>
@@ -65,7 +65,7 @@ function SignIn({ cloud }) {
         </div>
       )}
       <form className="fgrid" onSubmit={submit}>
-        {mode === 'up' && <div className="f" style={{ gridColumn: '1/-1' }}>{t('Language')}<LangPicker value={g.lang} onChange={(lang) => set({ lang })} label={t('Language')} /></div>}
+        {mode === 'up' && !bare && <div className="f" style={{ gridColumn: '1/-1' }}>{t('Language')}<LangPicker value={g.lang} onChange={(lang) => set({ lang })} label={t('Language')} /></div>}
         {mode === 'up' && <label className="f" style={{ gridColumn: '1/-1' }}>{t('Name on leaderboards')}<input type="text" maxLength={24} value={name} onChange={(e) => setName(e.target.value)} placeholder={t('e.g. Asha')} autoComplete="nickname" /></label>}
         <label className="f" style={{ gridColumn: '1/-1' }}>{t(mode === 'link' || mode === 'reset' ? 'Email' : 'Email or phone number')}<input type="text" inputMode={mode === 'link' || mode === 'reset' ? 'email' : 'text'} required value={email} onChange={(e) => setEmail(e.target.value)} placeholder={mode === 'link' || mode === 'reset' ? 'you@example.com' : t('you@example.com or 98765 43210')} autoComplete="username" autoCapitalize="none" spellCheck="false" />
           {(mode === 'in' || mode === 'up') && <span className="tiny muted" style={{ textTransform: 'none', letterSpacing: 0, fontFamily: 'var(--f-body)', fontWeight: 400 }}>{t('A 10-digit number is read as an Indian mobile (+91). Use +country code for others.')}</span>}</label>
@@ -237,7 +237,7 @@ export default function Community() {
             <h3>{t('Privacy')}</h3>
             <p className="small" style={{ margin: '6px 0 10px' }}>{t('Group members see only your name, XP, streak, task percentage, topics learned and best mock score. Nobody can read your notes, errors or answers.')}</p>
             <div className="row">
-              <button className="btn ghost" onClick={() => cloud.signOut()}>{t('Sign out')}</button>
+              <button className="btn ghost" onClick={() => { if (window.confirm(t('Sign out? You will need to sign in again to open the app.'))) cloud.signOut() }}>{t('Sign out')}</button>
               {confirm
                 ? <><button className="btn" style={{ background: 'var(--bad)' }} onClick={async () => { const { error } = await cloud.client.rpc('delete_my_data'); if (!error) { notify(t('Cloud data deleted')); setConfirm(false); setRev((n) => n + 1) } }}>{t('Yes, delete my cloud data')}</button><button className="btn ghost" onClick={() => setConfirm(false)}>{t('Cancel')}</button></>
                 : <button className="btn ghost" onClick={() => setConfirm(true)}>{t('Delete my cloud data')}</button>}
