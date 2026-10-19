@@ -20,10 +20,8 @@ export const useCloud = () => useContext(Ctx)
 export function friendly(msg = '') {
   const m = msg.toLowerCase()
   if (m.includes('invalid login')) return 'Wrong email, phone number or password.'
-  if (m.includes('phone') && (m.includes('disabled') || m.includes('unsupported') || m.includes('not enabled'))) return 'Phone sign-up is not turned on for this site yet. Use your email instead.'
   if (m.includes('already registered') || m.includes('already been registered')) return 'That email or phone number already has an account. Try signing in.'
-  if (m.includes('email not confirmed')) return 'Please confirm your email first. Check your inbox for the link.'
-  if (m.includes('phone not confirmed')) return 'This phone number is not confirmed yet. Sign in with your email, or ask the site owner to turn off phone confirmation.'
+  if (m.includes('email not confirmed')) return 'This account is not confirmed yet. Email accounts: open the link we emailed. Phone accounts: the site owner needs to turn off "Confirm email".'
   if (m.includes('rate limit') || m.includes('too many')) return 'Too many emails sent. Wait a few minutes and try again.'
   if (m.includes('password should be')) return 'Choose a longer password (at least 8 characters).'
   if (m.includes('same password')) return 'Choose a password you have not used before.'
@@ -41,11 +39,15 @@ export function parseId(raw) {
   if (n.length < 11 || n.length > 15) return { error: 'Enter a 10-digit mobile number, or a number with its country code like +91 98765 43210.' }
   return { phone: '+' + n }
 }
-export const idKey = (id) => (id.phone ? { phone: id.phone } : { email: id.email })
+// Phone numbers sign in with a password only (no SMS/OTP): the number becomes a private email-style
+// login name, so only Supabase's Email provider is needed.
+const PHONE_DOMAIN = 'phone.mission90.app'
+export const idKey = (id) => ({ email: id.phone ? id.phone.replace('+', '') + '@' + PHONE_DOMAIN : id.email })
+const phoneOf = (email = '') => (email.endsWith('@' + PHONE_DOMAIN) ? '+' + email.split('@')[0] : '')
 
 const cleanName = (s) => (s || '').replace(/[^\p{L}\p{N} ._-]/gu, '').trim().slice(0, 24)
-export const nicknameOf = (user) => cleanName(user?.user_metadata?.nickname) || cleanName((user?.email || '').split('@')[0]) || 'Learner'
-export const accountLabel = (user) => user?.email || user?.phone || ''
+export const nicknameOf = (user) => cleanName(user?.user_metadata?.nickname) || (phoneOf(user?.email) ? '' : cleanName((user?.email || '').split('@')[0])) || 'Learner'
+export const accountLabel = (user) => phoneOf(user?.email) || user?.email || ''
 
 export function CloudProvider({ children }) {
   const [client, setClient] = useState(null)

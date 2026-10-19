@@ -41,7 +41,7 @@ function SignIn({ cloud }) {
       else if (mode === 'in') await cloud.signInPassword(id, password)
       else if (mode === 'up') {
         if (password.length < MIN_PW) { cloud.setError(`Choose a password of at least ${MIN_PW} characters.`) }
-        else { const r = await cloud.signUp(id, password, name); if (r.needsConfirm) setNote(id.phone ? 'Account created. Phone confirmation is on for this site, so you may need to sign in with your email instead.' : 'Account created. Check your email and open the confirmation link in this browser, then sign in.') }
+        else { const r = await cloud.signUp(id, password, name); if (r.needsConfirm) setNote(id.phone ? 'Account created, but this site still asks for confirmation. Ask the site owner to turn off "Confirm email", or sign up with your email.' : 'Account created. Check your email and open the confirmation link in this browser, then sign in.') }
       } else if (mode === 'link') { await cloud.signInEmail(id.email); setNote('Check your email for a sign-in link. Open it in this same browser.') }
       else { await cloud.resetPassword(id.email); setNote('If that email has an account, a reset link is on its way. Open it in this same browser.') }
     } catch { /* the message is shown below */ }

@@ -13,7 +13,7 @@ Needs Node 20 or newer.
 
     cd app
     npm install
-    npm run dev          # http://localhost:5173
+    npm run dev          # landing at http://localhost:5173/ , study app at http://localhost:5173/app/
 
 ## Publish on GitHub Pages
 

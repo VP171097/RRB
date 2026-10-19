@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
-const base = import.meta.env.BASE_URL
+// The study app lives at <site>/app/ and the PDFs at <site>/pdfs/, so resolve them from the page URL, one level up.
+const base = new URL('../', window.location.href).href
 export const pdfUrl = (folder, path) => `${base}pdfs/${folder}/` + path.split('/').map(encodeURIComponent).join('/')
 
 // Each exam folder (RRB_*/pdfs) is copied to public/pdfs/<folder> at build time, with a manifest.json.
