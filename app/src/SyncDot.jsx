@@ -13,7 +13,8 @@ export default function SyncDot({ go }) {
     read(); window.addEventListener('mission90-sync', read)
     return () => window.removeEventListener('mission90-sync', read)
   }, [])
-  if (!cloud?.enabled || !cloud.user) return null
+  if (!cloud?.enabled) return null
+  if (!cloud.user) return cloud.ready ? <button className="signin-btn" onClick={() => go('community')}>{t('Sign in')}</button> : null
   const label = t({ saved: 'Saved to your account', saving: 'Saving…', error: 'Could not save to your account', offline: 'Offline' }[s] || 'Signed in')
   const color = { saved: 'var(--ok)', saving: 'var(--signal)', error: 'var(--bad)' }[s] || 'var(--muted)'
   return <button className="syncdot" title={label} aria-label={label} onClick={() => go('community')}><i style={{ background: color }} /></button>
