@@ -379,3 +379,14 @@ details>summary h3{margin:0}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--c-typ:#22d3ee}}
 :root[data-theme="dark"]{--c-typ:#22d3ee}
 .s-typ{--sc:var(--c-typ)}
+
+/* Sub-topics under a task */
+.subtasks{list-style:none;margin:0;padding:0 0 10px 36px;display:grid;gap:2px}
+.subt{display:flex;gap:10px;align-items:flex-start;padding:5px 0;font-size:13.5px;color:var(--muted);cursor:pointer;line-height:1.3}
+.subt input{position:absolute;opacity:0;pointer-events:none}
+.sbox{flex:0 0 16px;height:16px;margin-top:1px;border:2px solid var(--line);border-radius:4px;display:grid;place-items:center;background:var(--surface)}
+.subt input:checked + .sbox{background:var(--sc,var(--ok));border-color:var(--sc,var(--ok))}
+.subt input:checked + .sbox::after{content:"";width:4px;height:8px;border:solid var(--sc-ink,#fff);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.subt input:checked ~ span:last-child{text-decoration:line-through;opacity:.7}
+.subt input:focus-visible + .sbox{outline:2px solid var(--accent);outline-offset:2px}
+.task + .subtasks{margin-top:-2px}

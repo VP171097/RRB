@@ -15,7 +15,10 @@ const G1 = ["Ancient History","Medieval History","Modern History I (1757-1857)",
 "Chemistry I: matter, atoms, acids","Chemistry II: metals, carbon, everyday chemistry","Biology I: human body","Biology II: diseases, nutrition, plants","Computers: basics, abbreviations","Environment & Ecology",
 "Railways GK I: history, zones","Railways GK II: trains, projects, budget","Sports & Games","Awards, Books & Authors","Important days, Organisations (UN, IMF...)","Space, Nuclear, Defence"]
 
+import subtopics from './subtopics.js'
+
 export default {
+  subtopics,
   subjects: [
     { key: 'maths', label: 'Maths', code: 'M', color: 'maths', kind: 'quant', h: '2 h', list1: M1,
       p6: ["Percentage + Profit & Loss + Ratio","SI, CI, Average, Mixture","Time & Work + Speed-Distance","Number System, HCF-LCM, Simplification","Algebra + Mensuration","Geometry + Trigonometry + Statistics"],

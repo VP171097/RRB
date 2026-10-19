@@ -10,7 +10,7 @@ const LEGACY_KEY = 'ntpc-prep-v2'
 export const blank = () => ({
   t: 0,
   start: todayIso(),
-  done: {}, topics: {}, syl: {}, ca: {}, pyq: {},
+  done: {}, subdone: {}, topics: {}, syl: {}, ca: {}, pyq: {},
   mocks: [], errors: [], log: {}, badges: {}, cards: {}, tricks: {}, quests: {}, cardsDay: {},
   quiz: { xp: 0, played: 0, best: 0, sharp: 0, daily: {} }, speed: { xp: 0, best: {}, daily: {} },
   settings: { dailyHours: 7, examDate: '' },

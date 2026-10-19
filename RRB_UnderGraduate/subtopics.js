@@ -1,0 +1,27 @@
+// Typing sub-topics. Maths, Reasoning and GA sub-topics come from the Graduate file.
+export default {
+ "Posture, finger placement and home row": "Sitting posture; Finger positions; Home row ASDF JKL;; Using the F and J bumps",
+ "Top row keys": "Q to P reach; Finger assignments; Top-row drills",
+ "Bottom row keys": "Z to M reach; Finger assignments; Bottom-row drills",
+ "Number row without looking": "Finger assignments; Number drills; Symbols above numbers",
+ "Shift, capitals and punctuation": "Shift with the opposite hand; Capital letters; Punctuation marks; Space bar with the thumb",
+ "Common English words": "Top 100 words; Word drills; Short sentences",
+ "English: build to 15 wpm": "Paragraph drills; Steady rhythm; Reducing errors",
+ "English accuracy drills": "Error-free lines; Slow and steady runs; Fixing weak keys",
+ "Hindi Inscript layout: basics": "Inscript layout map; Vowels left, consonants right; Home row",
+ "Hindi: home row and matras": "Home row letters; Matras; Common words",
+ "English paragraphs: 20 wpm": "Paragraph timing; Accuracy above 95%; Pacing",
+ "Hindi paragraphs: 15 wpm": "Short paragraphs; Matras in flow; Accuracy",
+ "Capitalisation and punctuation drills": "Sentence starts; Proper nouns; Commas and full stops; Quotation marks",
+ "Proofreading while typing": "Reading ahead; Spotting errors; Making corrections",
+ "Numbers and symbols in text": "Figures in sentences; Currency and percent; Brackets and slashes",
+ "English: 25 wpm target": "Speed building; Accuracy at pace; Timed 5-minute runs",
+ "Hindi: 20 wpm target": "Speed building; Accuracy at pace; Timed 5-minute runs",
+ "Official letter and notice format": "Letter layout; Notice format; Dates and references; Practice passages",
+ "Hindi conjuncts and special characters": "Common conjuncts; Special characters; Practice words",
+ "Error-free runs": "Zero-error passages; Pace control; Review of mistakes",
+ "English: 30 wpm target": "Speed building; Accuracy at pace; Timed 5 and 10-minute runs",
+ "Hindi: 25 wpm target": "Speed building; Accuracy at pace; Timed 5 and 10-minute runs",
+ "Mixed passages": "English and Hindi mix; Numbers and symbols; Timed runs",
+ "Long passages: stamina": "10-minute runs; Posture and breaks; Pace management"
+}

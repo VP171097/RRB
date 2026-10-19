@@ -29,7 +29,10 @@ const G1 = [
   'Current affairs: national', 'Current affairs: international', 'Current affairs: sports and awards', 'Current affairs: appointments and reports', '*Static GK revision', '*GA revision test (20 Q)',
 ]
 
+import subtopics from './subtopics.js'
+
 export default {
+  subtopics,
   subjects: [
     { key: 'sci', label: 'Science', code: 'S', color: 'sci', kind: 'knowledge', h: '1.5 h', list1: S1,
       p6: ['Physics: mixed MCQs', 'Chemistry: mixed MCQs', 'Biology: mixed MCQs', 'Motion, force and energy sets', 'Electricity, light and magnetism sets', 'Sectional test: Science (25 Q, 20 min)'],

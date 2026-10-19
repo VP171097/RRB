@@ -21,14 +21,32 @@ export function TaskList({ n }) {
         </div>
         {g.items.map((x) => {
           const k = n + '.' + x.i
+          const sd = x.subs ? x.subs.filter((_, j) => state.subdone[k + '.' + j]).length : 0
           return (
-            <label className="task" key={k}>
-              <input type="checkbox" checked={!!state.done[k]}
-                onChange={(e) => update((s) => { if (e.target.checked) s.done[k] = 1; else delete s.done[k] })} />
-              <span className="box" />
-              <span className="tx">{x.label}</span>
-              <span className="tm">{x.t}</span>
-            </label>
+            <div key={k}>
+              <label className="task">
+                <input type="checkbox" checked={!!state.done[k]}
+                  onChange={(e) => update((s) => { if (e.target.checked) s.done[k] = 1; else delete s.done[k] })} />
+                <span className="box" />
+                <span className="tx">{x.label}{x.subs && <span className="tiny muted subcount"> · {sd}/{x.subs.length}</span>}</span>
+                <span className="tm">{x.t}</span>
+              </label>
+              {x.subs && (
+                <ul className="subtasks" aria-label={'Sub-topics of ' + x.label}>
+                  {x.subs.map((st, j) => {
+                    const sk = k + '.' + j
+                    return (
+                      <li key={sk}>
+                        <label className="subt">
+                          <input type="checkbox" checked={!!state.subdone[sk]} onChange={(e) => update((s) => { if (e.target.checked) s.subdone[sk] = 1; else delete s.subdone[sk] })} />
+                          <span className="sbox" /><span>{st}</span>
+                        </label>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+            </div>
           )
         })}
       </section>

@@ -29,12 +29,17 @@ export function buildPlan(spec) {
   for (let n = 1; n <= TOTAL; n++) {
     const w = Math.floor((n - 1) / 7) + 1, d = ((n - 1) % 7) + 1
     const t = []
-    const add = (g, l, time) => t.push({ g, l, t: time })
+    const add = (g, l, time, sub) => t.push(sub ? { g, l, t: time, subs: sub.split(';').map((x) => x.trim()) } : { g, l, t: time })
     let sum = ''
     if (w <= 5) {
       if (d <= 6) {
         const i = (w - 1) * 6 + (d - 1)
-        subs.forEach((s) => add(s.label, clean(s.list1[i]), s.h))
+        subs.forEach((s) => {
+          const raw = s.list1[i]
+          // Practice and revision days list the week's topics as their checklist.
+          const week = s.list1.slice((w - 1) * 6, w * 6).filter(isTopic).join(';')
+          add(s.label, clean(raw), s.h, isTopic(raw) ? spec.subtopics?.[raw] : (week || undefined))
+        })
         sum = subs.map((s) => clean(s.list1[i])).join(' · ')
       } else if (w === 1) {
         mock++
@@ -123,6 +128,6 @@ export function buildPlan(spec) {
 
 export function groupTasks(day, groups) {
   const map = {}
-  day.tasks.forEach((t, i) => { (map[t.g] ||= []).push({ i, t: t.t, label: t.l }) })
+  day.tasks.forEach((t, i) => { (map[t.g] ||= []).push({ i, t: t.t, label: t.l, subs: t.subs }) })
   return groups.filter((g) => map[g]).map((g) => ({ name: g, items: map[g] }))
 }

@@ -2,6 +2,7 @@
 // Typing track for the typing skill test (clerk-cum-typist posts). Entries starting with * are
 // practice or revision days, not topics.
 import graduate from '../RRB_Graduate/plan.js'
+import typingSubtopics from './subtopics.js'
 
 const T1 = [
   'Posture, finger placement and home row', 'Top row keys', 'Bottom row keys', 'Number row without looking', 'Shift, capitals and punctuation', '*Accuracy check: 5-minute drill',
@@ -12,6 +13,7 @@ const T1 = [
 ]
 
 export default {
+  subtopics: { ...graduate.subtopics, ...typingSubtopics },
   subjects: [
     ...graduate.subjects,
     { key: 'typing', label: 'Typing', code: 'T', color: 'typ', kind: 'skill', h: '30 min', list1: T1,
