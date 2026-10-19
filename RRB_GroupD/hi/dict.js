@@ -946,4 +946,6 @@ export default {
 "Science and technology + computers (revise, then an MCQ set)": "विज्ञान और प्रौद्योगिकी + कंप्यूटर (दोहराएँ, फिर MCQ का एक सेट)",
 "Puzzles + seating (timed sets, then review)": "पहेलियाँ + बैठने की व्यवस्था (समयबद्ध सेट, फिर समीक्षा)",
 "Railways GK + static GK (revise, then an MCQ set)": "रेलवे GK + स्टैटिक GK (दोहराएँ, फिर MCQ का एक सेट)",
+  'General Science for Indian Railways (Disha Publications, 631 pages, PDF, 80 MB)': 'भारतीय रेलवे के लिए सामान्य विज्ञान (Disha Publications, 631 पेज, PDF, 80 MB)',
+  'Railway-exam General Science. Opens the shared Google Drive file': 'रेलवे परीक्षा का सामान्य विज्ञान। शेयर की गई Google Drive फ़ाइल खुलती है',
 }
