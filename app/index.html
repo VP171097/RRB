@@ -30,9 +30,10 @@ a{color:inherit}
 .logo{font-weight:800;letter-spacing:-.02em;text-decoration:none;display:flex;gap:8px;align-items:center}
 .logo b{background:var(--brand);color:#fff;border-radius:8px;padding:2px 8px;font-size:14px}
 .nav .sp{flex:1}
+.nav a,.nav .logo,.btn.sm{white-space:nowrap}
 .nav a.l{color:var(--mute);text-decoration:none;font-size:14px}
 .nav a.l:hover{color:var(--ink)}
-@media(max-width:700px){.nav a.l{display:none}}
+@media(max-width:700px){.nav .wrap{gap:8px}.logo{font-size:15px}.btn.sm{padding:9px 11px;font-size:13px}.nav a.l{display:none}.nav a.l.signin{display:inline-block;color:var(--ink);font-weight:600}}
 .btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:12px 20px;font:600 16px/1 inherit;background:var(--accent);color:#1b1200;text-decoration:none;cursor:pointer;box-shadow:0 8px 22px rgba(255,159,28,.35);transition:transform .15s}
 .btn:hover{transform:translateY(-2px)}
 .btn.sm{padding:9px 14px;font-size:14px;box-shadow:none}
@@ -102,7 +103,7 @@ footer a{color:var(--brand)}
   <a class="logo" href="#top"><b>M90</b> Mission 90</a><span class="sp"></span>
   <a class="l" href="#exams">Exams</a><a class="l" href="#features">Features</a><a class="l" href="#how">How it works</a><a class="l" href="#faq">FAQ</a>
   <button class="tg" id="tg" aria-label="Toggle dark mode">◐</button>
-  <a class="l" href="./app/#/community">Sign in</a>
+  <a class="l signin" href="./app/#/community">Sign in</a>
   <a class="btn sm" href="./app/">Open the app</a>
 </div></header>
 
@@ -112,7 +113,7 @@ footer a{color:var(--brand)}
     <div class="eyebrow" style="color:#ffd089">RRB NTPC · Graduate · Undergraduate · Group D</div>
     <h1>Ride the plan. <em>Score 90+.</em></h1>
     <p class="lead">A free 91-day journey with daily tasks, step-by-step lessons, maths and reasoning tricks, quizzes and a mock tracker. Every day you finish moves your train one station closer to the exam.</p>
-    <div class="cta"><a class="btn" href="./app/">Start the journey →</a><a class="btn ghost" href="#features">See what's inside</a></div>
+    <div class="cta"><a class="btn" href="./app/">Start the journey →</a><a class="btn ghost" href="./app/#/community">Sign in / Create account</a><a class="btn ghost" href="#features">See what's inside</a></div>
   </div>
   <div class="ph"><img src="./landing/today.jpg" alt="Today screen of the Mission 90 app" width="780" height="1688" /></div>
 </div></div>
@@ -195,7 +196,7 @@ footer a{color:var(--brand)}
 <section class="final" style="padding-top:0"><div class="wrap">
   <h2>Your train is on the platform</h2>
   <p class="sub" style="margin-inline:auto">Day 1 takes about an hour. Open the app and board.</p>
-  <a class="btn" href="./app/">Start Day 1 →</a>
+  <a class="btn" href="./app/">Start Day 1 →</a> <a class="btn sm" style="background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none" href="./app/#/community">Sign in</a>
 </div></section>
 </main>
 
