@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useCloud, nicknameOf, googleEnabled } from '../cloud.jsx'
+import { useCloud, nicknameOf, googleEnabled, parseId, accountLabel } from '../cloud.jsx'
 import { useExam } from '../exam.jsx'
 import { useApp } from '../store.jsx'
 import { Pager, usePaged } from '../pager.jsx'
@@ -34,13 +34,16 @@ function SignIn({ cloud }) {
   const switchTo = (m) => { setMode(m); setNote(''); cloud.setError('') }
   const submit = async (e) => {
     e.preventDefault(); setBusy(true); setNote(''); cloud.setError('')
+    const id = parseId(email)
     try {
-      if (mode === 'in') await cloud.signInPassword(email.trim(), password)
+      if (id.error) cloud.setError(id.error)
+      else if ((mode === 'link' || mode === 'reset') && id.phone) cloud.setError('Sign-in links and password resets work with an email address. Enter your email here.')
+      else if (mode === 'in') await cloud.signInPassword(id, password)
       else if (mode === 'up') {
         if (password.length < MIN_PW) { cloud.setError(`Choose a password of at least ${MIN_PW} characters.`) }
-        else { const r = await cloud.signUp(email.trim(), password, name); if (r.needsConfirm) setNote('Account created. Check your email and open the confirmation link in this browser, then sign in.') }
-      } else if (mode === 'link') { await cloud.signInEmail(email.trim()); setNote('Check your email for a sign-in link. Open it in this same browser.') }
-      else { await cloud.resetPassword(email.trim()); setNote('If that email has an account, a reset link is on its way. Open it in this same browser.') }
+        else { const r = await cloud.signUp(id, password, name); if (r.needsConfirm) setNote(id.phone ? 'Account created. Phone confirmation is on for this site, so you may need to sign in with your email instead.' : 'Account created. Check your email and open the confirmation link in this browser, then sign in.') }
+      } else if (mode === 'link') { await cloud.signInEmail(id.email); setNote('Check your email for a sign-in link. Open it in this same browser.') }
+      else { await cloud.resetPassword(id.email); setNote('If that email has an account, a reset link is on its way. Open it in this same browser.') }
     } catch { /* the message is shown below */ }
     setBusy(false)
   }
@@ -57,7 +60,8 @@ function SignIn({ cloud }) {
       )}
       <form className="fgrid" onSubmit={submit}>
         {mode === 'up' && <label className="f" style={{ gridColumn: '1/-1' }}>Name on leaderboards<input type="text" maxLength={24} value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Asha" autoComplete="nickname" /></label>}
-        <label className="f" style={{ gridColumn: '1/-1' }}>Email<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email" /></label>
+        <label className="f" style={{ gridColumn: '1/-1' }}>{mode === 'link' || mode === 'reset' ? 'Email' : 'Email or phone number'}<input type="text" inputMode={mode === 'link' || mode === 'reset' ? 'email' : 'text'} required value={email} onChange={(e) => setEmail(e.target.value)} placeholder={mode === 'link' || mode === 'reset' ? 'you@example.com' : 'you@example.com or 98765 43210'} autoComplete="username" autoCapitalize="none" spellCheck="false" />
+          {(mode === 'in' || mode === 'up') && <span className="tiny muted" style={{ textTransform: 'none', letterSpacing: 0, fontFamily: 'var(--f-body)', fontWeight: 400 }}>A 10-digit number is read as an Indian mobile (+91). Use +country code for others.</span>}</label>
         {(mode === 'in' || mode === 'up') && (
           <label className="f" style={{ gridColumn: '1/-1' }}>Password
             <span className="pwrow"><input type={show ? 'text' : 'password'} required minLength={mode === 'up' ? MIN_PW : undefined} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === 'up' ? 'new-password' : 'current-password'} />
@@ -207,7 +211,7 @@ export default function Community() {
       {cloud.enabled && cloud.user && (
         <>
           <section className="card">
-            <div className="row" style={{ justifyContent: 'space-between' }}><h3>Your account</h3><span className="small muted">{cloud.user.email}</span></div>
+            <div className="row" style={{ justifyContent: 'space-between' }}><h3>Your account</h3><span className="small muted">{accountLabel(cloud.user)}</span></div>
             <form className="row" style={{ marginTop: 10 }} onSubmit={async (e) => { e.preventDefault(); try { await cloud.setNickname(nick); notify('Name saved') } catch { /* shown below */ } }}>
               <label className="f" style={{ flex: '1 1 180px' }}>Name shown on leaderboards<input type="text" value={nick} maxLength={24} onChange={(e) => setNick(e.target.value)} /></label>
               <button className="btn" type="submit" style={{ alignSelf: 'end' }}>Save name</button>

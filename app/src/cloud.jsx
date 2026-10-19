@@ -19,9 +19,11 @@ export const useCloud = () => useContext(Ctx)
 // Turns Supabase's messages into plain language.
 export function friendly(msg = '') {
   const m = msg.toLowerCase()
-  if (m.includes('invalid login')) return 'Wrong email or password.'
-  if (m.includes('already registered') || m.includes('already been registered')) return 'That email already has an account. Try signing in.'
+  if (m.includes('invalid login')) return 'Wrong email, phone number or password.'
+  if (m.includes('phone') && (m.includes('disabled') || m.includes('unsupported') || m.includes('not enabled'))) return 'Phone sign-up is not turned on for this site yet. Use your email instead.'
+  if (m.includes('already registered') || m.includes('already been registered')) return 'That email or phone number already has an account. Try signing in.'
   if (m.includes('email not confirmed')) return 'Please confirm your email first. Check your inbox for the link.'
+  if (m.includes('phone not confirmed')) return 'This phone number is not confirmed yet. Sign in with your email, or ask the site owner to turn off phone confirmation.'
   if (m.includes('rate limit') || m.includes('too many')) return 'Too many emails sent. Wait a few minutes and try again.'
   if (m.includes('password should be')) return 'Choose a longer password (at least 8 characters).'
   if (m.includes('same password')) return 'Choose a password you have not used before.'
@@ -29,8 +31,21 @@ export function friendly(msg = '') {
   return msg || 'Something went wrong.'
 }
 
+// Accepts an email or a phone number. Phone numbers without a country code are treated as Indian (+91).
+export function parseId(raw) {
+  const t = (raw || '').trim()
+  if (t.includes('@')) return /^\S+@\S+\.\S+$/.test(t) ? { email: t.toLowerCase() } : { error: 'Enter a valid email address.' }
+  const digits = t.replace(/[^\d]/g, '')
+  if (!digits) return { error: 'Enter an email or a phone number.' }
+  let n = t.startsWith('+') ? digits : digits.length === 10 ? '91' + digits : digits.length === 11 && digits.startsWith('0') ? '91' + digits.slice(1) : digits
+  if (n.length < 11 || n.length > 15) return { error: 'Enter a 10-digit mobile number, or a number with its country code like +91 98765 43210.' }
+  return { phone: '+' + n }
+}
+export const idKey = (id) => (id.phone ? { phone: id.phone } : { email: id.email })
+
 const cleanName = (s) => (s || '').replace(/[^\p{L}\p{N} ._-]/gu, '').trim().slice(0, 24)
 export const nicknameOf = (user) => cleanName(user?.user_metadata?.nickname) || cleanName((user?.email || '').split('@')[0]) || 'Learner'
+export const accountLabel = (user) => user?.email || user?.phone || ''
 
 export function CloudProvider({ children }) {
   const [client, setClient] = useState(null)
@@ -58,12 +73,12 @@ export function CloudProvider({ children }) {
     const wrap = async (fn) => { setError(''); try { return await fn() } catch (e) { setError(friendly(e.message)); throw e } }
     return {
       signInEmail: (email) => wrap(async () => { const { error: e } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: redirect } }); if (e) throw e }),
-      signUp: (email, password, nickname) => wrap(async () => {
-        const { data, error: e } = await client.auth.signUp({ email, password, options: { data: { nickname: cleanName(nickname) }, emailRedirectTo: redirect } })
+      signUp: (id, password, nickname) => wrap(async () => {
+        const { data, error: e } = await client.auth.signUp({ ...idKey(id), password, options: { data: { nickname: cleanName(nickname) }, emailRedirectTo: redirect } })
         if (e) throw e
         return { needsConfirm: !data.session }
       }),
-      signInPassword: (email, password) => wrap(async () => { const { error: e } = await client.auth.signInWithPassword({ email, password }); if (e) throw e }),
+      signInPassword: (id, password) => wrap(async () => { const { error: e } = await client.auth.signInWithPassword({ ...idKey(id), password }); if (e) throw e }),
       resetPassword: (email) => wrap(async () => { const { error: e } = await client.auth.resetPasswordForEmail(email, { redirectTo: redirect }); if (e) throw e }),
       updatePassword: (password) => wrap(async () => { const { error: e } = await client.auth.updateUser({ password }); if (e) throw e; setRecovery(false) }),
       signInGoogle: () => wrap(async () => { const { error: e } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirect } }); if (e) throw e }),

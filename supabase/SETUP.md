@@ -35,6 +35,12 @@ Trade-off: with confirmation off, nobody checks that an email address is really 
 
 Password resets always need email, so they also depend on the email limit above.
 
+### Sign in with a phone number
+The site also accepts a phone number plus password (a 10-digit number is read as +91). This uses Supabase's phone sign-in, which is off by default:
+
+- **Authentication → Providers → Phone → enable it**, and turn **off** "Enable phone confirmations" so no SMS is needed. Supabase may ask you to pick an SMS provider; you can leave it unset when confirmations are off, but if the dashboard insists, phone sign-in needs a paid SMS service (for example Twilio), and email sign-in is the free route.
+- Without confirmation, nobody proves a number is theirs, and a phone account cannot reset its password. Use it for a small private group, and tell people to also keep their email on their account.
+
 ## 4. Connect the site
 1. **Project Settings → API**. Copy the **Project URL** and the **anon public** key.
 2. Put them in `app/src/cloud-config.js`:
