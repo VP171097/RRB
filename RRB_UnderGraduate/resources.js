@@ -4,6 +4,7 @@ export default buildResources({
   q: 'RRB NTPC undergraduate',
   notice: 'RRB NTPC CEN 03/2024 undergraduate',
   books: [
+    { subject: 'All', title: 'RRB Non-Technical Recruitment Exams (Disha Publications, 286 pages, PDF, 9 MB)', use: 'Non-technical posts guide. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/1VxD6sDY3J-G83V-p3NLlWIIvH39y1HHc/view?usp=sharing' },
     { subject: 'All', title: 'RRB NTPC-25 Practice Sets (GKP, 120 pages, PDF, 37 MB)', use: 'Full-length practice sets. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/1-4nGQPN-N6zHw9Rc5IluHOv4O1nPS0Q-/view?usp=sharing' },
     { subject: 'Science', title: 'General Science for Indian Railways (Disha Publications, 631 pages, PDF, 80 MB)', use: 'Railway-exam General Science. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/1_93U5hcz6aVuITssTFGA6KtUm083Fq-M/view?usp=sharing' },
     { subject: 'All', title: 'A Comprehensive Guide for RRB NTPC (Adda247, 556 pages, PDF, 116 MB)', use: 'Full-syllabus guide. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/14Zjl1UgSrHdEXTeHKFpZaIp8z82F_ZVT/view?usp=sharing' },
