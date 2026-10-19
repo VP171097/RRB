@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
+import { useT } from './i18n.jsx'
 
 const listeners = new Set()
-export function notify(msg, kind = 'xp') {
-  listeners.forEach((f) => f({ id: Math.random(), msg, kind }))
+export function notify(msg, kind = 'xp', vars) {
+  listeners.forEach((f) => f({ id: Math.random(), msg, kind, vars }))
 }
 
 export function Toaster() {
+  const tr = useT()
   const [list, setList] = useState([])
   useEffect(() => {
     const f = (t) => {
@@ -17,7 +19,7 @@ export function Toaster() {
   }, [])
   return (
     <div className="toasts" aria-live="polite">
-      {list.map((t) => <div key={t.id} className={'toast2 ' + t.kind}>{t.msg}</div>)}
+      {list.map((t) => <div key={t.id} className={'toast2 ' + t.kind}>{tr(t.msg, t.vars)}</div>)}
     </div>
   )
 }

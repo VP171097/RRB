@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useApp } from '../store.jsx'
+import { useT } from '../i18n.jsx'
 import { useExam } from '../exam.jsx'
 import { Pager, usePaged } from '../pager.jsx'
 import { Bar } from '../ui.jsx'
@@ -11,6 +12,7 @@ const prep = (q) => { const idx = shuffle([0, 1, 2, 3]); return { ...q, opts: id
 const LABELS = ['A', 'B', 'C', 'D']
 
 export default function Quiz() {
+  const t = useT()
   const { state, update } = useApp()
   const { QUIZ, QUIZ_CATS } = useExam()
   const [cat, setCat] = useState('All')
@@ -86,22 +88,22 @@ export default function Quiz() {
     return (
       <>
         <section className="card">
-          <h3>Quick quiz</h3>
-          <p className="small muted" style={{ margin: '4px 0 12px' }}>{QUIZ.length} questions across Railways, Polity, Science, History, Geography, Economy, Computers, Maths and Reasoning. Questions and options are shuffled every time.</p>
+          <h3>{t('Quick quiz')}</h3>
+          <p className="small muted" style={{ margin: '4px 0 12px' }}>{t('{n} questions across {cats}. Questions and options are shuffled every time.', { n: QUIZ.length, cats: QUIZ_CATS.filter((c) => c !== 'All').map((c) => t(c)).join(', ') })}</p>
           <div className="fgrid">
-            <label className="f">Topic<select value={cat} onChange={(e) => setCat(e.target.value)}>{QUIZ_CATS.map((c) => <option key={c}>{c}</option>)}</select></label>
-            <label className="f">Questions<select value={count} onChange={(e) => setCount(+e.target.value)}><option value={10}>10</option><option value={20}>20</option><option value={0}>All ({pool.length})</option></select></label>
+            <label className="f">{t('Topic')}<select value={cat} onChange={(e) => setCat(e.target.value)}>{QUIZ_CATS.map((c) => <option key={c} value={c}>{t(c)}</option>)}</select></label>
+            <label className="f">{t('Questions')}<select value={count} onChange={(e) => setCount(+e.target.value)}><option value={10}>10</option><option value={20}>20</option><option value={0}>{t('All ({n})', { n: pool.length })}</option></select></label>
           </div>
-          <div className="seg" style={{ margin: '12px 0' }} role="group" aria-label="Mode">
-            <button className="btn ghost" aria-pressed={mode === 'learn'} onClick={() => setMode('learn')}>Learn mode</button>
-            <button className="btn ghost" aria-pressed={mode === 'exam'} onClick={() => setMode('exam')}>Exam mode</button>
+          <div className="seg" style={{ margin: '12px 0' }} role="group" aria-label={t('Mode')}>
+            <button className="btn ghost" aria-pressed={mode === 'learn'} onClick={() => setMode('learn')}>{t('Learn mode')}</button>
+            <button className="btn ghost" aria-pressed={mode === 'exam'} onClick={() => setMode('exam')}>{t('Exam mode')}</button>
           </div>
-          <p className="small muted" style={{ margin: '0 0 12px' }}>{mode === 'learn' ? 'See the answer and a short explanation after every question.' : 'Timed at 54 seconds a question, no feedback until the end, 1/3 negative marking, skipping is free.'}</p>
-          <button className="btn big-btn" onClick={begin}>Start quiz ({n} Q)</button>
+          <p className="small muted" style={{ margin: '0 0 12px' }}>{mode === 'learn' ? t('See the answer and a short explanation after every question.') : t('Timed at 54 seconds a question, no feedback until the end, 1/3 negative marking, skipping is free.')}</p>
+          <button className="btn big-btn" onClick={begin}>{t('Start quiz ({n} Q)', { n })}</button>
         </section>
-        <section className="card"><div className="row" style={{ justifyContent: 'space-between' }}><span>Quizzes played</span><b className="num">{state.quiz.played}</b></div>
-          <div className="row" style={{ justifyContent: 'space-between' }}><span>Best accuracy</span><b className="num">{state.quiz.best}%</b></div>
-          <div className="row" style={{ justifyContent: 'space-between' }}><span>Quiz XP</span><b className="num">{state.quiz.xp}</b></div></section>
+        <section className="card"><div className="row" style={{ justifyContent: 'space-between' }}><span>{t('Quizzes played')}</span><b className="num">{state.quiz.played}</b></div>
+          <div className="row" style={{ justifyContent: 'space-between' }}><span>{t('Best accuracy')}</span><b className="num">{state.quiz.best}%</b></div>
+          <div className="row" style={{ justifyContent: 'space-between' }}><span>{t('Quiz XP')}</span><b className="num">{state.quiz.xp}</b></div></section>
       </>
     )
   }
@@ -111,8 +113,8 @@ export default function Quiz() {
     return (
       <section className="card quiz">
         <div className="row" style={{ justifyContent: 'space-between' }}>
-          <span className="chip">{q.cat}</span>
-          <span className="small num muted">Q {i + 1} / {qs.length}{mode === 'exam' ? ` · ${Math.floor(leftS / 60)}:${String(leftS % 60).padStart(2, '0')}` : ''}</span>
+          <span className="chip">{t(q.cat)}</span>
+          <span className="small num muted">{t('Q')} {i + 1} / {qs.length}{mode === 'exam' ? ` · ${Math.floor(leftS / 60)}:${String(leftS % 60).padStart(2, '0')}` : ''}</span>
         </div>
         <Bar a={i + (shown ? 1 : 0)} b={qs.length} accent />
         <h3 className="qtext" key={i}>{q.q}</h3>
@@ -124,10 +126,10 @@ export default function Quiz() {
             return <button key={k} className={cls} onClick={() => pick(k)} disabled={mode === 'learn' && shown}><b>{LABELS[k]}</b><span>{o}</span></button>
           })}
         </div>
-        {mode === 'learn' && shown && <div className={'explain ' + (p === q.ans ? 'ok' : 'bad')}><b>{p === q.ans ? 'Correct.' : 'Not quite.'}</b> {q.e}</div>}
+        {mode === 'learn' && shown && <div className={'explain ' + (p === q.ans ? 'ok' : 'bad')}><b>{p === q.ans ? t('Correct.') : t('Not quite.')}</b> {q.e}</div>}
         <div className="row" style={{ justifyContent: 'space-between', marginTop: 12 }}>
-          {mode === 'exam' ? <button className="btn ghost" onClick={() => { const pk = [...picks]; pk[i] = null; setPicks(pk); next() }}>Skip</button> : <span />}
-          <button className="btn" onClick={() => next()} disabled={mode === 'learn' && !shown}>{i + 1 >= qs.length ? 'Finish' : 'Next'}</button>
+          {mode === 'exam' ? <button className="btn ghost" onClick={() => { const pk = [...picks]; pk[i] = null; setPicks(pk); next() }}>{t('Skip')}</button> : <span />}
+          <button className="btn" onClick={() => next()} disabled={mode === 'learn' && !shown}>{i + 1 >= qs.length ? t('Finish') : t('Next')}</button>
         </div>
       </section>
     )
@@ -137,24 +139,24 @@ export default function Quiz() {
   return (
     <>
       <section className="card result">
-        <div className="lab2">Result · {mode === 'exam' ? 'Exam mode' : 'Learn mode'}</div>
+        <div className="lab2">{t('Result')} · {mode === 'exam' ? t('Exam mode') : t('Learn mode')}</div>
         <div className="sc num" style={{ fontSize: 48 }}>{r.score}<span className="muted" style={{ fontSize: 20 }}> / {qs.length}</span></div>
-        <p className="small muted" style={{ margin: 0 }}>{r.correct} right · {r.wrong} wrong · {r.skipped} skipped · {r.acc}% accuracy on attempted · +{r.gained} XP</p>
+        <p className="small muted" style={{ margin: 0 }}>{t('{correct} right · {wrong} wrong · {skipped} skipped · {acc}% accuracy on attempted · +{gained} XP', r)}</p>
         <div className="row" style={{ marginTop: 12 }}>
-          <button className="btn" onClick={begin}>Play again</button>
-          <button className="btn ghost" onClick={() => setPhase('setup')}>Change setup</button>
-          {r.wrong > 0 && <button className="btn ghost" disabled={saved} onClick={saveWrong}>{saved ? 'Saved' : 'Save wrong to error log'}</button>}
+          <button className="btn" onClick={begin}>{t('Play again')}</button>
+          <button className="btn ghost" onClick={() => setPhase('setup')}>{t('Change setup')}</button>
+          {r.wrong > 0 && <button className="btn ghost" disabled={saved} onClick={saveWrong}>{saved ? t('Saved') : t('Save wrong to error log')}</button>}
         </div>
       </section>
       <section className="card">
-        <h3>Review</h3>
+        <h3>{t('Review')}</h3>
         {reviewPg.items.map((q) => {
           const x = qs.indexOf(q)
           const pk = r.picks[x], ok = pk === q.ans
           return (
             <div className="res" key={x}>
-              <div><span className={'pill ' + (pk === null ? 'prio-Low' : ok ? 'ok' : 'bad')}>{pk === null ? 'Skipped' : ok ? 'Right' : 'Wrong'}</span> <b>{q.q}</b></div>
-              <span className="small">Answer: <b>{q.opts[q.ans]}</b>{pk !== null && !ok && <span className="muted"> · you chose {q.opts[pk]}</span>}</span>
+              <div><span className={'pill ' + (pk === null ? 'prio-Low' : ok ? 'ok' : 'bad')}>{pk === null ? t('Skipped') : ok ? t('Right') : t('Wrong')}</span> <b>{q.q}</b></div>
+              <span className="small">{t('Answer:')} <b>{q.opts[q.ans]}</b>{pk !== null && !ok && <span className="muted"> · {t('you chose {x}', { x: q.opts[pk] })}</span>}</span>
               <span className="small muted">{q.e}</span>
             </div>
           )
