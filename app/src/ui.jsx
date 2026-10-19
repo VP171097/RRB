@@ -1,3 +1,4 @@
+import { planT } from './planText.js'
 import { useApp } from './store.jsx'
 import { useT } from './i18n.jsx'
 import { useExam } from './exam.jsx'
@@ -31,11 +32,11 @@ export function TaskList({ n }) {
                 <input type="checkbox" checked={!!state.done[k]}
                   onChange={(e) => update((s) => { if (e.target.checked) s.done[k] = 1; else delete s.done[k] })} />
                 <span className="box" />
-                <span className="tx">{t(x.label)}{x.subs && <span className="tiny muted subcount"> · {sd}/{x.subs.length}</span>}</span>
+                <span className="tx">{planT(t, x.label)}{x.subs && <span className="tiny muted subcount"> · {sd}/{x.subs.length}</span>}</span>
                 <span className="tm">{t(x.t)}</span>
               </label>
               {x.subs && (
-                <ul className="subtasks" aria-label={t('Sub-topics of {name}', { name: t(x.label) })}>
+                <ul className="subtasks" aria-label={t('Sub-topics of {name}', { name: planT(t, x.label) })}>
                   {x.subs.map((st, j) => {
                     const sk = k + '.' + j
                     return (

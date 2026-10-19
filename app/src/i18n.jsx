@@ -20,9 +20,16 @@ export function makeT(dict) {
         if (out.some((p, i) => p !== parts[i])) return out.join(sep === ' and ' ? ' और ' : sep)
       }
     }
+    if (/[.!?] /.test(s)) { // a run of sentences: translate each one that has an entry
+      const parts = s.split(/(?<=[.!?]) /)
+      const out = parts.map((p) => dict[p] ?? p)
+      if (out.some((p, i) => p !== parts[i])) return out.join(' ')
+    }
     return s
   }
-  return (s, v) => fill(look(s), v)
+  const t = (s, v) => fill(look(s), v)
+  t.exact = (s) => dict?.[s]
+  return t
 }
 
 const Ctx = createContext({ lang: 'en', t: makeT(null), pack: null })

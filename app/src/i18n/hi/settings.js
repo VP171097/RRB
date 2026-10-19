@@ -1,4 +1,7 @@
 export default {
+  'Language': 'भाषा',
+  'Everything on the site, including lessons, switches to this language. It is saved on your account if you are signed in.': 'लेसन सहित पूरी साइट इसी भाषा में दिखेगी। साइन इन होने पर यह आपके खाते में सेव हो जाती है।',
+
   'Settings': 'सेटिंग्स',
   'Your browser blocked saving. Progress will be lost when you close the tab. Export a backup now.': 'आपके ब्राउज़र ने सेव करने से रोक दिया है। टैब बंद करने पर प्रगति खो जाएगी। अभी बैकअप एक्सपोर्ट करें।',
   'These apply to this exam only.': 'ये सिर्फ़ इसी परीक्षा पर लागू होते हैं।',

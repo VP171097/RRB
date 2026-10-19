@@ -29,8 +29,8 @@ const TEMPLATES = [
 
 export function planT(t, s) {
   if (typeof s !== 'string' || !s) return s
-  const direct = t(s)
-  if (direct !== s) return direct
+  const exact = t.exact?.(s)
+  if (exact != null) return exact
   for (const { tpl, names, re } of TEMPLATES) {
     const m = s.match(re)
     if (m) {
@@ -40,5 +40,5 @@ export function planT(t, s) {
     }
   }
   if (s.includes(' · ')) return s.split(' · ').map((p) => planT(t, p)).join(' · ')
-  return s
+  return t(s)
 }
