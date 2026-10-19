@@ -948,4 +948,6 @@ export default {
 "Railways GK + static GK (revise, then an MCQ set)": "रेलवे GK + स्टैटिक GK (दोहराएँ, फिर MCQ का एक सेट)",
   'General Science for Indian Railways (Disha Publications, 631 pages, PDF, 80 MB)': 'भारतीय रेलवे के लिए सामान्य विज्ञान (Disha Publications, 631 पेज, PDF, 80 MB)',
   'Railway-exam General Science. Opens the shared Google Drive file': 'रेलवे परीक्षा का सामान्य विज्ञान। शेयर की गई Google Drive फ़ाइल खुलती है',
+  'Quantitative Aptitude for Competitive Examinations (R.S. Aggarwal, S. Chand, 2017, PDF)': 'प्रतियोगी परीक्षाओं के लिए क्वांटिटेटिव एप्टीट्यूड (आर.एस. अग्रवाल, S. Chand, 2017, PDF)',
+  'Concepts and graded exercises. Opens the shared Google Drive file': 'कॉन्सेप्ट और क्रमबद्ध अभ्यास। शेयर की गई Google Drive फ़ाइल खुलती है',
 }

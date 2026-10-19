@@ -1185,4 +1185,6 @@ export default {
   'Full-length practice sets. Opens the shared Google Drive file': 'पूरे लंबाई के प्रैक्टिस सेट। शेयर की गई Google Drive फ़ाइल खुलती है',
   'RRB Non-Technical Recruitment Exams (Disha Publications, 286 pages, PDF, 9 MB)': 'RRB नॉन-टेक्निकल भर्ती परीक्षाएँ (Disha Publications, 286 पेज, PDF, 9 MB)',
   'Non-technical posts guide. Opens the shared Google Drive file': 'नॉन-टेक्निकल पदों की गाइड। शेयर की गई Google Drive फ़ाइल खुलती है',
+  'Quantitative Aptitude for Competitive Examinations (R.S. Aggarwal, S. Chand, 2017, PDF)': 'प्रतियोगी परीक्षाओं के लिए क्वांटिटेटिव एप्टीट्यूड (आर.एस. अग्रवाल, S. Chand, 2017, PDF)',
+  'Concepts and graded exercises. Opens the shared Google Drive file': 'कॉन्सेप्ट और क्रमबद्ध अभ्यास। शेयर की गई Google Drive फ़ाइल खुलती है',
 }

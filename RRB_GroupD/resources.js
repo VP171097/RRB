@@ -4,6 +4,7 @@ export default buildResources({
   q: 'RRB Group D',
   notice: 'RRB Group D CEN 08/2024 Level 1',
   books: [
+    { subject: 'Maths', title: 'Quantitative Aptitude for Competitive Examinations (R.S. Aggarwal, S. Chand, 2017, PDF)', use: 'Concepts and graded exercises. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/1biqr7y_5EVRaTVxK6t6EUt0pkBmbu1bb/view?usp=drivesdk' },
     { subject: 'Science', title: 'General Science for Indian Railways (Disha Publications, 631 pages, PDF, 80 MB)', use: 'Railway-exam General Science. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/1_93U5hcz6aVuITssTFGA6KtUm083Fq-M/view?usp=sharing' },
     { subject: 'Science', title: 'NCERT Science, Classes 9 and 10', use: 'The base for every Science question' },
     { subject: 'Science', title: 'Lucent General Science', use: 'Quick revision of Physics, Chemistry, Biology' },
