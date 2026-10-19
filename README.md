@@ -47,3 +47,6 @@ Drop PDFs into `RRB_<exam>/pdfs/<folder>/` and commit them, or from `app/`:
 
 ## Hindi
 The site has an English / Hindi switch (when creating an account and under Track → Settings; saved on the account when signed in). Text goes through `t('English text')` (`app/src/i18n.jsx`) with dictionaries in `app/src/i18n/hi/` and `RRB_*/hi/dict.js`. Hindi lessons, drills, tricks, quiz and notes live in `RRB_*/hi/`; anything without a Hindi entry falls back to English. Please have a Hindi speaker proofread before relying on it.
+
+## Sign-in is required, and the app can be installed
+When Supabase is set up (`app/src/cloud-config.js`), the app asks people to sign in or create an account before it opens, and keeps them signed in on that device until they tap Sign out. It is a Progressive Web App (`app/public/manifest.webmanifest`, `app/public/sw.js`): browsers offer **Install app**, and there is an Install button on the sign-in screen, the landing page and in Settings. The service worker is network first, so updates arrive straight away and the last copy opens offline.

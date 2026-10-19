@@ -1,4 +1,17 @@
 export default {
+  'Your RRB exam plan, one station at a time.': 'आपकी RRB परीक्षा की योजना, एक-एक स्टेशन करके।',
+  'A study plan built from your start date, exam date and daily hours': 'आपकी शुरू की तारीख, परीक्षा की तारीख और रोज़ के घंटों से बनी पढ़ाई की योजना',
+  'Lessons, tricks, quizzes and mock tracking in English and Hindi': 'अंग्रेज़ी और हिंदी में पाठ, ट्रिक, क्विज़ और मॉक ट्रैकिंग',
+  'Your progress saved to your account, on every device': 'आपकी प्रगति आपके खाते में, हर डिवाइस पर सेव',
+  'Photo: Wikimedia Commons, CC BY-SA 4.0': 'फ़ोटो: Wikimedia Commons, CC BY-SA 4.0',
+  'Welcome to Mission RRB': 'Mission RRB में आपका स्वागत है',
+  'Sign in or create an account to open the app. You stay signed in on this device until you tap Sign out.': 'ऐप खोलने के लिए साइन इन करें या खाता बनाएँ। जब तक आप साइन आउट नहीं दबाते, आप इस डिवाइस पर साइन इन रहते हैं।',
+  'Install the app on this device': 'इस डिवाइस पर ऐप इंस्टॉल करें',
+  'Install app': 'ऐप इंस्टॉल करें',
+  'Sign out? You will need to sign in again to open the app.': 'साइन आउट करें? ऐप खोलने के लिए आपको फिर से साइन इन करना होगा।',
+  'On iPhone or iPad: tap the Share button, then "Add to Home Screen".': 'iPhone या iPad पर: शेयर बटन दबाएँ, फिर "Add to Home Screen" चुनें।',
+  'Open your browser menu (the three dots) and tap "Install app" or "Add to Home screen".': 'अपने ब्राउज़र का मेन्यू (तीन बिंदु) खोलें और "Install app" या "Add to Home screen" दबाएँ।',
+
   'Sign in or create an account to open Mission RRB. Your progress is saved to your account and follows you across devices.': 'Mission RRB खोलने के लिए साइन इन करें या खाता बनाएँ। आपकी प्रगति आपके खाते में सेव होती है और हर डिवाइस पर साथ चलती है।',
   'Continue without an account': 'बिना खाते के आगे बढ़ें',
   'Without an account your progress stays only in this browser.': 'खाते के बिना आपकी प्रगति सिर्फ़ इसी ब्राउज़र में रहेगी।',

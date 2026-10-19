@@ -1,4 +1,7 @@
 export default {
+  'Install the app': 'ऐप इंस्टॉल करें',
+  'Add Mission RRB to your home screen or desktop. It opens like an app and keeps working offline with your last saved data.': 'Mission RRB को अपनी होम स्क्रीन या डेस्कटॉप पर जोड़ें। यह ऐप की तरह खुलता है और आपके आखिरी सेव डेटा के साथ ऑफ़लाइन भी चलता है।',
+
   'Exam date (last day of the plan)': 'परीक्षा की तारीख (योजना का आखिरी दिन)',
   'Your plan: {n} days ({w} weeks)': 'आपकी योजना: {n} दिन ({w} सप्ताह)',
   'The plan has {n} days from the start date to the exam date, split into foundation, practice, previous-year papers, mocks and a final week. Task times are sized to {h} hours a day. Day {n} falls on {date}.': 'शुरू की तारीख से परीक्षा की तारीख तक योजना में {n} दिन हैं, जो नींव, प्रैक्टिस, पिछले वर्ष के पेपर, मॉक और आखिरी सप्ताह में बँटे हैं। कार्यों का समय रोज़ {h} घंटे के हिसाब से रखा गया है। दिन {n} की तारीख {date} है।',

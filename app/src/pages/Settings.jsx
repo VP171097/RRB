@@ -6,6 +6,7 @@ import { fmt, addDays, parse, iso } from '../lib.js'
 import { MIN_DAYS, MAX_DAYS } from '../plan.js'
 import { useT } from '../i18n.jsx'
 import { LangPicker, useSetLang } from '../LangPicker.jsx'
+import { InstallButton } from '../install.jsx'
 
 const PALETTES = [['ocean', 'Ocean', '#0b3d91'], ['sunrise', 'Sunrise', '#c2410c'], ['forest', 'Forest', '#15803d'], ['violet', 'Violet', '#6d28d9'], ['rose', 'Rose', '#be185d']]
 
@@ -61,6 +62,12 @@ export default function Settings() {
         {rawDays > MAX_DAYS && <p className="small" style={{ margin: '6px 0 0', color: 'var(--bad)' }}>{t('Plans longer than {n} days are shortened to {n} days.', { n: MAX_DAYS })}</p>}
         {topicsPerDay > 2 && <p className="small" style={{ margin: '6px 0 0', color: 'var(--bad)' }}>{t('Tight plan: about {n} topics per subject each study day. A later exam date gives you more room.', { n: Math.round(topicsPerDay * 10) / 10 })}</p>}
         <p className="small muted" style={{ margin: '6px 0 0' }}>{t('Changing the dates rebuilds the plan. Ticks stay attached to their day and task number, so they may move to different work.')}</p>
+      </section>
+
+      <section className="card">
+        <h3>{t('Install the app')}</h3>
+        <p className="small muted" style={{ margin: '2px 0 8px' }}>{t('Add Mission RRB to your home screen or desktop. It opens like an app and keeps working offline with your last saved data.')}</p>
+        <InstallButton className="btn" />
       </section>
 
       <section className="card">

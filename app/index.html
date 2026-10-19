@@ -10,6 +10,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://vp171097.github.io/RRB/landing/trains/vande-bharat.jpg" />
 <meta name="theme-color" content="#0b3d91" />
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Mission RRB" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b3d91'/%3E%3Cpath d='M9 22V10h5l4 7V10h5v12h-5l-4-7v7z' fill='%23fff'/%3E%3C/svg%3E" />
 <script>
 // Old links like /RRB/#/today now live under /app/
@@ -33,6 +37,7 @@ a{color:inherit}
 .nav a,.nav .logo,.btn.sm{white-space:nowrap}
 .nav a.l{color:var(--mute);text-decoration:none;font-size:14px}
 .nav a.l:hover{color:var(--ink)}
+[hidden]{display:none!important}
 @media(max-width:700px){.nav .wrap{gap:8px}.logo{font-size:15px}.btn.sm{padding:9px 11px;font-size:13px}.nav a.l{display:none}.nav a.l.signin{display:inline-block;color:var(--ink);font-weight:600}}
 .btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:12px 20px;font:600 16px/1 inherit;background:var(--accent);color:#1b1200;text-decoration:none;cursor:pointer;box-shadow:0 8px 22px rgba(255,159,28,.35);transition:transform .15s}
 .btn:hover{transform:translateY(-2px)}
@@ -103,6 +108,7 @@ footer a{color:var(--brand)}
   <a class="logo" href="#top"><b>MR</b> Mission RRB</a><span class="sp"></span>
   <a class="l" href="#exams">Exams</a><a class="l" href="#features">Features</a><a class="l" href="#how">How it works</a><a class="l" href="#faq">FAQ</a>
   <button class="tg" id="tg" aria-label="Toggle dark mode">◐</button>
+  <button class="tg" id="inst" type="button" title="Install app" aria-label="Install app" hidden>⤓</button>
   <a class="l signin" href="./app/#/community">Sign in</a>
   <a class="btn sm" href="./app/">Open the app</a>
 </div></header>
@@ -113,7 +119,7 @@ footer a{color:var(--brand)}
     <div class="eyebrow" style="color:#ffd089">RRB NTPC · Graduate · Undergraduate · Group D</div>
     <h1>Ride the plan. <em>Score 90+.</em></h1>
     <p class="lead">A free study plan built from your start date, exam date and daily hours, with daily tasks, step-by-step lessons, maths and reasoning tricks, quizzes and a mock tracker. Every day you finish moves your train one station closer to the exam.</p>
-    <div class="cta"><a class="btn" href="./app/">Start the journey →</a><a class="btn ghost" href="./app/#/community">Sign in / Create account</a><a class="btn ghost" href="#features">See what's inside</a></div>
+    <div class="cta"><a class="btn" href="./app/">Start the journey →</a><a class="btn ghost" href="./app/#/community">Sign in / Create account</a><button class="btn ghost" id="inst2" type="button" hidden>Install app</button><a class="btn ghost" href="#features">See what's inside</a></div>
   </div>
   <div class="ph"><img src="./landing/today.jpg" alt="Today screen of the Mission RRB app" width="780" height="1688" /></div>
 </div></div>
@@ -207,6 +213,15 @@ footer a{color:var(--brand)}
 <script>
 const r=document.documentElement,k='mission90-landing-theme';let t;try{t=localStorage.getItem(k)}catch(e){}
 if(t)r.dataset.theme=t
+// Install app: Chrome and Edge give a prompt; iPhone and other browsers get the manual steps.
+let dp=null;const insts=[document.getElementById('inst'),document.getElementById('inst2')]
+const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true
+const iosDev=/iphone|ipad|ipod/i.test(navigator.userAgent)
+if(!standalone)insts.forEach(b=>b&&(b.hidden=false))
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e})
+addEventListener('appinstalled',()=>insts.forEach(b=>b&&(b.hidden=true)))
+insts.forEach(b=>b&&(b.onclick=async()=>{if(dp){dp.prompt();await dp.userChoice.catch(()=>{});dp=null}else alert(iosDev?'On iPhone or iPad: tap the Share button, then "Add to Home Screen".':'Open your browser menu (the three dots) and tap "Install app" or "Add to Home screen".')}))
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))
 document.getElementById('tg').onclick=()=>{const d=(r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'))==='dark'?'light':'dark';r.dataset.theme=d;try{localStorage.setItem(k,d)}catch(e){}}
 </script>
 </body>
