@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useApp } from '../store.jsx'
 import { useExam } from '../exam.jsx'
-import { findLesson, topicLessons } from '../lessons.js'
+import { findLesson, topicLessons, drillsFor } from '../lessons.js'
 import { searchLink, videoLink } from '../../../RRB_Graduate/resources.js'
 import { intent } from '../nav.js'
 import { Ext } from '../ui.jsx'
 import { sfx } from '../fx.jsx'
+import { toggleSub } from '../subs.js'
 
 // Shows x^2 as x with a superscript 2.
 function Rich({ text }) {
@@ -26,6 +27,19 @@ function noteFor(X, g, topic) {
   return has('sta') ? 'sta' : X.NOTES[0].id
 }
 
+function DrillQ({ title, l }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="res">
+      <span className="tiny muted">{title}</span>
+      <span>{l.q ? <Rich text={l.q} /> : `Recall the key points of "${title}" without looking.`}</span>
+      {open
+        ? (l.q ? <span className="sol small"><b>Worked: </b><Rich text={l.a} /></span> : <ul className="keypts small">{l.points.map((p, k) => <li key={k}><Rich text={p} /></li>)}</ul>)
+        : <button className="btn ghost sm" style={{ width: 'fit-content' }} onClick={() => setOpen(true)}>{l.q ? 'Show answer' : 'Check my recall'}</button>}
+    </div>
+  )
+}
+
 // param is the sub-topic key "<day>.<task index>.<sub-topic index>" from the plan.
 export default function Lesson({ param, go }) {
   const { state, update } = useApp()
@@ -38,9 +52,11 @@ export default function Lesson({ param, go }) {
     return <><h2>Lesson not found</h2><button className="btn" onClick={() => go('days')}>Back to the plan</button></>
   }
   const key = `${n}.${i}.${j}`
-  const topic = task.l
+  const topic = task.topic || task.l
   const lesson = findLesson(X.LESSONS, topic, sub)
   const parts = lesson ? [] : topicLessons(X.LESSONS, sub, X.plan.subtopics)
+  const drillQs = task.drill ? topicLessons(X.LESSONS, topic, X.plan.subtopics) : []
+  const extraQs = task.drill ? drillsFor(X.DRILLS, topic) : []
   const done = !!state.subdone[key]
   const words = topic.toLowerCase().split(/[^a-z]+/).filter((w) => w.length > 3 && !SKIP.includes(w))
   const tricks = X.TRICKS.filter((t) => words.some((w) => (t.topic + ' ' + t.title).toLowerCase().includes(w))).slice(0, 3)
@@ -90,8 +106,18 @@ export default function Lesson({ param, go }) {
           {show ? <p className="sol"><b>Worked: </b><Rich text={lesson.a} /></p> : <button className="btn ghost sm" onClick={() => { setShow(true); sfx('tick') }}>Show solution</button>}
         </section>
       )}
+      {(extraQs.length > 0 || drillQs.length > 0) && (
+        <details>
+          <summary><h3>Drill: {extraQs.length + drillQs.length} questions on {topic}</h3></summary>
+          <div className="in">
+            <p className="small muted" style={{ margin: '0 0 8px' }}>Try each before you open the answer. Then add 20 more questions from a book, a mock or your error log.</p>
+            {extraQs.map((d, k) => <DrillQ key={'x' + k} title={'Practice ' + (k + 1)} l={{ q: d.q, a: d.a, points: [] }} />)}
+            {drillQs.map(({ title, lesson: l }) => <DrillQ key={title} title={title} l={l} />)}
+          </div>
+        </details>
+      )}
       <div className="row" style={{ margin: '14px 0' }}>
-        <button className="btn" aria-pressed={done} onClick={() => { update((s) => { if (s.subdone[key]) delete s.subdone[key]; else s.subdone[key] = 1 }); if (!done) sfx('ok') }}>{done ? 'Marked as done' : 'Mark as done'}</button>
+        <button className="btn" aria-pressed={done} onClick={() => { update((s) => toggleSub(s, X, n, i, j, !s.subdone[key])); if (!done) sfx('ok') }}>{done ? 'Marked as done' : 'Mark as done'}</button>
         {next !== null ? <button className="btn ghost" onClick={() => nav(next)}>Next: {task.subs[next]} ›</button> : <button className="btn ghost" onClick={() => go('days')}>Finish topic</button>}
         {prev !== null && <button className="btn ghost" onClick={() => nav(prev)}>‹ Previous</button>}
       </div>

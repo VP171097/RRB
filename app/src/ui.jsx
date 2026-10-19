@@ -2,6 +2,7 @@ import { useApp } from './store.jsx'
 import { useExam } from './exam.jsx'
 import { pct } from './lib.js'
 import { groupTasks } from './plan.js'
+import { toggleSub } from './subs.js'
 
 export function Bar({ a, b, accent }) {
   return <div className={'bar' + (accent ? ' accent' : '')}><i style={{ width: pct(a, b) + '%' }} /></div>
@@ -38,7 +39,7 @@ export function TaskList({ n }) {
                     return (
                       <li key={sk} className="subt">
                         <label className="subchk" aria-label={'Mark ' + st + ' as done'}>
-                          <input type="checkbox" checked={!!state.subdone[sk]} onChange={(e) => update((s) => { if (e.target.checked) s.subdone[sk] = 1; else delete s.subdone[sk] })} />
+                          <input type="checkbox" checked={!!state.subdone[sk]} onChange={(e) => update((s) => toggleSub(s, X, n, x.i, j, e.target.checked))} />
                           <span className="sbox" />
                         </label>
                         <a className="sublink" href={'#/lesson/' + sk}>{st}</a>

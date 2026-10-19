@@ -29,7 +29,7 @@ export function buildPlan(spec) {
   for (let n = 1; n <= TOTAL; n++) {
     const w = Math.floor((n - 1) / 7) + 1, d = ((n - 1) % 7) + 1
     const t = []
-    const add = (g, l, time, sub) => t.push(sub ? { g, l, t: time, subs: sub.split(';').map((x) => x.trim()) } : { g, l, t: time })
+    const add = (g, l, time, sub, extra) => t.push({ g, l, t: time, ...(sub ? { subs: sub.split(';').map((x) => x.trim()) } : {}), ...(extra || {}) })
     let sum = ''
     if (w <= 5) {
       if (d <= 6) {
@@ -77,7 +77,10 @@ export function buildPlan(spec) {
       if (d <= 6) {
         add(G_MOCK, `Previous-year paper #${p} (one full shift, 90 min)`, '1.5 h')
         add(G_MOCK, 'Analyse paper; log errors', '1.5 h')
-        subs.forEach((s) => add(s.label, drill(s, rot(s, p - 1)), s.kind === 'quant' ? '1 h' : '45 min'))
+        subs.forEach((s) => {
+          const topic = rot(s, p - 1)
+          add(s.label, drill(s, topic), s.kind === 'quant' ? '1 h' : '45 min', spec.subtopics?.[topic], { topic, drill: true })
+        })
         sum = 'PYQ paper #' + p
       } else {
         mock++; sum = 'Mock #' + mock
@@ -91,7 +94,11 @@ export function buildPlan(spec) {
       add(G_MOCK, `Full mock #${mock} (90 min, exam timing)`, '1.5 h')
       add(G_MOCK, 'Analyse mock: every wrong, skipped and lucky-guess question', '2 h')
       if (d < 7) {
-        subs.forEach((s) => add(s.label, s.kind === 'quant' ? `20 Q drill on ${rot(s, n - 64)} (swap in your weakest topic from the error log)` : s.kind === 'logic' ? `15 Q drill on ${rot(s, n - 64)}` : s.kind === 'skill' ? `typing practice: ${rot(s, n - 64)}` : `recall notes on ${rot(s, n - 64)}${s === ga ? ', then current affairs' : ''}`, '40 min'))
+        subs.forEach((s) => {
+          const topic = rot(s, n - 64)
+          const label = s.kind === 'quant' ? `20 Q drill on ${topic} (swap in your weakest topic from the error log)` : s.kind === 'logic' ? `15 Q drill on ${topic}` : s.kind === 'skill' ? `typing practice: ${topic}` : `recall notes on ${topic}${s === ga ? ', then current affairs' : ''}`
+          add(s.label, label, '40 min', spec.subtopics?.[topic], { topic, drill: true })
+        })
         add(quant.label, 'Formulas + calculation speed', '20 min')
       } else add(G_REV, 'Light revision only; rest in the evening', '1 h')
     } else if (d <= 4) {

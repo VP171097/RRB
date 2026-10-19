@@ -40,3 +40,25 @@ export function topicLessons(db, topicName, subtopics) {
   const subs = (subtopics?.[topicName] || '').split(';').map((x) => x.trim()).filter(Boolean)
   return subs.map((title) => ({ title, lesson: findLesson(db, topicName, title) })).filter((x) => x.lesson)
 }
+
+// Extra drill questions per topic. Lines: "## Topic", "Q: question | A: answer"; "## Topic => Other topic" reuses another topic's set.
+export function parseDrills(text) {
+  const map = new Map(), alias = new Map()
+  text.split(/^## /m).slice(1).forEach((block) => {
+    const lines = block.split('\n')
+    const head = lines[0].trim()
+    if (head.includes('=>')) { const [a, b] = head.split('=>'); alias.set(norm(a), norm(b)); return }
+    const qs = []
+    lines.slice(1).forEach((l) => {
+      const m = l.trim().match(/^Q:\s*(.+?)\s*\|\s*A:\s*(.+)$/)
+      if (m) qs.push({ q: m[1], a: m[2] })
+    })
+    map.set(norm(head), qs)
+  })
+  return { map, alias }
+}
+
+export function drillsFor(db, topic) {
+  const k = norm(topic)
+  return db.map.get(k) || db.map.get(db.alias.get(k)) || []
+}

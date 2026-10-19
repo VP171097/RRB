@@ -6,6 +6,8 @@ import { QUIZ } from './quiz.js'
 import resources from './resources.js'
 import graduateLessons from '../RRB_Graduate/lessons/index.js'
 import typingLessons from './lessons/index.js'
+import graduateDrills from '../RRB_Graduate/drills.js'
+import typingDrills from './lessons/drills.js'
 import { GRAD_PATTERN, SECTIONS_NTPC } from '../RRB_Graduate/index.js'
 
 const pattern = [
@@ -30,4 +32,5 @@ export default {
   ],
   plan, syllabus: SYLLABUS, notes: NOTES, tricks: TRICKS, quiz: QUIZ, resources,
   lessons: typingLessons + '\n' + graduateLessons,
+  drills: typingDrills + '\n' + graduateDrills,
 }

@@ -72,6 +72,18 @@ export function Provider({ children }) {
     return { dateOf, today, dayDone, dayFull, tasks: { all, done }, streak, backlog, learned, topicCount: X.TOPICS.length }
   }, [state, DAYS, TOTAL, X.TOPICS])
 
+  // One-time catch-up: a task whose sub-topics were all ticked earlier is marked done too.
+  const synced = useRef(false)
+  useEffect(() => {
+    if (synced.current) return
+    synced.current = true
+    const fix = []
+    DAYS.forEach((d) => d.tasks.forEach((t, i) => {
+      if (t.subs && !state.done[d.n + '.' + i] && t.subs.every((_, j) => state.subdone[`${d.n}.${i}.${j}`])) fix.push(d.n + '.' + i)
+    }))
+    if (fix.length) update((st) => { fix.forEach((k) => { st.done[k] = 1 }) })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   const game = useMemo(() => buildGame(state, derived, X), [state, derived, X])
   const xpInfo = useMemo(() => xpParts(state, game, X), [state, game, X])
   const rank = useMemo(() => rankInfo(xpInfo.total), [xpInfo])
