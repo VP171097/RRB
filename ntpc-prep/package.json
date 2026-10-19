@@ -1,0 +1,23 @@
+{
+  "name": "ntpc-prep",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "manifest": "node scripts/gen-manifest.mjs",
+    "predev": "node scripts/gen-manifest.mjs",
+    "dev": "vite",
+    "prebuild": "node scripts/gen-manifest.mjs",
+    "build": "vite build",
+    "preview": "vite preview",
+    "fetch-pdf": "node scripts/fetch-pdf.mjs"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "vite": "^7.0.0"
+  }
+}
