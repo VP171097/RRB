@@ -1,4 +1,8 @@
 export default {
+  'Sign in or create an account to open Mission 90. Your progress is saved to your account and follows you across devices.': 'Mission 90 खोलने के लिए साइन इन करें या खाता बनाएँ। आपकी प्रगति आपके खाते में सेव होती है और हर डिवाइस पर साथ चलती है।',
+  'Continue without an account': 'बिना खाते के आगे बढ़ें',
+  'Without an account your progress stays only in this browser.': 'खाते के बिना आपकी प्रगति सिर्फ़ इसी ब्राउज़र में रहेगी।',
+
   'Groups are switched off': 'ग्रुप बंद हैं',
   'Sign-in, cloud saving and study groups use a free Supabase project. Until it is connected, everything still works and saves in this browser.': 'साइन इन, क्लाउड सेविंग और स्टडी ग्रुप एक मुफ़्त Supabase प्रोजेक्ट से चलते हैं। जब तक यह जुड़ा नहीं है, सब कुछ इसी ब्राउज़र में चलता और सेव होता रहेगा।',
   'Create a Supabase project, then run': 'एक Supabase प्रोजेक्ट बनाएँ, फिर चलाएँ',

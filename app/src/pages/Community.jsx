@@ -27,7 +27,7 @@ function SetupCard() {
 
 const MIN_PW = 8
 
-function SignIn({ cloud }) {
+export function SignIn({ cloud }) {
   const { g, set } = useGlobal()
   const t = useT()
   const [mode, setMode] = useState('in')            // in | up | link | reset

@@ -28,10 +28,11 @@ import Rewards from './pages/Rewards.jsx'
 import Settings from './pages/Settings.jsx'
 import Lesson from './pages/Lesson.jsx'
 import Community from './pages/Community.jsx'
-import { CloudProvider } from './cloud.jsx'
+import { CloudProvider, useCloud } from './cloud.jsx'
+import { SignIn } from './pages/Community.jsx'
 import CloudSync from './CloudSync.jsx'
 import SyncDot from './SyncDot.jsx'
-import { LangSync } from './LangPicker.jsx'
+import { LangSync, LangPicker } from './LangPicker.jsx'
 
 const PAGES = {
   today: Dashboard, mission: Mission, days: Days, topics: Topics, syllabus: Syllabus, tricks: Tricks, notes: Notes, pyq: Pyq, pyqpdf: PaperPdfs, library: Library,
@@ -47,8 +48,35 @@ function Shell() {
   return <I18nProvider lang={g.lang} examId={g.exam} loadPacks={loadHiPacks}><Inner /></I18nProvider>
 }
 
+const GUEST_KEY = 'mission90-guest'
+const readGuest = () => { try { return localStorage.getItem(GUEST_KEY) === '1' } catch { return false } }
+
+// Before the app opens, ask people to sign in or create an account. "Continue without an account" keeps working offline on this device.
+function AuthGate({ cloud, onSkip }) {
+  const { t } = useI18n()
+  const { g, set } = useGlobal()
+  return (
+    <>
+      <header className="top"><div className="brand"><h1>Mission 90</h1><LangPicker value={g.lang} onChange={(lang) => set({ lang })} label={t('Language')} /></div></header>
+      <div className="wrap" style={{ maxWidth: 520 }}>
+        <main>
+          <p className="small muted" style={{ margin: '4px 0' }}>{t('Sign in or create an account to open Mission 90. Your progress is saved to your account and follows you across devices.')}</p>
+          <SignIn cloud={cloud} />
+          <div style={{ textAlign: 'center', margin: '8px 0 24px' }}>
+            <button className="btn ghost sm" onClick={onSkip}>{t('Continue without an account')}</button>
+            <p className="tiny muted" style={{ margin: '6px 0 0' }}>{t('Without an account your progress stays only in this browser.')}</p>
+          </div>
+        </main>
+      </div>
+    </>
+  )
+}
+
 function Inner() {
   const { g, set } = useGlobal()
+  const cloud = useCloud()
+  const [guest, setGuest] = useState(readGuest)
+  useEffect(() => { if (cloud?.user) { try { localStorage.removeItem(GUEST_KEY) } catch { /* ignore */ } setGuest(false) } }, [cloud?.user])
   const { t, packs } = useI18n()
   const X = useMemo(() => localizeExam(loadExam(g.exam), packs), [g.exam, packs])
   const [route, setRoute] = useState(readHash)
@@ -62,6 +90,9 @@ function Inner() {
   const go = (p) => { window.location.hash = '#/' + p; window.scrollTo(0, 0) }
   const grp = groupOf(page === 'lesson' ? 'days' : page)
   const Page = PAGES[page]
+  const skip = () => { try { localStorage.setItem(GUEST_KEY, '1') } catch { /* ignore */ } setGuest(true) }
+  if (cloud?.enabled && cloud.ready && !cloud.user && !guest) return <AuthGate cloud={cloud} onSkip={skip} />
+  if (cloud?.enabled && !cloud.ready) return <div className="empty" style={{ margin: 40 }}>{t('Connecting…')}</div>
 
   return (
     <ExamCtx.Provider value={X}>
