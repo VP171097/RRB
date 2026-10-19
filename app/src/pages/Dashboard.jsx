@@ -78,7 +78,7 @@ export default function Dashboard({ go }) {
 
       <button className={'card missionstrip' + (game.won ? ' won' : '')} onClick={() => go('mission')}>
         <div className="grow" style={{ textAlign: 'left' }}>
-          <span className="lab2">{game.won ? t('Victory') : `${t('Mission 90')} · ${t('Station {k} of 13', { k: game.current.k })}`}</span>
+          <span className="lab2">{game.won ? t('Victory') : `${t('Mission RRB')} · ${t('Station {k} of 13', { k: game.current.k })}`}</span>
           <div className="nu-t">{game.won ? t('You beat the 90 Dragon') : t(game.current.name)}</div>
           {!game.won && <div className="small muted">{t('Boss: {boss} · needs {score}', { boss: t(game.current.boss), score: game.current.target == null ? t('any score') : game.current.target + '+' })}</div>}
           <div className="hp" style={{ marginTop: 8 }}><i style={{ width: (game.won ? 0 : bossHp(game.current)) + '%' }} /></div>

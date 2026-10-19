@@ -30,7 +30,7 @@ export default {
   'Exam date passed': 'परीक्षा की तारीख़ निकल गई',
   'Set exam date': 'परीक्षा की तारीख़ तय करें',
   'Victory': 'जीत',
-  'Mission 90': 'मिशन 90',
+  'Mission RRB': 'मिशन 90',
   'Station {k} of 13': 'स्टेशन {k} / 13',
   'You beat the 90 Dragon': 'आपने 90 ड्रैगन को हरा दिया',
   'Boss: {boss} · needs {score}': 'बॉस: {boss} · चाहिए {score}',

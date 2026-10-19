@@ -1,4 +1,4 @@
-# Connect Mission 90 to Supabase
+# Connect Mission RRB to Supabase
 
 This turns on sign-in, cloud saving across devices, and study groups with leaderboards. It takes about ten minutes. Everything is free at this size.
 

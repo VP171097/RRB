@@ -1,4 +1,10 @@
 export default {
+  '{n} h': '{n} घंटे',
+  '{n} min': '{n} मिनट',
+  'Days {a} to {b}': 'दिन {a} से {b}',
+  'Weeks 1 to {n}, left to right': 'सप्ताह 1 से {n}, बाएँ से दाएँ',
+  'S{n}': 'स्टे{n}',
+
   // Days / Topics
   'All days': 'सभी दिन',
   'Unfinished': 'अधूरे',

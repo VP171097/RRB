@@ -1,4 +1,4 @@
--- Mission 90: Supabase schema. Paste this whole file into Supabase > SQL Editor and run it once.
+-- Mission RRB: Supabase schema. Paste this whole file into Supabase > SQL Editor and run it once.
 -- Safe to run again: every statement is idempotent.
 
 -- 1. Each person's saved progress, one row per exam. Only the owner can read or write it.

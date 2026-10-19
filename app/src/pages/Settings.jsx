@@ -2,7 +2,8 @@ import { useRef, useState } from 'react'
 import { useApp } from '../store.jsx'
 import { useExam } from '../exam.jsx'
 import { useGlobal } from '../global.jsx'
-import { fmt } from '../lib.js'
+import { fmt, addDays, parse, iso } from '../lib.js'
+import { MIN_DAYS, MAX_DAYS } from '../plan.js'
 import { useT } from '../i18n.jsx'
 import { LangPicker, useSetLang } from '../LangPicker.jsx'
 
@@ -10,13 +11,16 @@ const PALETTES = [['ocean', 'Ocean', '#0b3d91'], ['sunrise', 'Sunrise', '#c2410c
 
 export default function Settings() {
   const { state, update, replace, saveError, dateOf } = useApp()
-  const { TOTAL, name, id } = useExam()
+  const { TOTAL, name, id, SUBJECTS } = useExam()
   const { g, set } = useGlobal()
   const t = useT()
   const setLang = useSetLang()
   const file = useRef(null)
   const [msg, setMsg] = useState('')
   const [confirm, setConfirm] = useState(false)
+  const rawDays = (() => { const e = state.settings.examDate; if (!e) return 91; const [a, b] = [state.start.split('-'), e.split('-')]; return Math.round((Date.UTC(+b[0], +b[1] - 1, +b[2]) - Date.UTC(+a[0], +a[1] - 1, +a[2])) / 864e5) + 1 })()
+  const studyDays = Math.max(1, (Math.round((TOTAL - (TOTAL >= 21 ? 7 : 3)) * (5 / 12)) * 6) / 7)
+  const topicsPerDay = Math.max(...SUBJECTS.map((s) => s.list1.length)) / studyDays
   const flash = (m) => { setMsg(t(m)); setTimeout(() => setMsg(''), 2500) }
 
   const exportData = () => {
@@ -48,10 +52,15 @@ export default function Settings() {
         <p className="small muted" style={{ margin: '2px 0 12px' }}>{t('These apply to this exam only.')}</p>
         <div className="fgrid">
           <label className="f">{t('Plan start (day 1)')}<input type="date" value={state.start} onChange={(e) => e.target.value && update((s) => { s.start = e.target.value })} /></label>
-          <label className="f">{t('Exam date (optional)')}<input type="date" value={state.settings.examDate} onChange={(e) => update((s) => { s.settings.examDate = e.target.value })} /></label>
-          <label className="f">{t('Study hours a day')}<input type="number" min="1" max="16" step="0.5" value={state.settings.dailyHours} onChange={(e) => update((s) => { s.settings.dailyHours = Math.max(1, +e.target.value || 1) })} /></label>
+          <label className="f">{t('Exam date (last day of the plan)')}<input type="date" value={state.settings.examDate || iso(addDays(parse(state.start), 90))} min={iso(addDays(parse(state.start), MIN_DAYS - 1))} onChange={(e) => update((s) => { s.settings.examDate = e.target.value })} /></label>
+          <label className="f">{t('Study hours a day')}<input type="number" min="1" max="16" step="0.5" value={state.settings.dailyHours} onChange={(e) => update((s) => { s.settings.dailyHours = Math.max(1, Math.min(16, +e.target.value || 1)) })} /></label>
         </div>
-        <p className="small muted" style={{ margin: '10px 0 0' }}>{t('Day {n} falls on {date}. Ticks stay attached to their day number if you change the start date.', { n: TOTAL, date: fmt(dateOf(TOTAL)) })}</p>
+        <p className="small" style={{ margin: '10px 0 0' }}><b>{t('Your plan: {n} days ({w} weeks)', { n: TOTAL, w: Math.round((TOTAL / 7) * 10) / 10 })}</b></p>
+        <p className="small muted" style={{ margin: '4px 0 0' }}>{t('The plan has {n} days from the start date to the exam date, split into foundation, practice, previous-year papers, mocks and a final week. Task times are sized to {h} hours a day. Day {n} falls on {date}.', { n: TOTAL, h: state.settings.dailyHours, date: fmt(dateOf(TOTAL)) })}</p>
+        {rawDays < MIN_DAYS && <p className="small" style={{ margin: '6px 0 0', color: 'var(--bad)' }}>{t('The plan needs at least {n} days. Pick a later exam date.', { n: MIN_DAYS })}</p>}
+        {rawDays > MAX_DAYS && <p className="small" style={{ margin: '6px 0 0', color: 'var(--bad)' }}>{t('Plans longer than {n} days are shortened to {n} days.', { n: MAX_DAYS })}</p>}
+        {topicsPerDay > 2 && <p className="small" style={{ margin: '6px 0 0', color: 'var(--bad)' }}>{t('Tight plan: about {n} topics per subject each study day. A later exam date gives you more room.', { n: Math.round(topicsPerDay * 10) / 10 })}</p>}
+        <p className="small muted" style={{ margin: '6px 0 0' }}>{t('Changing the dates rebuilds the plan. Ticks stay attached to their day and task number, so they may move to different work.')}</p>
       </section>
 
       <section className="card">

@@ -57,10 +57,10 @@ function AuthGate({ cloud, onSkip }) {
   const { g, set } = useGlobal()
   return (
     <>
-      <header className="top"><div className="brand"><h1>Mission 90</h1><LangPicker value={g.lang} onChange={(lang) => set({ lang })} label={t('Language')} /></div></header>
+      <header className="top"><div className="brand"><h1>Mission RRB</h1><LangPicker value={g.lang} onChange={(lang) => set({ lang })} label={t('Language')} /></div></header>
       <div className="wrap" style={{ maxWidth: 520 }}>
         <main>
-          <p className="small muted" style={{ margin: '4px 0' }}>{t('Sign in or create an account to open Mission 90. Your progress is saved to your account and follows you across devices.')}</p>
+          <p className="small muted" style={{ margin: '4px 0' }}>{t('Sign in or create an account to open Mission RRB. Your progress is saved to your account and follows you across devices.')}</p>
           <SignIn cloud={cloud} />
           <div style={{ textAlign: 'center', margin: '8px 0 24px' }}>
             <button className="btn ghost sm" onClick={onSkip}>{t('Continue without an account')}</button>
@@ -86,7 +86,7 @@ function Inner() {
     window.addEventListener('hashchange', on)
     return () => window.removeEventListener('hashchange', on)
   }, [])
-  useEffect(() => { document.title = `Mission 90 · ${t(X.name)}` }, [X.name, t])
+  useEffect(() => { document.title = `Mission RRB · ${t(X.name)}` }, [X.name, t])
   const go = (p) => { window.location.hash = '#/' + p; window.scrollTo(0, 0) }
   const grp = groupOf(page === 'lesson' ? 'days' : page)
   const Page = PAGES[page]
@@ -99,7 +99,7 @@ function Inner() {
       <Provider key={X.id}>
         <header className="top">
           <div className="brand">
-            <h1>Mission 90 <SyncDot go={go} /></h1>
+            <h1>Mission RRB <SyncDot go={go} /></h1>
             <label className="examsel"><span className="sr">{t('Exam')}</span>
               <select value={g.exam} onChange={(e) => set({ exam: e.target.value })} aria-label={t('Choose exam')}>
                 {EXAM_LIST.map((e) => <option key={e.id} value={e.id}>{t(e.name)}</option>)}

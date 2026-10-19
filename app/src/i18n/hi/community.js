@@ -1,5 +1,5 @@
 export default {
-  'Sign in or create an account to open Mission 90. Your progress is saved to your account and follows you across devices.': 'Mission 90 खोलने के लिए साइन इन करें या खाता बनाएँ। आपकी प्रगति आपके खाते में सेव होती है और हर डिवाइस पर साथ चलती है।',
+  'Sign in or create an account to open Mission RRB. Your progress is saved to your account and follows you across devices.': 'Mission RRB खोलने के लिए साइन इन करें या खाता बनाएँ। आपकी प्रगति आपके खाते में सेव होती है और हर डिवाइस पर साथ चलती है।',
   'Continue without an account': 'बिना खाते के आगे बढ़ें',
   'Without an account your progress stays only in this browser.': 'खाते के बिना आपकी प्रगति सिर्फ़ इसी ब्राउज़र में रहेगी।',
 
