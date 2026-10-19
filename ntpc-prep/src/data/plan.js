@@ -25,6 +25,8 @@ function phaseOf(n){return n<=35?PHASES[0]:n<=63?PHASES[1]:PHASES[2];}
 
 function buildDays(){
   var days=[],mock=0,n,w,d,i,t;
+  var MT=M1.filter(function(x){return x.charAt(0)!=='*'}),RT=R1.filter(function(x){return x.charAt(0)!=='*'}),GT=G1.filter(function(x){return x.charAt(0)!=='*'});
+  var rot=function(a,k){return a[k%a.length]};
   for(n=1;n<=TOTAL;n++){
     w=Math.floor((n-1)/7)+1; d=(n-1)%7+1; t=[]; var sum="";
     if(w<=5){
@@ -49,9 +51,9 @@ function buildDays(){
     } else if(w<=7){
       if(d<=6){
         const M=(w===6?M6:M7)[d-1],R=(w===6?R6:R7)[d-1],G=(w===6?G6:G7)[d-1];
-        t.push({l:"Maths: "+(w===6?"timed sets (25 Q) + review: ":"")+M,t:"2 h"});
-        t.push({l:"Reasoning: "+(w===6&&d<6?"timed sets (25 Q) + review: ":"")+R,t:"1.5 h"});
-        t.push({l:"GA: "+(w===6?"revise + MCQ set: ":"")+G,t:"2 h"});
+        t.push({l:"Maths: "+M+(w===6?" (timed 25 Q sets, then review)":""),t:"2 h"});
+        t.push({l:"Reasoning: "+R+(w===6&&d<6?" (timed 25 Q sets, then review)":""),t:"1.5 h"});
+        t.push({l:"GA: "+G+(w===6?" (revise, then an MCQ set)":""),t:"2 h"});
         t.push({l:"Current affairs: today's news + last week's notes",t:"30 min"}); sum=[M,R,G].join(" · ");
       } else { mock++; sum="Mock #"+mock;
         t.push({l:"Full mock #"+mock+" (90 min, timed sections)",t:"1.5 h"});
@@ -63,9 +65,9 @@ function buildDays(){
       if(d<=6){
         t.push({l:"Previous-year paper #"+p+" (one full RRB NTPC shift, 90 min)",t:"1.5 h"});
         t.push({l:"Analyse paper; log errors",t:"1.5 h"});
-        t.push({l:"Weak topics: Maths drill",t:"1 h"});
-        t.push({l:"Weak topics: Reasoning drill",t:"45 min"});
-        t.push({l:"GA: revise notes + current affairs",t:"1 h"}); sum="PYQ paper #"+p;
+        t.push({l:"Maths: weak-topic drill, 25 Q on "+rot(MT,p-1)+" (swap in your weakest topic from the error log)",t:"1 h"});
+        t.push({l:"Reasoning: weak-topic drill, 20 Q on "+rot(RT,p-1)+" (or your weakest)",t:"45 min"});
+        t.push({l:"GA: revise notes on "+rot(GT,p-1)+", then current affairs",t:"1 h"}); sum="PYQ paper #"+p;
       } else { mock++; sum="Mock #"+mock;
         t.push({l:"Full mock #"+mock+" (90 min)",t:"1.5 h"});
         t.push({l:"Analyse mock; log every error with cause",t:"2 h"});
@@ -76,8 +78,9 @@ function buildDays(){
       t.push({l:"Full mock #"+mock+" (90 min, exam timing)",t:"1.5 h"});
       t.push({l:"Analyse mock: every wrong, skipped and lucky-guess question",t:"2 h"});
       if(d<7){
-        t.push({l:"Weak-area drill from error log",t:"1.5 h"});
-        t.push({l:"GA recall: notes + current affairs",t:"1 h"});
+        t.push({l:"Maths: 20 Q drill on "+rot(MT,n-64)+" (swap in your weakest topic from the error log)",t:"45 min"});
+        t.push({l:"Reasoning: 15 Q drill on "+rot(RT,n-64),t:"30 min"});
+        t.push({l:"GA: recall notes on "+rot(GT,n-64)+", then current affairs",t:"45 min"});
         t.push({l:"Formulas + calculation speed",t:"20 min"});
       } else t.push({l:"Light revision only; rest in the evening",t:"1 h"});
     } else {
