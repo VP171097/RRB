@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useApp } from '../store.jsx'
 import { confetti, sfx } from '../fx.jsx'
+import { intent } from '../nav.js'
+import { todayIso } from '../lib.js'
 
 const ri = (a, b) => a + ((Math.random() * (b - a + 1)) | 0)
 const FP = [[1, 2, 50], [1, 4, 25], [1, 5, 20], [1, 8, 12.5], [1, 10, 10], [1, 20, 5], [3, 4, 75], [3, 8, 37.5], [5, 8, 62.5], [7, 8, 87.5], [2, 5, 40], [3, 5, 60], [1, 16, 6.25], [1, 3, 33.33], [1, 6, 16.67], [1, 12, 8.33]]
@@ -19,7 +21,8 @@ const SECONDS = 60
 
 export default function Speed() {
   const { state, update } = useApp()
-  const [mode, setMode] = useState('mix')
+  const [mode, setMode] = useState(intent.speedMode || 'mix')
+  useEffect(() => { intent.speedMode = null }, [])
   const [phase, setPhase] = useState('setup')
   const [q, setQ] = useState(null)
   const [val, setVal] = useState('')
@@ -47,7 +50,7 @@ export default function Speed() {
     const s = st.current
     const prevBest = state.speed.best[mode] || 0
     const record = s.score > prevBest && s.score > 0
-    update((x) => { x.speed.xp += Math.round(s.score / 20); x.speed.best[mode] = Math.max(prevBest, s.score) })
+    update((x) => { x.speed.xp += Math.round(s.score / 20); x.speed.best[mode] = Math.max(prevBest, s.score); const d = (x.speed.daily ||= {}), k = todayIso(); d[k] = Math.max(d[k] || 0, s.score) })
     setFin({ ...s, record, prevBest }); setPhase('result')
     if (record) { confetti(120); sfx('done') }
   }

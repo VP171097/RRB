@@ -42,7 +42,7 @@ export default function Cards() {
   const rate = (good) => {
     const k = queue[0], c = state.cards[k] || { box: 0 }
     const box = good ? Math.min(5, c.box + 1) : 0
-    update((s) => { s.cards[k] = { box, due: good ? iso(addDays(parse(today), GAPS[box])) : today } })
+    update((s) => { s.cards[k] = { box, due: good ? iso(addDays(parse(today), GAPS[box])) : today }; if (good) { const d = (s.cardsDay ||= {}); d[today] = (d[today] || 0) + 1 } })
     sfx(good ? 'ok' : 'bad')
     const rest = queue.slice(1)
     const nq = good ? rest : [...rest, k]

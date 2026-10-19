@@ -64,6 +64,7 @@ export default function Quiz() {
       s.quiz.xp += gained; s.quiz.played += 1
       s.quiz.best = Math.max(s.quiz.best, accAll)
       if (qs.length >= 10 && accAll >= 90) s.quiz.sharp = (s.quiz.sharp || 0) + 1
+      if (qs.length >= 10) { const d = (s.quiz.daily ||= {}), k = todayIso(); d[k] = Math.max(d[k] || 0, accAll) }
     })
     setPhase('result')
     if (accAll >= 80) { confetti(120); sfx('done') } else sfx('ok')

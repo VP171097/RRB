@@ -14,11 +14,13 @@ import Notes from './pages/Notes.jsx'
 import Focus from './pages/Focus.jsx'
 import Practice from './pages/Practice.jsx'
 import Rewards from './pages/Rewards.jsx'
+import Mission from './pages/Mission.jsx'
+import Tricks from './pages/Tricks.jsx'
 import { Toaster } from './fx.jsx'
 import Settings from './pages/Settings.jsx'
 
 const PAGES = [
-  ['today', 'Today', Dashboard], ['days', 'Days', Days], ['topics', 'Topics', Topics], ['practice', 'Practice', Practice], ['focus', 'Focus', Focus],
+  ['today', 'Today', Dashboard], ['mission', 'Mission', Mission], ['days', 'Days', Days], ['topics', 'Topics', Topics], ['tricks', 'Tricks', Tricks], ['practice', 'Practice', Practice], ['focus', 'Focus', Focus],
   ['rewards', 'Rewards', Rewards], ['syllabus', 'Syllabus', Syllabus], ['exam', 'Exam', Exam], ['pyq', 'PYQs', Pyq], ['library', 'Library', Library],
   ['resources', 'Resources', Resources], ['mocks', 'Mocks', Mocks], ['errors', 'Errors', Errors], ['notes', 'Notes', Notes], ['settings', 'Settings', Settings],
 ]
@@ -37,7 +39,7 @@ function Shell() {
   return (
     <>
       <header className="top">
-        <div className="brand"><h1>NTPC Prep</h1><span>RRB CEN 06/2026 · Graduate</span></div>
+        <div className="brand"><h1>Mission 90</h1><span>RRB NTPC · Graduate</span></div>
         <nav className="tabs" role="tablist" aria-label="Sections">
           {PAGES.map(([k, l]) => <button key={k} role="tab" aria-selected={page === k} onClick={() => go(k)}>{l}</button>)}
         </nav>

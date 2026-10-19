@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { xpParts, rankInfo, BADGES } from './gamify.js'
+import { buildGame } from './game.js'
 import { notify, confetti, sfx, setSound } from './fx.jsx'
 import { DAYS, TOTAL, TOPICS } from './data/plan.js'
 import { todayIso, parse, iso, addDays } from './lib.js'
@@ -10,8 +11,8 @@ export const blank = () => ({
   t: 0,
   start: todayIso(),
   done: {}, topics: {}, syl: {}, ca: {}, pyq: {},
-  mocks: [], errors: [], log: {}, badges: {}, cards: {},
-  quiz: { xp: 0, played: 0, best: 0, sharp: 0 }, speed: { xp: 0, best: {} },
+  mocks: [], errors: [], log: {}, badges: {}, cards: {}, tricks: {}, quests: {}, cardsDay: {},
+  quiz: { xp: 0, played: 0, best: 0, sharp: 0, daily: {} }, speed: { xp: 0, best: {}, daily: {} },
   settings: { dailyHours: 7, theme: 'system', palette: 'ocean', sound: true, examDate: '' },
 })
 
@@ -80,7 +81,8 @@ export function Provider({ children }) {
     return { dateOf, today, dayDone, dayFull, tasks: { all, done }, streak, backlog, learned, rev3, topicCount: TOPICS.length }
   }, [state])
 
-  const xpInfo = useMemo(() => xpParts(state), [state])
+  const game = useMemo(() => buildGame(state, derived), [state, derived])
+  const xpInfo = useMemo(() => xpParts(state, game), [state, game])
   const rank = useMemo(() => rankInfo(xpInfo.total), [xpInfo])
 
   // Rewards: XP toasts, rank-ups, badges and the day-complete celebration.
@@ -88,11 +90,11 @@ export function Provider({ children }) {
   const born = useRef(Date.now())
   useEffect(() => {
     const cur = Math.max(1, Math.min(derived.today, TOTAL))
-    const snap = { xp: xpInfo.total, rank: rank.idx, full: derived.dayFull(cur), cur }
+    const snap = { xp: xpInfo.total, rank: rank.idx, full: derived.dayFull(cur), cur, cleared: game.cleared, won: game.won }
     const p = prev.current
     prev.current = snap
     const live = Date.now() - born.current > 1500
-    const newly = BADGES.filter((b) => !state.badges[b.id] && b.test({ s: state, streak: derived.streak, dayFull: derived.dayFull }))
+    const newly = BADGES.filter((b) => !state.badges[b.id] && b.test({ s: state, streak: derived.streak, dayFull: derived.dayFull, game }))
     if (newly.length) {
       const stamp = todayIso()
       update((s) => { newly.forEach((b) => { s.badges[b.id] = stamp }) })
@@ -102,10 +104,12 @@ export function Provider({ children }) {
     if (!p || !live) return
     if (snap.xp > p.xp) { notify('+' + (snap.xp - p.xp) + ' XP'); sfx('tick') }
     if (snap.rank > p.rank) { notify('Rank up: ' + rank.name, 'badge'); confetti(200); sfx('level') }
+    if (snap.cleared > p.cleared) { notify('Station cleared: ' + game.stations[snap.cleared - 1]?.name, 'badge'); confetti(180); sfx('level') }
+    if (snap.won && !p.won) { notify('YOU WIN. The 90 Dragon is down.', 'badge'); confetti(400); sfx('level') }
     if (snap.cur === p.cur && snap.full && !p.full) { notify('Day ' + cur + ' complete. Well run.', 'badge'); confetti(160); sfx('done') }
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const value = useMemo(() => ({ state, update, replace, saveError, xp: xpInfo, rank, ...derived }), [state, update, replace, saveError, xpInfo, rank, derived])
+  const value = useMemo(() => ({ state, update, replace, saveError, xp: xpInfo, rank, game, ...derived }), [state, update, replace, saveError, xpInfo, rank, game, derived])
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
 

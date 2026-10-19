@@ -7,6 +7,7 @@ import { subjectOf } from '../lib.js'
 import { fmt, pct, todayIso, round1, mockTotal, parse } from '../lib.js'
 import { intent } from '../nav.js'
 import { sfx } from '../fx.jsx'
+import { bossHp } from '../game.js'
 
 const TIPS = [
   'Skip any question that eats more than 90 seconds. Flag it and move on.',
@@ -25,7 +26,7 @@ const TIPS = [
 const hello = () => { const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening' }
 
 export default function Dashboard({ go }) {
-  const { state, update, today, dateOf, dayDone, tasks, learned, topicCount, streak, backlog, rank, xp } = useApp()
+  const { state, update, today, dateOf, dayDone, tasks, learned, topicCount, streak, backlog, rank, xp, game } = useApp()
   const [peek, setPeek] = useState(null)
   const cur = Math.max(1, Math.min(today, TOTAL))
   const day = DAYS[cur - 1]
@@ -72,6 +73,16 @@ export default function Dashboard({ go }) {
           <span>{exam !== null ? (exam >= 0 ? `${exam} day${exam === 1 ? '' : 's'} to exam` : 'Exam date passed') : <button className="linkbtn" onClick={() => go('settings')}>Set exam date</button>}</span>
         </div>
       </section>
+
+      <button className={'card missionstrip' + (game.won ? ' won' : '')} onClick={() => go('mission')}>
+        <div className="grow" style={{ textAlign: 'left' }}>
+          <span className="lab2">{game.won ? 'Victory' : `Mission 90 · Station ${game.current.k} of 13`}</span>
+          <div className="nu-t">{game.won ? 'You beat the 90 Dragon' : game.current.name}</div>
+          {!game.won && <div className="small muted">Boss: {game.current.boss} · needs {game.current.target == null ? 'any score' : game.current.target + '+'}</div>}
+          <div className="hp" style={{ marginTop: 8 }}><i style={{ width: (game.won ? 0 : bossHp(game.current)) + '%' }} /></div>
+        </div>
+        <div style={{ textAlign: 'center' }}><b className="sc num">{game.cleared}</b><div className="tiny muted">of 13 cleared</div></div>
+      </button>
 
       <section className="card nextup">
         <Ring value={pct(doneToday, allToday)} size={92} stroke={10} color="var(--ok)" label={`${doneToday} of ${allToday} tasks done today`}>
@@ -150,7 +161,7 @@ export default function Dashboard({ go }) {
       <section className="card">
         <h3>Play and practise</h3>
         <div className="seg" style={{ marginTop: 8 }}>
-          {[['practice', 'Quiz, Speed Maths, Flashcards'], ['pyq', 'Previous-year papers'], ['syllabus', 'Syllabus'], ['notes', 'Formula sheets']].map(([k, l]) =>
+          {[['tricks', 'Tricks and shortcuts'], ['practice', 'Quiz, Speed Maths, Flashcards'], ['pyq', 'Previous-year papers'], ['syllabus', 'Syllabus'], ['notes', 'Formula sheets']].map(([k, l]) =>
             <button key={k} className="btn ghost sm" onClick={() => go(k)}>{l}</button>)}
         </div>
       </section>

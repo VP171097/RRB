@@ -1,4 +1,4 @@
-# NTPC Prep
+# Mission 90 (NTPC Prep)
 
 A study tool for the RRB NTPC (graduate) CBT, built with React and Vite. No server and no account: progress is saved in your browser.
 
@@ -6,6 +6,9 @@ A study tool for the RRB NTPC (graduate) CBT, built with React and Vite. No serv
 
 | Tab | What it does |
 |---|---|
+| Mission | The game: 13 stations (the 13 weeks), a boss at each, daily quests, fuel gauge. Win by scoring 90+ |
+| Tricks | 83 maths and reasoning shortcuts grouped by syllabus topic, with try-it examples |
+| Practice / Focus / Rewards | Quiz, Speed Maths, flashcards, focus timer, XP, ranks and badges |
 | Today / Days | 91-day plan with a checkbox for every task, by day and week |
 | Topics | Per-topic tracker: Learn, Practice, Rev 1, Rev 2, Rev 3 |
 | Syllabus | Detailed syllabus (every heading in the notification, 52 topic groups) with priority, indicative weight, tick-off, practice and video links |

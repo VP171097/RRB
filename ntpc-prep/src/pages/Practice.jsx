@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { intent } from '../nav.js'
 import Quiz from './Quiz.jsx'
 import Speed from './Speed.jsx'
 import Cards from './Cards.jsx'
@@ -6,7 +7,8 @@ import Cards from './Cards.jsx'
 const TABS = [['quiz', 'Quiz', Quiz], ['speed', 'Speed Maths', Speed], ['cards', 'Flashcards', Cards]]
 
 export default function Practice() {
-  const [t, setT] = useState('quiz')
+  const [t, setT] = useState(intent.practiceTab || 'quiz')
+  useEffect(() => { intent.practiceTab = null }, [])
   const Page = TABS.find((x) => x[0] === t)[2]
   return (
     <>

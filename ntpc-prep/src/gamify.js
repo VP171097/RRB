@@ -18,7 +18,7 @@ export const focusMinutes = (s) => Object.values(s.log || {}).reduce((a, d) => a
 export const tasksDone = (s) => Object.keys(s.done).length
 export const stagesDone = (s) => TOPICS.reduce((a, t) => a + COLS.filter((_, i) => s.topics[t.k]?.[i]).length, 0)
 
-export function xpParts(s) {
+export function xpParts(s, g) {
   const parts = [
     ['Daily tasks', tasksDone(s) * 10],
     ['Topic stages', stagesDone(s) * 8],
@@ -30,6 +30,9 @@ export function xpParts(s) {
     ['Quizzes', s.quiz?.xp || 0],
     ['Speed Maths', s.speed?.xp || 0],
     ['Flashcards', cardsKnown(s) * 4],
+    ['Tricks learned', Object.values(s.tricks || {}).filter(Boolean).length * 6],
+    ['Daily quests', Object.values(s.quests || {}).reduce((a, q) => a + q.length * 25 + (q.length >= 5 ? 50 : 0), 0)],
+    ['Stations cleared', g ? g.stations.reduce((a, x) => a + (x.cleared ? 120 + (x.stars === 3 ? 30 : 0) : 0), 0) + (g.won ? 500 : 0) : 0],
   ]
   return { parts, total: parts.reduce((a, p) => a + p[1], 0) }
 }
@@ -38,7 +41,7 @@ const learned = (s) => TOPICS.filter((t) => s.topics[t.k]?.[0]).length
 const bestMock = (s) => (s.mocks.length ? Math.max(...s.mocks.map((m) => (+m.ga || 0) + (+m.maths || 0) + (+m.reas || 0))) : 0)
 const perfectWeeks = (dayFull) => { let c = 0; for (let w = 0; w < 13; w++) { let ok = true; for (let d = 1; d <= 7; d++) if (!dayFull(w * 7 + d)) ok = false; if (ok) c++ } return c }
 
-// c = { s: state, streak, dayFull }
+// c = { s: state, streak, dayFull, game }
 export const BADGES = [
   { id: 'first', name: 'First Signal', desc: 'Complete your first task', color: 'ga', test: (c) => tasksDone(c.s) >= 1 },
   { id: 'day', name: 'Clean Run', desc: 'Finish every task in a day', color: 'ok', test: (c) => DAYS.some((d) => c.dayFull(d.n)) },
@@ -61,6 +64,13 @@ export const BADGES = [
   { id: 'q1', name: 'Quiz Starter', desc: 'Finish a quiz', color: 'reas', test: (c) => (c.s.quiz?.played || 0) >= 1 },
   { id: 'q90', name: 'Sharp Mind', desc: 'Score 90%+ on a quiz of 10 or more', color: 'reas', test: (c) => (c.s.quiz?.sharp || 0) >= 1 },
   { id: 'sp', name: 'Quick Hands', desc: 'Score 300+ in a Speed Maths sprint', color: 'maths', test: (c) => Math.max(0, ...Object.values(c.s.speed?.best || {})) >= 300 },
+  { id: 'tr10', name: 'Trick Collector', desc: 'Learn 10 tricks', color: 'maths', test: (c) => Object.values(c.s.tricks || {}).filter(Boolean).length >= 10 },
+  { id: 'tr40', name: 'Shortcut Master', desc: 'Learn 40 tricks', color: 'maths', test: (c) => Object.values(c.s.tricks || {}).filter(Boolean).length >= 40 },
+  { id: 'qs1', name: 'Quest Taker', desc: 'Claim a daily quest', color: 'ga', test: (c) => Object.values(c.s.quests || {}).some((q) => q.length) },
+  { id: 'qs5', name: 'Quest Sweep', desc: 'Claim all five quests in a day', color: 'ga', test: (c) => Object.values(c.s.quests || {}).some((q) => q.length >= 5) },
+  { id: 'gs1', name: 'First Station', desc: 'Clear your first station', color: 'mock', test: (c) => c.game.cleared >= 1 },
+  { id: 'gs7', name: 'Halfway Home', desc: 'Clear 7 stations', color: 'mock', test: (c) => c.game.cleared >= 7 },
+  { id: 'win', name: 'Terminus Reached', desc: 'Defeat the 90 Dragon and win the game', color: 'ok', test: (c) => c.game.won },
   { id: 'c50', name: 'Card Shark', desc: 'Know 50 flashcards', color: 'ga', test: (c) => cardsKnown(c.s) >= 50 },
 ]
 export const TOTAL_DAYS = TOTAL
