@@ -1175,4 +1175,8 @@ export default {
   'Computers, Awards, Sports, Days (revise, then an MCQ set)': 'कंप्यूटर, पुरस्कार, खेल, दिवस (रिवीज़न करें, फिर एक MCQ सेट)',
   'Geometry + Trigonometry + Statistics (timed sets, then review)': 'ज्यामिति + त्रिकोणमिति + सांख्यिकी (समयबद्ध सेट, फिर समीक्षा)',
   'Railways GK, PSUs, Transport, Flora & Fauna (revise, then an MCQ set)': 'रेलवे GK, PSU, परिवहन, वनस्पति और जीव-जंतु (रिवीज़न करें, फिर एक MCQ सेट)',
+  'A Comprehensive Guide for RRB NTPC (Adda247, 556 pages, PDF, 116 MB)': 'RRB NTPC के लिए संपूर्ण गाइड (Adda247, 556 पेज, PDF, 116 MB)',
+  'Full-syllabus guide. Opens the shared Google Drive file': 'पूरे पाठ्यक्रम की गाइड। शेयर की गई Google Drive फ़ाइल खुलती है',
+  'RRB NTPC Stage-1 Practice Workbook (Kiran, 339 pages, PDF, 8 MB)': 'RRB NTPC स्टेज-1 प्रैक्टिस वर्कबुक (Kiran, 339 पेज, PDF, 8 MB)',
+  'Stage-1 practice sets. Opens the shared Google Drive file': 'स्टेज-1 के प्रैक्टिस सेट। शेयर की गई Google Drive फ़ाइल खुलती है',
 }
