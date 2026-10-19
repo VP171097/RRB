@@ -52,7 +52,7 @@ export function Provider({ children }) {
       return next
     })
   }, [])
-  const replace = useCallback((next) => setState({ ...merge(next), t: Date.now() }), [])
+  const replace = useCallback((next, keepT = false) => setState({ ...merge(next), t: keepT ? next.t : Date.now() }), [])
 
   const derived = useMemo(() => {
     const start = parse(state.start)

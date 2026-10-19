@@ -13,6 +13,7 @@
     "fetch-pdf": "node scripts/fetch-pdf.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

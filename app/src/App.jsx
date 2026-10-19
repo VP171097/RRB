@@ -25,10 +25,14 @@ import Errors from './pages/Errors.jsx'
 import Rewards from './pages/Rewards.jsx'
 import Settings from './pages/Settings.jsx'
 import Lesson from './pages/Lesson.jsx'
+import Community from './pages/Community.jsx'
+import { CloudProvider } from './cloud.jsx'
+import CloudSync from './CloudSync.jsx'
+import SyncDot from './SyncDot.jsx'
 
 const PAGES = {
   today: Dashboard, mission: Mission, days: Days, topics: Topics, syllabus: Syllabus, tricks: Tricks, notes: Notes, pyq: Pyq, library: Library,
-  resources: Resources, exam: Exam, lesson: Lesson, quiz: Quiz, speed: Speed, cards: Cards, focus: Focus, mocks: Mocks, errors: Errors, rewards: Rewards, settings: Settings,
+  resources: Resources, exam: Exam, lesson: Lesson, community: Community, quiz: Quiz, speed: Speed, cards: Cards, focus: Focus, mocks: Mocks, errors: Errors, rewards: Rewards, settings: Settings,
 }
 const readHash = () => {
   const [p, ...rest] = window.location.hash.replace('#/', '').replace('#', '').split('/')
@@ -55,7 +59,7 @@ function Shell() {
       <Provider key={X.id}>
         <header className="top">
           <div className="brand">
-            <h1>Mission 90</h1>
+            <h1>Mission 90 <SyncDot go={go} /></h1>
             <label className="examsel"><span className="sr">Exam</span>
               <select value={g.exam} onChange={(e) => set({ exam: e.target.value })} aria-label="Choose exam">
                 {EXAM_LIST.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
@@ -73,9 +77,10 @@ function Shell() {
           <main key={page + param}><Page go={go} param={param} /></main>
         </div>
         <Toaster />
+        <CloudSync />
       </Provider>
     </ExamCtx.Provider>
   )
 }
 
-export default function App() { return <GlobalProvider><Shell /></GlobalProvider> }
+export default function App() { return <GlobalProvider><CloudProvider><Shell /></CloudProvider></GlobalProvider> }

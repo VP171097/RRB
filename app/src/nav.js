@@ -7,6 +7,6 @@ export const NAV = [
   { id: 'plan', label: 'Plan', subs: [['days', 'Days'], ['topics', 'Topics'], ['syllabus', 'Syllabus']] },
   { id: 'learn', label: 'Learn', subs: [['tricks', 'Tricks'], ['notes', 'Notes'], ['pyq', 'Papers'], ['library', 'Library'], ['resources', 'Links'], ['exam', 'Pattern']] },
   { id: 'practice', label: 'Practice', subs: [['quiz', 'Quiz'], ['speed', 'Speed Maths'], ['cards', 'Cards'], ['focus', 'Focus']] },
-  { id: 'track', label: 'Track', subs: [['mocks', 'Mocks'], ['errors', 'Errors'], ['rewards', 'Rewards'], ['settings', 'Settings']] },
+  { id: 'track', label: 'Track', subs: [['mocks', 'Mocks'], ['errors', 'Errors'], ['rewards', 'Rewards'], ['community', 'Group'], ['settings', 'Settings']] },
 ]
 export const groupOf = (page) => NAV.find((g) => g.subs.some((s) => s[0] === page)) || NAV[0]

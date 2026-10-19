@@ -29,9 +29,13 @@ Needs Node 20 or newer.
 | Plan | Days (one week per page), Topics, Syllabus |
 | Learn | Tricks, Notes, Papers, Library, Links, Pattern |
 | Practice | Quiz, Speed Maths, Cards, Focus |
-| Track | Mocks, Errors, Rewards, Settings |
+| Track | Mocks, Errors, Rewards, Group, Settings |
 
 Progress is stored in the browser, separately for each exam. Look-and-feel settings are shared. Use **Settings → Export backup** to move progress between devices.
+
+## Sign-in, cloud saving and study groups
+
+Optional. Follow `supabase/SETUP.md` (about ten minutes, free) to turn on accounts, saving across devices, and group leaderboards. Without it the site saves in the browser only.
 
 ## PDFs
 
