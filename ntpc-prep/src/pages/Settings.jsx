@@ -42,7 +42,24 @@ export default function Settings() {
         <div className="row" style={{ marginTop: 8 }}><input type="number" min="1" max="16" step="0.5" style={{ maxWidth: 100 }} aria-label="Hours per day" value={state.settings.dailyHours} onChange={(e) => update((s) => { s.settings.dailyHours = Math.max(1, +e.target.value || 1) })} /><span className="small muted">hours a day</span></div>
       </section>
       <section className="card">
-        <h3>Theme</h3>
+        <h3>Exam date</h3>
+        <p className="small muted" style={{ margin: '4px 0 10px' }}>Optional. Adds a countdown to the home screen.</p>
+        <input type="date" style={{ maxWidth: 200 }} aria-label="Exam date" value={state.settings.examDate} onChange={(e) => update((s) => { s.settings.examDate = e.target.value })} />
+      </section>
+      <section className="card">
+        <h3>Colour palette</h3>
+        <div className="palettes" role="group" aria-label="Palette">
+          {[['ocean', 'Ocean', '#0b3d91'], ['sunrise', 'Sunrise', '#c2410c'], ['forest', 'Forest', '#15803d'], ['violet', 'Violet', '#6d28d9'], ['rose', 'Rose', '#be185d']].map(([k, l, c]) => (
+            <button key={k} className="pal" aria-pressed={state.settings.palette === k} onClick={() => update((s) => { s.settings.palette = k })}><i style={{ background: c }} />{l}</button>
+          ))}
+        </div>
+      </section>
+      <section className="card">
+        <h3>Sound effects</h3>
+        <label className="sub" style={{ marginTop: 6 }}><input type="checkbox" checked={state.settings.sound !== false} onChange={(e) => update((s) => { s.settings.sound = e.target.checked })} /><span className="box" /><span className="tx">Short sounds for XP, quiz answers and celebrations</span></label>
+      </section>
+      <section className="card">
+        <h3>Light or dark</h3>
         <div className="seg" style={{ marginTop: 8 }}>
           {['system', 'light', 'dark'].map((t) => <button key={t} className="btn ghost sm" aria-pressed={state.settings.theme === t} onClick={() => update((s) => { s.settings.theme = t })}>{t[0].toUpperCase() + t.slice(1)}</button>)}
         </div>

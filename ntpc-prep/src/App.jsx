@@ -11,13 +11,16 @@ import Library from './pages/Library.jsx'
 import Mocks from './pages/Mocks.jsx'
 import Errors from './pages/Errors.jsx'
 import Notes from './pages/Notes.jsx'
-import Log from './pages/Log.jsx'
+import Focus from './pages/Focus.jsx'
+import Practice from './pages/Practice.jsx'
+import Rewards from './pages/Rewards.jsx'
+import { Toaster } from './fx.jsx'
 import Settings from './pages/Settings.jsx'
 
 const PAGES = [
-  ['today', 'Today', Dashboard], ['days', 'Days', Days], ['topics', 'Topics', Topics], ['syllabus', 'Syllabus', Syllabus],
-  ['exam', 'Exam', Exam], ['pyq', 'PYQs', Pyq], ['library', 'Library', Library], ['resources', 'Resources', Resources],
-  ['mocks', 'Mocks', Mocks], ['errors', 'Errors', Errors], ['notes', 'Notes', Notes], ['log', 'Study log', Log], ['settings', 'Settings', Settings],
+  ['today', 'Today', Dashboard], ['days', 'Days', Days], ['topics', 'Topics', Topics], ['practice', 'Practice', Practice], ['focus', 'Focus', Focus],
+  ['rewards', 'Rewards', Rewards], ['syllabus', 'Syllabus', Syllabus], ['exam', 'Exam', Exam], ['pyq', 'PYQs', Pyq], ['library', 'Library', Library],
+  ['resources', 'Resources', Resources], ['mocks', 'Mocks', Mocks], ['errors', 'Errors', Errors], ['notes', 'Notes', Notes], ['settings', 'Settings', Settings],
 ]
 const ids = PAGES.map((p) => p[0])
 const readHash = () => { const h = window.location.hash.replace('#/', '').replace('#', ''); return ids.includes(h) ? h : 'today' }
@@ -39,7 +42,8 @@ function Shell() {
           {PAGES.map(([k, l]) => <button key={k} role="tab" aria-selected={page === k} onClick={() => go(k)}>{l}</button>)}
         </nav>
       </header>
-      <div className="wrap"><main><Page go={go} /></main></div>
+      <div className="wrap"><main key={page}><Page go={go} /></main></div>
+      <Toaster />
     </>
   )
 }

@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useApp } from '../store.jsx'
 import { TOPICS, SUBS, COLS } from '../data/plan.js'
 import { Bar } from '../ui.jsx'
+import { intent } from '../nav.js'
 
 export default function Topics() {
   const { state, update } = useApp()
-  const [sub, setSub] = useState('Maths')
+  const [sub, setSub] = useState(intent.topicSub || 'Maths')
+  useEffect(() => { intent.topicSub = null }, [])
   const list = TOPICS.filter((t) => t.sub === sub)
   const stages = list.reduce((a, t) => a + COLS.filter((_, i) => state.topics[t.k]?.[i]).length, 0)
   return (
@@ -16,13 +18,13 @@ export default function Topics() {
         {SUBS.map((s) => {
           const t = TOPICS.filter((x) => x.sub === s)
           const l = t.filter((x) => state.topics[x.k]?.[0]).length
-          return <button key={s} className="btn ghost" aria-pressed={sub === s} onClick={() => setSub(s)}>{s} {l}/{t.length}</button>
+          return <button key={s} className={'btn ghost sbtn s-' + ({ Maths: 'maths', Reasoning: 'reas', GA: 'ga' }[s])} aria-pressed={sub === s} onClick={() => setSub(s)}>{s} {l}/{t.length}</button>
         })}
       </div>
       <Bar a={stages} b={list.length * 5} accent />
       <section className="card">
         {list.map((t) => (
-          <div className="tp" key={t.k}>
+          <div className={'tp s-' + ({ Maths: 'maths', Reasoning: 'reas', GA: 'ga' }[t.sub])} key={t.k}>
             <div className="row" style={{ justifyContent: 'space-between', flexWrap: 'nowrap' }}><span className="nm">{t.name}</span><span className="chip">Day {t.day}</span></div>
             <div className="cols">
               {COLS.map((c, i) => (

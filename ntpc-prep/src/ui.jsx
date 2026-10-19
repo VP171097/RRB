@@ -1,6 +1,7 @@
 import { useApp } from './store.jsx'
 import { DAYS } from './data/plan.js'
 import { pct, groupTasks } from './lib.js'
+import { SUB_CLASS } from './widgets.jsx'
 
 export function Bar({ a, b, accent }) {
   return <div className={'bar' + (accent ? ' accent' : '')}><i style={{ width: pct(a, b) + '%' }} /></div>
@@ -12,7 +13,7 @@ export function TaskList({ n }) {
   return groups.map((g) => {
     const done = g.items.filter((x) => state.done[n + '.' + x.i]).length
     return (
-      <section className="grp" key={g.name}>
+      <section className={'grp s-' + SUB_CLASS[g.name]} key={g.name}>
         <div className="grp-h">
           <h3>{g.name}</h3>
           <span className={'small num ' + (done === g.items.length ? 'ok' : 'muted')}>{done}/{g.items.length}</span>
