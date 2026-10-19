@@ -57,6 +57,7 @@ export default function Focus() {
   const start = () => { try { document.documentElement.requestFullscreen?.({ navigationUI: 'hide' }).catch(() => {}) } catch { /* not allowed here */ } persist({ sub, dur: mins * 60, acc: 0, since: Date.now() }); setNow(Date.now()) }
   const pause = () => persist({ ...run, acc: secs(run, Date.now()), since: null })
   const resume = () => { persist({ ...run, since: Date.now() }); setNow(Date.now()) }
+  const discard = () => { persist(null); try { if (document.fullscreenElement) document.exitFullscreen() } catch { /* ignore */ } }
   const finish = (auto) => {
     const sec = secs(run, Date.now())
     const m = Math.max(0, Math.round((run.dur ? Math.min(sec, run.dur) : sec) / 60))
@@ -91,6 +92,7 @@ export default function Focus() {
             <button className="btn big-btn" onClick={paused ? resume : pause}>{paused ? t('Resume') : t('Pause')}</button>
             <button className="btn ghost big-btn" onClick={() => finish(false)}>{run.dur ? t('End and save') : t('Stop and save')}</button>
           </div>
+          <button className="ff-discard" onClick={discard}>{t('Discard without saving')}</button>
         </div>,
         document.body
       )}
