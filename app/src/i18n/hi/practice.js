@@ -1,4 +1,11 @@
 export default {
+  'Pause': 'रोकें (पॉज़)',
+  'Resume': 'फिर शुरू करें',
+  'Paused': 'पॉज़ है',
+  'Stay with it': 'डटे रहिए',
+  'End and save': 'खत्म करें और सेव करें',
+  'Discard without saving': 'बिना सेव किए रद्द करें',
+
   // Quiz
   'Quick quiz': 'क्विक क्विज़',
   '{n} questions across {cats}. Questions and options are shuffled every time.': '{cats} में कुल {n} प्रश्न। प्रश्न और विकल्प हर बार बदल जाते हैं।',
