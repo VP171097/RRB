@@ -44,3 +44,6 @@ Drop PDFs into `RRB_<exam>/pdfs/<folder>/` and commit them, or from `app/`:
     npm run fetch-pdf -- "<direct-pdf-url>" graduate/pyq/ntpc-2025-shift1.pdf
 
 `graduate`, `undergraduate` or `groupd`, then `syllabus`, `pyq`, `notes`, `books` or `other`. The Library page reads them after the next build.
+
+## Hindi
+The site has an English / Hindi switch (when creating an account and under Track → Settings; saved on the account when signed in). Text goes through `t('English text')` (`app/src/i18n.jsx`) with dictionaries in `app/src/i18n/hi/` and `RRB_*/hi/dict.js`. Hindi lessons, drills, tricks, quiz and notes live in `RRB_*/hi/`; anything without a Hindi entry falls back to English. Please have a Hindi speaker proofread before relying on it.
