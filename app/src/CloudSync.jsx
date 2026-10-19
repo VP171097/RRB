@@ -4,6 +4,7 @@ import { useApp } from './store.jsx'
 import { useExam } from './exam.jsx'
 import { notify } from './fx.jsx'
 import { mockTotal, pct } from './lib.js'
+import { useT } from './i18n.jsx'
 
 // Keeps the signed-in person's progress for the current exam in Supabase.
 // Newer copy wins: on sign-in the cloud copy is loaded if it is newer; otherwise the local copy is uploaded.
@@ -11,6 +12,7 @@ export const SYNC_KEY = 'mission90-sync-status'
 const setStatus = (s) => { try { localStorage.setItem(SYNC_KEY, JSON.stringify({ s, at: Date.now() })); window.dispatchEvent(new Event('mission90-sync')) } catch { /* ignore */ } }
 
 export default function CloudSync() {
+  const t = useT()
   const cloud = useCloud()
   const { state, replace, xp, streak, tasks, learned } = useApp()
   const X = useExam()
@@ -48,7 +50,7 @@ export default function CloudSync() {
         replace({ ...data.data, t: data.client_t }, true)
         syncedT.current = data.client_t
         setStatus('saved')
-        notify('Loaded your saved progress from the cloud')
+        notify(t('Loaded your saved progress from the cloud'))
       } else {
         syncedT.current = data ? data.client_t || 0 : -1
         await push()

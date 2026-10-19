@@ -3,20 +3,23 @@ import { useExam } from '../exam.jsx'
 import { videoLink, searchLink } from '../../../RRB_Graduate/resources.js'
 import { Ext } from '../ui.jsx'
 import { Pager, usePaged } from '../pager.jsx'
+import { useT } from '../i18n.jsx'
 
 function Item({ href, title, note, tag }) {
+  const t = useT()
   return (
     <div className="res">
       <div className="row" style={{ justifyContent: 'space-between', flexWrap: 'nowrap' }}>
-        {href ? <Ext href={href}>{title}</Ext> : <b>{title}</b>}
-        {tag && <span className="chip">{tag}</span>}
+        {href ? <Ext href={href}>{t(title)}</Ext> : <b>{t(title)}</b>}
+        {tag && <span className="chip">{t(tag)}</span>}
       </div>
-      {note && <span className="small muted">{note}</span>}
+      {note && <span className="small muted">{t(note)}</span>}
     </div>
   )
 }
 
 export default function Resources() {
+  const t = useT()
   const { RES } = useExam()
   const [tab, setTab] = useState('official')
   const tabs = {
@@ -29,14 +32,14 @@ export default function Resources() {
   const L = [['official', 'Official'], ['sites', 'Study sites'], ['books', 'Books'], ['videos', 'Videos']]
   return (
     <>
-      <h2>Links and resources</h2>
-      <p className="small muted" style={{ margin: 0 }}>Official and free sources link directly. Papers, books and video courses are searches, which keep working when sites move files.</p>
-      <div className="seg" role="group" aria-label="Type">
-        {L.map(([k, l]) => <button key={k} className="btn ghost sm" aria-pressed={tab === k} onClick={() => { setTab(k); pg.setPage(1) }}>{l}</button>)}
+      <h2>{t('Links and resources')}</h2>
+      <p className="small muted" style={{ margin: 0 }}>{t('Official and free sources link directly. Papers, books and video courses are searches, which keep working when sites move files.')}</p>
+      <div className="seg" role="group" aria-label={t('Type')}>
+        {L.map(([k, l]) => <button key={k} className="btn ghost sm" aria-pressed={tab === k} onClick={() => { setTab(k); pg.setPage(1) }}>{t(l)}</button>)}
       </div>
       <section className="card">{pg.items.map((r) => <Item key={r.title} {...r} />)}</section>
-      <Pager pg={pg} label="Links page" />
-      {tab === 'books' && <p className="small muted" style={{ margin: 0 }}>Choose one book per subject and finish it. Several half-read books help less than one revised three times.</p>}
+      <Pager pg={pg} label={t('Links page')} />
+      {tab === 'books' && <p className="small muted" style={{ margin: 0 }}>{t('Choose one book per subject and finish it. Several half-read books help less than one revised three times.')}</p>}
     </>
   )
 }

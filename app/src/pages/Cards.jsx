@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useApp } from '../store.jsx'
+import { useT } from '../i18n.jsx'
 import { useExam } from '../exam.jsx'
 import { Pager, usePaged } from '../pager.jsx'
 import { Bar } from '../ui.jsx'
@@ -19,6 +20,7 @@ const buildDecks = (NOTES) => {
 }
 
 export default function Cards() {
+  const t = useT()
   const { state, update } = useApp()
   const { NOTES } = useExam()
   const DECKS = useMemo(() => buildDecks(NOTES), [NOTES])
@@ -60,45 +62,45 @@ export default function Cards() {
     const front = reverse ? r[1] : r[0], back = reverse ? r[0] : r[1]
     return (
       <section className="card">
-        <div className="row" style={{ justifyContent: 'space-between' }}><span className="chip">{d.from}</span><span className="small num muted">{done} known · {queue.length} left</span></div>
+        <div className="row" style={{ justifyContent: 'space-between' }}><span className="chip">{t(d.from)}</span><span className="small num muted">{t('{done} known · {left} left', { done, left: queue.length })}</span></div>
         <Bar a={done} b={done + queue.length} accent />
-        <button className={'flip' + (flip ? ' on' : '')} onClick={() => { setFlip(!flip); sfx('tick') }} aria-label="Flip card">
-          <span className="face front"><small>{reverse ? d.h[1] : d.h[0]}</small><b>{front}</b><i>Tap to reveal</i></span>
-          <span className="face back"><small>{reverse ? d.h[0] : d.h[1]}</small><b>{back}</b></span>
+        <button className={'flip' + (flip ? ' on' : '')} onClick={() => { setFlip(!flip); sfx('tick') }} aria-label={t('Flip card')}>
+          <span className="face front"><small>{t(reverse ? d.h[1] : d.h[0])}</small><b>{t(front)}</b><i>{t('Tap to reveal')}</i></span>
+          <span className="face back"><small>{t(reverse ? d.h[0] : d.h[1])}</small><b>{t(back)}</b></span>
         </button>
         <div className="row" style={{ justifyContent: 'center', marginTop: 14 }}>
-          <button className="btn ghost" disabled={!flip} onClick={() => rate(false)}>Again</button>
-          <button className="btn" disabled={!flip} onClick={() => rate(true)}>Got it</button>
+          <button className="btn ghost" disabled={!flip} onClick={() => rate(false)}>{t('Again')}</button>
+          <button className="btn" disabled={!flip} onClick={() => rate(true)}>{t('Got it')}</button>
         </div>
-        <div className="row" style={{ justifyContent: 'center', marginTop: 10 }}><button className="linkbtn" onClick={() => setPhase('list')}>Stop session</button></div>
+        <div className="row" style={{ justifyContent: 'center', marginTop: 10 }}><button className="linkbtn" onClick={() => setPhase('list')}>{t('Stop session')}</button></div>
       </section>
     )
   }
   if (phase === 'end') {
     return (
       <section className="card result">
-        <div className="lab2">Session complete</div>
-        <div className="sc num" style={{ fontSize: 48 }}>{done} cards</div>
-        <p className="small muted" style={{ margin: 0 }}>Cards you miss come back sooner. Ones you know return after 1, 3, 7, 14 and 30 days. Cards at the third level count towards XP.</p>
-        <div className="row" style={{ marginTop: 12 }}><button className="btn" onClick={() => setPhase('list')}>Back to decks</button></div>
+        <div className="lab2">{t('Session complete')}</div>
+        <div className="sc num" style={{ fontSize: 48 }}>{t('{n} cards', { n: done })}</div>
+        <p className="small muted" style={{ margin: 0 }}>{t('Cards you miss come back sooner. Ones you know return after 1, 3, 7, 14 and 30 days. Cards at the third level count towards XP.')}</p>
+        <div className="row" style={{ marginTop: 12 }}><button className="btn" onClick={() => setPhase('list')}>{t('Back to decks')}</button></div>
       </section>
     )
   }
   return (
     <>
       <section className="card">
-        <h3>Flashcards</h3>
-        <p className="small muted" style={{ margin: '4px 0 12px' }}>Built from the tables in your Notes: zones, vitamins, units, abbreviations, days, headquarters and more. Missed cards return sooner; known cards come back after longer gaps.</p>
-        <div className="row"><button className="btn" disabled={!allDue} onClick={() => begin(null)}>Study all due ({allDue})</button>
-          <label className="sub" style={{ padding: 0 }}><input type="checkbox" checked={reverse} onChange={(e) => setReverse(e.target.checked)} /><span className="box" /><span className="tx">Reverse (answer to question)</span></label></div>
+        <h3>{t('Flashcards')}</h3>
+        <p className="small muted" style={{ margin: '4px 0 12px' }}>{t('Built from the tables in your Notes: zones, vitamins, units, abbreviations, days, headquarters and more. Missed cards return sooner; known cards come back after longer gaps.')}</p>
+        <div className="row"><button className="btn" disabled={!allDue} onClick={() => begin(null)}>{t('Study all due ({n})', { n: allDue })}</button>
+          <label className="sub" style={{ padding: 0 }}><input type="checkbox" checked={reverse} onChange={(e) => setReverse(e.target.checked)} /><span className="box" /><span className="tx">{t('Reverse (answer to question)')}</span></label></div>
       </section>
       <div className="grid2">
         {deckPg.items.map((d) => (
           <button key={d.id} className="card deck" onClick={() => begin(d)} disabled={!due(d).length}>
-            <b>{d.name}</b>
-            <span className="tiny muted">{d.from}</span>
+            <b>{t(d.h[0])} → {t(d.h[1])}</b>
+            <span className="tiny muted">{t(d.from)}</span>
             <Bar a={known(d)} b={d.rows.length} />
-            <span className="tiny muted">{known(d)}/{d.rows.length} known · {due(d).length} due</span>
+            <span className="tiny muted">{t('{k}/{n} known · {d} due', { k: known(d), n: d.rows.length, d: due(d).length })}</span>
           </button>
         ))}
       </div>
