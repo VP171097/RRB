@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useCloud, nicknameOf } from '../cloud.jsx'
+import { useCloud, nicknameOf, googleEnabled } from '../cloud.jsx'
 import { useExam } from '../exam.jsx'
 import { useApp } from '../store.jsx'
 import { Pager, usePaged } from '../pager.jsx'
@@ -21,25 +21,78 @@ function SetupCard() {
   )
 }
 
+const MIN_PW = 8
+
 function SignIn({ cloud }) {
+  const [mode, setMode] = useState('in')            // in | up | link | reset
   const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
+  const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
   const [busy, setBusy] = useState(false)
+  const [note, setNote] = useState('')
+  const [show, setShow] = useState(false)
+  const switchTo = (m) => { setMode(m); setNote(''); cloud.setError('') }
+  const submit = async (e) => {
+    e.preventDefault(); setBusy(true); setNote(''); cloud.setError('')
+    try {
+      if (mode === 'in') await cloud.signInPassword(email.trim(), password)
+      else if (mode === 'up') {
+        if (password.length < MIN_PW) { cloud.setError(`Choose a password of at least ${MIN_PW} characters.`) }
+        else { const r = await cloud.signUp(email.trim(), password, name); if (r.needsConfirm) setNote('Account created. Check your email and open the confirmation link in this browser, then sign in.') }
+      } else if (mode === 'link') { await cloud.signInEmail(email.trim()); setNote('Check your email for a sign-in link. Open it in this same browser.') }
+      else { await cloud.resetPassword(email.trim()); setNote('If that email has an account, a reset link is on its way. Open it in this same browser.') }
+    } catch { /* the message is shown below */ }
+    setBusy(false)
+  }
+  const titles = { in: 'Sign in', up: 'Create an account', link: 'Email me a sign-in link', reset: 'Reset your password' }
   return (
     <section className="card">
-      <h3>Sign in to save your progress and join groups</h3>
-      <p className="small muted" style={{ margin: '4px 0 10px' }}>Progress follows you across devices. Your notes and errors stay private. Groups only see your XP, streak, task percentage and best mock score.</p>
-      {sent ? (
-        <p style={{ margin: 0 }}>Check your email for a sign-in link. Open it in this same browser.</p>
-      ) : (
-        <form className="fgrid" onSubmit={async (e) => { e.preventDefault(); setBusy(true); try { await cloud.signInEmail(email.trim()); setSent(true) } catch { /* shown below */ } setBusy(false) }}>
-          <label className="f" style={{ gridColumn: '1/-1' }}>Email<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email" /></label>
-          <div style={{ gridColumn: '1/-1' }} className="row"><button className="btn" type="submit" disabled={busy}>Email me a sign-in link</button>
-            <button className="btn ghost" type="button" onClick={() => cloud.signInGoogle().catch(() => {})}>Continue with Google</button></div>
-        </form>
+      <h3>{titles[mode]}</h3>
+      <p className="small muted" style={{ margin: '4px 0 10px' }}>Your progress saves to your account and follows you across devices. Groups only see your XP, streak, task percentage and best mock score.</p>
+      {(mode === 'in' || mode === 'up') && (
+        <div className="seg" role="tablist" style={{ marginBottom: 10 }}>
+          <button className="btn ghost sm" role="tab" aria-pressed={mode === 'in'} onClick={() => switchTo('in')}>Sign in</button>
+          <button className="btn ghost sm" role="tab" aria-pressed={mode === 'up'} onClick={() => switchTo('up')}>Create account</button>
+        </div>
       )}
+      <form className="fgrid" onSubmit={submit}>
+        {mode === 'up' && <label className="f" style={{ gridColumn: '1/-1' }}>Name on leaderboards<input type="text" maxLength={24} value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Asha" autoComplete="nickname" /></label>}
+        <label className="f" style={{ gridColumn: '1/-1' }}>Email<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email" /></label>
+        {(mode === 'in' || mode === 'up') && (
+          <label className="f" style={{ gridColumn: '1/-1' }}>Password
+            <span className="pwrow"><input type={show ? 'text' : 'password'} required minLength={mode === 'up' ? MIN_PW : undefined} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === 'up' ? 'new-password' : 'current-password'} />
+              <button type="button" className="btn ghost sm" onClick={() => setShow(!show)} aria-pressed={show}>{show ? 'Hide' : 'Show'}</button></span>
+            {mode === 'up' && <span className="tiny muted" style={{ textTransform: 'none', letterSpacing: 0, fontFamily: 'var(--f-body)', fontWeight: 400 }}>At least {MIN_PW} characters.</span>}
+          </label>
+        )}
+        <div style={{ gridColumn: '1/-1' }} className="row">
+          <button className="btn" type="submit" disabled={busy}>{{ in: 'Sign in', up: 'Create account', link: 'Send link', reset: 'Send reset link' }[mode]}</button>
+          {googleEnabled && (mode === 'in' || mode === 'up') && <button className="btn ghost" type="button" onClick={() => cloud.signInGoogle().catch(() => {})}>Continue with Google</button>}
+        </div>
+      </form>
+      {note && <p className="small" style={{ margin: '10px 0 0' }}>{note}</p>}
       {cloud.error && <p className="small" style={{ color: 'var(--bad)', margin: '10px 0 0' }}>{cloud.error}</p>}
+      <div className="row small" style={{ marginTop: 12, gap: 14 }}>
+        {mode === 'in' && <button className="linkbtn" onClick={() => switchTo('reset')}>Forgot password?</button>}
+        {(mode === 'in' || mode === 'up') && <button className="linkbtn" onClick={() => switchTo('link')}>Email me a sign-in link instead</button>}
+        {(mode === 'link' || mode === 'reset') && <button className="linkbtn" onClick={() => switchTo('in')}>Back to sign in</button>}
+      </div>
     </section>
+  )
+}
+
+function NewPassword({ cloud, embedded }) {
+  const [pw, setPw] = useState('')
+  const Wrap = embedded ? 'div' : 'section'
+  return (
+    <Wrap className={embedded ? undefined : 'card'}>
+      {!embedded && <h3>Choose a new password</h3>}
+      <form className="row" style={{ marginTop: 10 }} onSubmit={async (e) => { e.preventDefault(); if (pw.length < MIN_PW) { cloud.setError(`Choose a password of at least ${MIN_PW} characters.`); return } try { await cloud.updatePassword(pw); notify('Password updated') } catch { /* shown below */ } }}>
+        <input type="password" required minLength={MIN_PW} value={pw} onChange={(e) => setPw(e.target.value)} placeholder="New password" aria-label="New password" autoComplete="new-password" style={{ flex: '1 1 180px' }} />
+        <button className="btn" type="submit">Save password</button>
+      </form>
+      {cloud.error && <p className="small" style={{ color: 'var(--bad)', margin: '10px 0 0' }}>{cloud.error}</p>}
+    </Wrap>
   )
 }
 
@@ -150,6 +203,7 @@ export default function Community() {
       {!cloud.enabled && <SetupCard />}
       {cloud.enabled && !cloud.ready && <div className="empty">Connecting…</div>}
       {cloud.enabled && cloud.ready && !cloud.user && <SignIn cloud={cloud} />}
+      {cloud.enabled && cloud.user && cloud.recovery && <NewPassword cloud={cloud} />}
       {cloud.enabled && cloud.user && (
         <>
           <section className="card">
@@ -159,6 +213,7 @@ export default function Community() {
               <button className="btn" type="submit" style={{ alignSelf: 'end' }}>Save name</button>
             </form>
             <p className="small muted" style={{ margin: '10px 0 0' }}>Your progress for {X.name} saves to your account automatically. Your name updates on the leaderboard the next time you study.</p>
+            <details style={{ marginTop: 10 }}><summary><b className="small">Change password</b></summary><div className="in"><NewPassword cloud={cloud} embedded /></div></details>
             {cloud.error && <p className="small" style={{ color: 'var(--bad)', margin: '8px 0 0' }}>{cloud.error}</p>}
             {backup && <div className="row small" style={{ marginTop: 10 }}><span className="muted">A local copy from before the last cloud load is saved.</span><button className="btn ghost sm" onClick={() => { replace(backup); notify('Local copy restored') }}>Restore it</button></div>}
           </section>

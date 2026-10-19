@@ -23,6 +23,18 @@ This creates the tables and access rules. Nobody can read another person's saved
 
 Heads up: Supabase's built-in email sender allows only a few emails an hour. For a real group, either enable Google sign-in or add a custom SMTP service under **Authentication → SMTP Settings**.
 
+### Sign in with a password
+The site offers **Sign in / Create account** with email and password, plus a "forgot password" link and an email-link option.
+
+By default Supabase asks every new person to confirm their email before they can sign in, and its built-in email sender is limited to a few messages an hour. For a small private group, the simplest setup is:
+
+- **Authentication → Providers → Email → turn off "Confirm email".** New accounts then work straight away, with no email needed.
+- Leave "Secure password change" and the minimum length at their defaults. The site asks for at least 8 characters.
+
+Trade-off: with confirmation off, nobody checks that an email address is really theirs. That is fine for friends sharing a group code. If you want verified emails, keep confirmation on and add a custom SMTP service under **Authentication → SMTP Settings**.
+
+Password resets always need email, so they also depend on the email limit above.
+
 ## 4. Connect the site
 1. **Project Settings → API**. Copy the **Project URL** and the **anon public** key.
 2. Put them in `app/src/cloud-config.js`:
