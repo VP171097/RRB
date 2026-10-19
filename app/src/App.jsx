@@ -15,6 +15,7 @@ import Tricks from './pages/Tricks.jsx'
 import Notes from './pages/Notes.jsx'
 import Pyq from './pages/Pyq.jsx'
 import Library from './pages/Library.jsx'
+import PaperPdfs from './pages/PaperPdfs.jsx'
 import Resources from './pages/Resources.jsx'
 import Exam from './pages/Exam.jsx'
 import Quiz from './pages/Quiz.jsx'
@@ -33,7 +34,7 @@ import SyncDot from './SyncDot.jsx'
 import { LangSync } from './LangPicker.jsx'
 
 const PAGES = {
-  today: Dashboard, mission: Mission, days: Days, topics: Topics, syllabus: Syllabus, tricks: Tricks, notes: Notes, pyq: Pyq, library: Library,
+  today: Dashboard, mission: Mission, days: Days, topics: Topics, syllabus: Syllabus, tricks: Tricks, notes: Notes, pyq: Pyq, pyqpdf: PaperPdfs, library: Library,
   resources: Resources, exam: Exam, lesson: Lesson, community: Community, quiz: Quiz, speed: Speed, cards: Cards, focus: Focus, mocks: Mocks, errors: Errors, rewards: Rewards, settings: Settings,
 }
 const readHash = () => {
