@@ -49,6 +49,8 @@ export default buildResources({
   q: 'RRB NTPC',
   notice: 'RRB NTPC CEN 06/2026 graduate',
   books: [
+    { subject: 'All', title: 'A Comprehensive Guide for RRB NTPC (Adda247, 556 pages, PDF, 116 MB)', use: 'Full-syllabus guide. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/14Zjl1UgSrHdEXTeHKFpZaIp8z82F_ZVT/view?usp=sharing' },
+    { subject: 'All', title: 'RRB NTPC Stage-1 Practice Workbook (Kiran, 339 pages, PDF, 8 MB)', use: 'Stage-1 practice sets. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/1k6MLQ9_pRClGHHs2oK7O0YwnW3bIUUHL/view?usp=sharing' },
     { subject: 'Maths', title: 'Rakesh Yadav / Kiran: Advanced Maths', use: 'Tricks plus volume of practice' },
     { subject: 'Maths', title: 'R.S. Aggarwal: Quantitative Aptitude', use: 'Concepts and graded exercises' },
     { subject: 'Maths', title: 'Fast Track Objective Arithmetic (Rajesh Verma)', use: 'Speed and shortcuts' },

@@ -241,5 +241,9 @@ export default {
   "typing practice: Long passages: stamina": "टाइपिंग प्रैक्टिस: लंबे अनुच्छेद: सहनशक्ति",
   'Class 8-10 level arithmetic with some algebra, geometry and trigonometry.': 'कक्षा 8-10 स्तर का अंकगणित, साथ में थोड़ा बीजगणित, ज्यामिति और त्रिकोणमिति।',
   'Speed matters more than difficulty.': 'यहाँ कठिनाई से ज़्यादा स्पीड मायने रखती है।',
-  'For Undergraduate posts the questions sit at Class 12 standard or below.': 'अंडरग्रेजुएट पदों के लिए प्रश्न कक्षा 12 स्तर या उससे नीचे के होते हैं।'
+  'For Undergraduate posts the questions sit at Class 12 standard or below.': 'अंडरग्रेजुएट पदों के लिए प्रश्न कक्षा 12 स्तर या उससे नीचे के होते हैं।',
+  'A Comprehensive Guide for RRB NTPC (Adda247, 556 pages, PDF, 116 MB)': 'RRB NTPC के लिए संपूर्ण गाइड (Adda247, 556 पेज, PDF, 116 MB)',
+  'Full-syllabus guide. Opens the shared Google Drive file': 'पूरे पाठ्यक्रम की गाइड। शेयर की गई Google Drive फ़ाइल खुलती है',
+  'RRB NTPC Stage-1 Practice Workbook (Kiran, 339 pages, PDF, 8 MB)': 'RRB NTPC स्टेज-1 प्रैक्टिस वर्कबुक (Kiran, 339 पेज, PDF, 8 MB)',
+  'Stage-1 practice sets. Opens the shared Google Drive file': 'स्टेज-1 के प्रैक्टिस सेट। शेयर की गई Google Drive फ़ाइल खुलती है',
 }

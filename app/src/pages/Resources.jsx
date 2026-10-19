@@ -25,7 +25,7 @@ export default function Resources() {
   const tabs = {
     official: RES.OFFICIAL.map((r) => ({ href: r.url, title: r.name, note: r.note })),
     sites: RES.STUDY_SITES.map((r) => ({ href: r.url, title: r.name, note: r.note, tag: r.subject })),
-    books: RES.BOOKS.map((b) => ({ href: searchLink(b.title + ' pdf OR buy'), title: b.title, note: b.use, tag: b.subject })),
+    books: RES.BOOKS.map((b) => ({ href: b.url || searchLink(b.title + ' pdf OR buy'), title: b.title, note: b.use, tag: b.subject })),
     videos: RES.VIDEOS.map((v) => ({ href: videoLink(v.q), title: v.q, note: v.note, tag: v.subject })),
   }
   const pg = usePaged(tabs[tab], 6)
