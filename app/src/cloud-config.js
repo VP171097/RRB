@@ -1,5 +1,4 @@
-// Fill these in after you create your Supabase project (Project Settings > API), then commit.
-// The anon key is designed to be public: the database rules in supabase/schema.sql are what protect people's data.
-// While they are empty the site works exactly as before, with progress saved in the browser only.
-export const SUPABASE_URL = ''
-export const SUPABASE_ANON_KEY = ''
+// Supabase project for Mission 90. The anon key is designed to be public: the database rules in
+// supabase/schema.sql are what protect people's data. Never put the service_role key here.
+export const SUPABASE_URL = 'https://dadvdkqlvqsutabpaliy.supabase.co'
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhZHZka3FsdnFzdXRhYnBhbGl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MTczMTEsImV4cCI6MjEwNzk5MzMxMX0.N-3JDuat1x8dblW5yrIC6GckYUsPoZPFTLIPpv3k2_Q'
