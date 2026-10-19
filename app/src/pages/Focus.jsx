@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useApp } from '../store.jsx'
 import { useT } from '../i18n.jsx'
 import { useExam } from '../exam.jsx'
@@ -23,25 +24,47 @@ export default function Focus() {
   const [sub, setSub] = useState(LOG_SUBS.includes(hint?.sub) ? hint.sub : LOG_SUBS[0])
   const [mins, setMins] = useState(hint?.min ?? 25)
   const [manual, setManual] = useState('30')
-  const [run, setRun] = useState(() => { try { return JSON.parse(localStorage.getItem(TKEY)) } catch { return null } })
+  // run: { sub, dur, acc, since }. acc = seconds already run; since = when the current stretch began, or null while paused.
+  const [run, setRun] = useState(() => {
+    try {
+      const r = JSON.parse(localStorage.getItem(TKEY))
+      return r && r.at != null ? { sub: r.sub, dur: r.dur, acc: 0, since: r.at } : r
+    } catch { return null }
+  })
   const [now, setNow] = useState(Date.now())
 
   useEffect(() => {
-    if (!run) return
+    if (!run || !run.since) return
     const id = setInterval(() => setNow(Date.now()), 250)
     return () => clearInterval(id)
   }, [run])
 
+  // The timer covers the whole screen while it runs, and the screen is kept awake where the browser allows it.
+  useEffect(() => {
+    if (!run) return
+    document.body.classList.add('focus-open')
+    let lock = null
+    const hold = () => { try { navigator.wakeLock?.request('screen').then((l) => { lock = l }).catch(() => {}) } catch { /* not supported */ } }
+    hold()
+    const vis = () => { if (document.visibilityState === 'visible') hold() }
+    document.addEventListener('visibilitychange', vis)
+    return () => { document.body.classList.remove('focus-open'); document.removeEventListener('visibilitychange', vis); try { lock?.release() } catch { /* ignore */ } }
+  }, [!!run]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const add = (day, s, m) => update((st) => { const d = (st.log[day] ||= {}); d[s] = (d[s] || 0) + m })
   const persist = (r) => { try { r ? localStorage.setItem(TKEY, JSON.stringify(r)) : localStorage.removeItem(TKEY) } catch { /* ignore */ } setRun(r) }
-  const start = () => { persist({ sub, at: Date.now(), dur: mins * 60 }); setNow(Date.now()) }
+  const secs = (r, at) => Math.floor((r.acc || 0) + (r.since ? (at - r.since) / 1000 : 0))
+  const start = () => { persist({ sub, dur: mins * 60, acc: 0, since: Date.now() }); setNow(Date.now()) }
+  const pause = () => persist({ ...run, acc: secs(run, Date.now()), since: null })
+  const resume = () => { persist({ ...run, since: Date.now() }); setNow(Date.now()) }
   const finish = (auto) => {
-    const m = Math.max(0, Math.round((Math.min(Date.now(), run.dur ? run.at + run.dur * 1000 : Date.now()) - run.at) / 60000))
+    const sec = secs(run, Date.now())
+    const m = Math.max(0, Math.round((run.dur ? Math.min(sec, run.dur) : sec) / 60))
     if (m > 0) add(todayIso(), run.sub, m)
     persist(null)
     if (auto) { notify('Session complete: {m} min of {sub}', 'badge', { m, sub: t(run.sub) }); confetti(90); sfx('done') }
   }
-  const elapsed = run ? Math.floor((now - run.at) / 1000) : 0
+  const elapsed = run ? secs(run, Math.max(now, run.since || 0)) : 0
   const left = run && run.dur ? Math.max(0, run.dur - elapsed) : 0
   useEffect(() => { if (run && run.dur && elapsed >= run.dur) finish(true) }) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -55,8 +78,26 @@ export default function Focus() {
   const sc = SUB_CLS[run ? run.sub : sub]
   const progress = run ? (run.dur ? (elapsed / run.dur) * 100 : (elapsed % 3600) / 36) : 0
 
+  const paused = run && !run.since
   return (
     <>
+      {run && createPortal(
+        <div className={'focus-full s-' + sc + (paused ? ' paused' : '')} role="dialog" aria-modal="true" aria-label={t('Focus timer')}>
+          <div className="ff-top">
+            <span className="ff-sub">{t(run.sub)}</span>
+            <span className="ff-state">{paused ? t('Paused') : run.dur ? t('Stay with it') : t('stopwatch')}</span>
+          </div>
+          <Ring value={progress} size={Math.min(360, Math.round(Math.min(window.innerWidth, window.innerHeight) * 0.72))} stroke={16} color="#ffffff" label={t('Focus timer')}>
+            <div className="ff-time">{run.dur ? mmss(left) : mmss(elapsed)}</div>
+          </Ring>
+          <div className="ff-actions">
+            <button className="btn big-btn" onClick={paused ? resume : pause}>{paused ? t('Resume') : t('Pause')}</button>
+            <button className="btn ghost big-btn" onClick={() => finish(false)}>{run.dur ? t('End and save') : t('Stop and save')}</button>
+          </div>
+          <button className="ff-discard" onClick={() => persist(null)}>{t('Discard without saving')}</button>
+        </div>,
+        document.body
+      )}
       <h2>{t('Focus')}</h2>
       <section className={'card focus s-' + sc}>
         <Ring value={progress} size={200} stroke={14} color="var(--sc)" label={t('Focus timer')}>
@@ -66,14 +107,12 @@ export default function Focus() {
         <div className="seg" role="group" aria-label={t('Subject')}>
           {LOG_SUBS.map((s) => <button key={s} className={'btn ghost sm sbtn s-' + SUB_CLS[s]} disabled={!!run} aria-pressed={(run ? run.sub : sub) === s} onClick={() => setSub(s)}>{t(s)}</button>)}
         </div>
-        {!run && (
+        {(
           <div className="seg" role="group" aria-label={t('Length')}>
             {PRESETS.map((p) => <button key={p} className="btn ghost sm" aria-pressed={mins === p} onClick={() => setMins(p)}>{p ? t('{n} min', { n: p }) : t('Stopwatch')}</button>)}
           </div>
         )}
-        {run
-          ? <div className="row"><button className="btn" onClick={() => finish(false)}>{run.dur ? t('End early and save') : t('Stop and save')}</button><button className="btn ghost" onClick={() => persist(null)}>{t('Discard')}</button></div>
-          : <button className="btn big-btn" onClick={() => { sfx('ok'); start() }}>{t('Start focus')}</button>}
+        <button className="btn big-btn" onClick={() => { sfx('ok'); start() }}>{t('Start focus')}</button>
         <p className="small muted" style={{ margin: 0, textAlign: 'center' }}>{t('Keeps running if you reload. Saved minutes earn XP.')}</p>
       </section>
 
