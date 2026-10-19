@@ -246,4 +246,12 @@ export default {
   'Full-syllabus guide. Opens the shared Google Drive file': 'पूरे पाठ्यक्रम की गाइड। शेयर की गई Google Drive फ़ाइल खुलती है',
   'RRB NTPC Stage-1 Practice Workbook (Kiran, 339 pages, PDF, 8 MB)': 'RRB NTPC स्टेज-1 प्रैक्टिस वर्कबुक (Kiran, 339 पेज, PDF, 8 MB)',
   'Stage-1 practice sets. Opens the shared Google Drive file': 'स्टेज-1 के प्रैक्टिस सेट। शेयर की गई Google Drive फ़ाइल खुलती है',
+  'General Science for Indian Railways (Disha Publications, 631 pages, PDF, 80 MB)': 'भारतीय रेलवे के लिए सामान्य विज्ञान (Disha Publications, 631 पेज, PDF, 80 MB)',
+  'Railway-exam General Science. Opens the shared Google Drive file': 'रेलवे परीक्षा का सामान्य विज्ञान। शेयर की गई Google Drive फ़ाइल खुलती है',
+  'RRB NTPC-25 Practice Sets (GKP, 120 pages, PDF, 37 MB)': 'RRB NTPC-25 प्रैक्टिस सेट (GKP, 120 पेज, PDF, 37 MB)',
+  'Full-length practice sets. Opens the shared Google Drive file': 'पूरे लंबाई के प्रैक्टिस सेट। शेयर की गई Google Drive फ़ाइल खुलती है',
+  'RRB Non-Technical Recruitment Exams (Disha Publications, 286 pages, PDF, 9 MB)': 'RRB नॉन-टेक्निकल भर्ती परीक्षाएँ (Disha Publications, 286 पेज, PDF, 9 MB)',
+  'Non-technical posts guide. Opens the shared Google Drive file': 'नॉन-टेक्निकल पदों की गाइड। शेयर की गई Google Drive फ़ाइल खुलती है',
+  'Quantitative Aptitude for Competitive Examinations (R.S. Aggarwal, S. Chand, 2017, PDF)': 'प्रतियोगी परीक्षाओं के लिए क्वांटिटेटिव एप्टीट्यूड (आर.एस. अग्रवाल, S. Chand, 2017, PDF)',
+  'Concepts and graded exercises. Opens the shared Google Drive file': 'कॉन्सेप्ट और क्रमबद्ध अभ्यास। शेयर की गई Google Drive फ़ाइल खुलती है',
 }
