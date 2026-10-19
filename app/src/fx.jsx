@@ -55,20 +55,54 @@ export function confetti(n = 150) {
 let ac = null
 let soundOn = true
 export const setSound = (v) => { soundOn = v }
+
+// One note: frequency, start offset (s), length (s), wave and loudness.
+const N = (f, at, dur = 0.22, type = 'sine', vol = 0.1) => ({ f, at, dur, type, vol })
+const arp = (fs, step, dur, type, vol) => fs.map((f, i) => N(f, i * step, dur, type, vol))
+const SOUNDS = {
+  tick: [N(660, 0)],
+  ok: [N(523, 0), N(784, 0.09)],
+  bad: [N(196, 0)],
+  level: arp([523, 659, 784, 1047], 0.09),
+  done: arp([784, 988, 1175], 0.09),
+  // A tap on a sub-topic: a bright two-note chime.
+  sub: [N(880, 0, 0.18, 'triangle', 0.12), N(1175, 0.08, 0.3, 'triangle', 0.12)],
+  // A topic finished: a rising run that lands on a chord.
+  topic: [...arp([523, 659, 784, 1047], 0.08, 0.2, 'triangle', 0.12), N(1047, 0.34, 0.6, 'triangle', 0.1), N(1319, 0.34, 0.6, 'triangle', 0.1), N(1568, 0.34, 0.6, 'triangle', 0.09)],
+  // A milestone or the timer finishing: a fanfare with a final chord and a burst of applause.
+  celebrate: [...arp([523, 659, 784, 1047, 1319], 0.1, 0.22, 'triangle', 0.13), N(1047, 0.55, 0.9, 'triangle', 0.11), N(1319, 0.55, 0.9, 'triangle', 0.1), N(1568, 0.55, 0.9, 'triangle', 0.1), N(2093, 0.55, 0.9, 'sine', 0.05)],
+  win: [...arp([392, 523, 659, 784, 1047, 784, 1047, 1319], 0.11, 0.3, 'triangle', 0.14), N(1047, 1.0, 1.4, 'triangle', 0.12), N(1319, 1.0, 1.4, 'triangle', 0.11), N(1568, 1.0, 1.4, 'triangle', 0.11), N(2093, 1.0, 1.4, 'sine', 0.06)],
+}
+const APPLAUSE = { celebrate: [0.55, 0.7], win: [1.0, 1.2], topic: [0.34, 0.4] }
+
 export function sfx(kind) {
   if (!soundOn) return
   try {
     ac ||= new (window.AudioContext || window.webkitAudioContext)()
-    const seq = { tick: [660], ok: [523, 784], bad: [196], level: [523, 659, 784, 1047], done: [784, 988, 1175] }[kind] || [660]
-    seq.forEach((f, i) => {
-      const t0 = ac.currentTime + i * 0.09
+    if (ac.state === 'suspended') ac.resume()
+    const base = ac.currentTime
+    ;(SOUNDS[kind] || SOUNDS.tick).forEach(({ f, at, dur, type, vol }) => {
+      const t0 = base + at
       const o = ac.createOscillator(), g = ac.createGain()
-      o.type = 'sine'; o.frequency.value = f
+      o.type = type; o.frequency.value = f
       g.gain.setValueAtTime(0.0001, t0)
-      g.gain.exponentialRampToValueAtTime(0.1, t0 + 0.01)
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.2)
+      g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012)
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur)
       o.connect(g); g.connect(ac.destination)
-      o.start(t0); o.stop(t0 + 0.22)
+      o.start(t0); o.stop(t0 + dur + 0.02)
     })
+    const ap = APPLAUSE[kind]
+    if (ap) {
+      // Short filtered noise, like a quick round of applause.
+      const len = Math.round(ac.sampleRate * ap[1])
+      const buf = ac.createBuffer(1, len, ac.sampleRate)
+      const d = buf.getChannelData(0)
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len)
+      const src = ac.createBufferSource(), bp = ac.createBiquadFilter(), g = ac.createGain()
+      src.buffer = buf; bp.type = 'bandpass'; bp.frequency.value = 3200; bp.Q.value = 0.7
+      g.gain.setValueAtTime(0.0001, base + ap[0]); g.gain.exponentialRampToValueAtTime(0.09, base + ap[0] + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, base + ap[0] + ap[1])
+      src.connect(bp); bp.connect(g); g.connect(ac.destination)
+      src.start(base + ap[0])
+    }
   } catch { /* audio unavailable */ }
 }
