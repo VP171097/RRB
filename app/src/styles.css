@@ -373,3 +373,9 @@ details>summary h3{margin:0}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--c-sci:#4ade80}}
 :root[data-theme="dark"]{--c-sci:#4ade80}
 .s-sci{--sc:var(--c-sci)}
+
+/* NTPC Undergraduate has a Typing skill track */
+:root{--c-typ:#0e7490}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--c-typ:#22d3ee}}
+:root[data-theme="dark"]{--c-typ:#22d3ee}
+.s-typ{--sc:var(--c-typ)}

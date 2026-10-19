@@ -19,6 +19,12 @@ const pattern = [
 
 export default {
   id: 'undergraduate', folder: 'RRB_UnderGraduate', name: 'NTPC Undergraduate', brand: 'RRB NTPC · Undergraduate', notice: 'Check the current CEN',
-  sections: SECTIONS_NTPC, total: { q: 100, minutes: 90 }, pattern, stationFocus: null,
+  sections: SECTIONS_NTPC, total: { q: 100, minutes: 90 }, pattern,
+  stationFocus: [
+    'Take your baseline mock. Any score counts. Start daily typing.', 'Number system, percentages, ratio and profit. English typing to 15 wpm.', 'Interest, time and work, mixtures. Hindi typing basics.', 'Speed and distance, algebra, mensuration. Typing at 20 wpm.',
+    'Geometry, trigonometry, statistics, GA finish. Typing at 25 wpm.', 'Timed sets and your first full mock under the clock.', 'Harder mixed sets and previous-year questions.', 'Full previous-year papers, one a day.',
+    'More papers. Fix recurring weak topics.', 'A mock every day. Analyse each one.', 'Raise accuracy. Skip what you cannot narrow down.', 'Cut silly mistakes. Keep typing at 30 wpm.',
+    'Final week. Score 90 in a mock and keep your typing warm.',
+  ],
   plan, syllabus: SYLLABUS, notes: NOTES, tricks: TRICKS, quiz: QUIZ, resources,
 }

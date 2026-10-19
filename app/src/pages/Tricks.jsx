@@ -6,7 +6,7 @@ import { Pager, usePaged } from '../pager.jsx'
 import { intent } from '../nav.js'
 import { sfx } from '../fx.jsx'
 
-const CLS = { Maths: 'maths', Reasoning: 'reas' }
+const CLS = { Maths: 'maths', Reasoning: 'reas', Typing: 'typ' }
 
 function Card({ t, go }) {
   const { state, update } = useApp()
@@ -37,6 +37,7 @@ function Card({ t, go }) {
 export default function Tricks({ go }) {
   const { state } = useApp()
   const { TRICKS } = useExam()
+  const SUBJECTS = useMemo(() => Array.from(new Set(TRICKS.map((t) => t.sub))), [TRICKS])
   const [sub, setSub] = useState('Maths')
   const [topic, setTopic] = useState('All')
   const [q, setQ] = useState('')
@@ -64,7 +65,7 @@ export default function Tricks({ go }) {
         <div className="row" style={{ marginTop: 10 }}><button className="btn sm" onClick={() => { setSub(tod.sub); setTopic(tod.topic); setQ(''); setOnly('all'); reset() }}>Open it</button></div>
       </section>
       <div className="seg" role="group" aria-label="Subject">
-        {['Maths', 'Reasoning'].map((s) => {
+        {SUBJECTS.map((s) => {
           const a = TRICKS.filter((t) => t.sub === s)
           return <button key={s} className={'btn ghost sbtn s-' + CLS[s]} aria-pressed={sub === s} onClick={() => { setSub(s); setTopic('All'); reset() }}>{s} {a.filter((t) => state.tricks[t.id]).length}/{a.length}</button>
         })}

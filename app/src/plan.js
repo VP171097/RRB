@@ -21,7 +21,8 @@ export function buildPlan(spec) {
   const drill = (s, topic) => (s.kind === 'quant'
     ? `weak-topic drill, 25 Q on ${topic} (swap in your weakest topic from the error log)`
     : s.kind === 'logic' ? `weak-topic drill, 20 Q on ${topic} (or your weakest)`
-      : `revise notes on ${topic}, then 15 MCQs`)
+      : s.kind === 'skill' ? `${topic} (timed, note speed and accuracy)`
+        : `revise notes on ${topic}, then 15 MCQs`)
   const days = []
   let mock = 0
 
@@ -54,7 +55,7 @@ export function buildPlan(spec) {
       if (d <= 6) {
         subs.forEach((s) => {
           const base = (w === 6 ? s.p6 : s.p7)[d - 1]
-          const note = w === 6 && !/^Sectional/.test(base) ? (s.kind === 'knowledge' ? ' (revise, then an MCQ set)' : ' (timed sets, then review)') : ''
+          const note = w === 6 && !/^Sectional/.test(base) && s.kind !== 'skill' ? (s.kind === 'knowledge' ? ' (revise, then an MCQ set)' : ' (timed sets, then review)') : ''
           add(s.label, base + note, s.h)
         })
         add(ga.label, "Current affairs: today's news + last week's notes", '30 min')
@@ -85,7 +86,7 @@ export function buildPlan(spec) {
       add(G_MOCK, `Full mock #${mock} (90 min, exam timing)`, '1.5 h')
       add(G_MOCK, 'Analyse mock: every wrong, skipped and lucky-guess question', '2 h')
       if (d < 7) {
-        subs.forEach((s) => add(s.label, s.kind === 'quant' ? `20 Q drill on ${rot(s, n - 64)} (swap in your weakest topic from the error log)` : s.kind === 'logic' ? `15 Q drill on ${rot(s, n - 64)}` : `recall notes on ${rot(s, n - 64)}${s === ga ? ', then current affairs' : ''}`, '40 min'))
+        subs.forEach((s) => add(s.label, s.kind === 'quant' ? `20 Q drill on ${rot(s, n - 64)} (swap in your weakest topic from the error log)` : s.kind === 'logic' ? `15 Q drill on ${rot(s, n - 64)}` : s.kind === 'skill' ? `typing practice: ${rot(s, n - 64)}` : `recall notes on ${rot(s, n - 64)}${s === ga ? ', then current affairs' : ''}`, '40 min'))
         add(quant.label, 'Formulas + calculation speed', '20 min')
       } else add(G_REV, 'Light revision only; rest in the evening', '1 h')
     } else if (d <= 4) {
