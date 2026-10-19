@@ -49,6 +49,7 @@ export default buildResources({
   q: 'RRB NTPC',
   notice: 'RRB NTPC CEN 06/2026 graduate',
   books: [
+    { subject: 'All', title: 'RRB NTPC-25 Practice Sets (GKP, 120 pages, PDF, 37 MB)', use: 'Full-length practice sets. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/1-4nGQPN-N6zHw9Rc5IluHOv4O1nPS0Q-/view?usp=sharing' },
     { subject: 'Science', title: 'General Science for Indian Railways (Disha Publications, 631 pages, PDF, 80 MB)', use: 'Railway-exam General Science. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/1_93U5hcz6aVuITssTFGA6KtUm083Fq-M/view?usp=sharing' },
     { subject: 'All', title: 'A Comprehensive Guide for RRB NTPC (Adda247, 556 pages, PDF, 116 MB)', use: 'Full-syllabus guide. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/14Zjl1UgSrHdEXTeHKFpZaIp8z82F_ZVT/view?usp=sharing' },
     { subject: 'All', title: 'RRB NTPC Stage-1 Practice Workbook (Kiran, 339 pages, PDF, 8 MB)', use: 'Stage-1 practice sets. Opens the shared Google Drive file', url: 'https://drive.google.com/file/d/1k6MLQ9_pRClGHHs2oK7O0YwnW3bIUUHL/view?usp=sharing' },

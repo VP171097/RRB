@@ -1181,4 +1181,6 @@ export default {
   'Stage-1 practice sets. Opens the shared Google Drive file': 'स्टेज-1 के प्रैक्टिस सेट। शेयर की गई Google Drive फ़ाइल खुलती है',
   'General Science for Indian Railways (Disha Publications, 631 pages, PDF, 80 MB)': 'भारतीय रेलवे के लिए सामान्य विज्ञान (Disha Publications, 631 पेज, PDF, 80 MB)',
   'Railway-exam General Science. Opens the shared Google Drive file': 'रेलवे परीक्षा का सामान्य विज्ञान। शेयर की गई Google Drive फ़ाइल खुलती है',
+  'RRB NTPC-25 Practice Sets (GKP, 120 pages, PDF, 37 MB)': 'RRB NTPC-25 प्रैक्टिस सेट (GKP, 120 पेज, PDF, 37 MB)',
+  'Full-length practice sets. Opens the shared Google Drive file': 'पूरे लंबाई के प्रैक्टिस सेट। शेयर की गई Google Drive फ़ाइल खुलती है',
 }
