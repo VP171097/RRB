@@ -3,6 +3,7 @@ import { xpParts, rankInfo, BADGES } from './gamify.js'
 import { buildGame } from './game.js'
 import { notify, confetti, sfx } from './fx.jsx'
 import { useExam } from './exam.jsx'
+import { useT } from './i18n.jsx'
 import { todayIso, parse, addDays } from './lib.js'
 
 const LEGACY_KEY = 'ntpc-prep-v2'
@@ -34,6 +35,7 @@ export const useApp = () => useContext(Ctx)
 
 export function Provider({ children }) {
   const X = useExam()
+  const t = useT()
   const { DAYS, TOTAL } = X
   const [state, setState] = useState(() => load(X.id))
   const [saveError, setSaveError] = useState(false)
@@ -101,14 +103,14 @@ export function Provider({ children }) {
     if (newly.length) {
       const stamp = todayIso()
       update((s) => { newly.forEach((b) => { s.badges[b.id] = stamp }) })
-      if (p && live) { newly.forEach((b) => notify('Badge unlocked: ' + b.name, 'badge')); confetti(90); sfx('level') }
+      if (p && live) { newly.forEach((b) => notify('Badge unlocked: {name}', 'badge', { name: t(b.name) })); confetti(90); sfx('level') }
     }
     if (!p || !live) return
-    if (snap.xp > p.xp) { notify('+' + (snap.xp - p.xp) + ' XP'); sfx('tick') }
-    if (snap.rank > p.rank) { notify('Rank up: ' + rank.name, 'badge'); confetti(200); sfx('level') }
-    if (snap.cleared > p.cleared) { notify('Station cleared: ' + game.stations.filter((s) => s.cleared).at(-1)?.name, 'badge'); confetti(180); sfx('level') }
+    if (snap.xp > p.xp) { notify('+{n} XP', 'xp', { n: snap.xp - p.xp }); sfx('tick') }
+    if (snap.rank > p.rank) { notify('Rank up: {name}', 'badge', { name: t(rank.name) }); confetti(200); sfx('level') }
+    if (snap.cleared > p.cleared) { notify('Station cleared: {name}', 'badge', { name: t(game.stations.filter((s) => s.cleared).at(-1)?.name || '') }); confetti(180); sfx('level') }
     if (snap.won && !p.won) { notify('YOU WIN. The 90 Dragon is down.', 'badge'); confetti(400); sfx('level') }
-    if (snap.cur === p.cur && snap.full && !p.full) { notify('Day ' + cur + ' complete. Well run.', 'badge'); confetti(160); sfx('done') }
+    if (snap.cur === p.cur && snap.full && !p.full) { notify('Day {n} complete. Well run.', 'badge', { n: cur }); confetti(160); sfx('done') }
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const value = useMemo(() => ({ state, update, replace, saveError, xp: xpInfo, rank, game, ...derived }), [state, update, replace, saveError, xpInfo, rank, game, derived])

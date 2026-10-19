@@ -1,4 +1,6 @@
+import { planT } from './planText.js'
 import { useApp } from './store.jsx'
+import { useT } from './i18n.jsx'
 import { useExam } from './exam.jsx'
 import { pct } from './lib.js'
 import { groupTasks } from './plan.js'
@@ -9,6 +11,7 @@ export function Bar({ a, b, accent }) {
 }
 
 export function TaskList({ n }) {
+  const t = useT()
   const { state, update } = useApp()
   const X = useExam()
   const groups = groupTasks(X.DAYS[n - 1], X.GROUPS)
@@ -17,7 +20,7 @@ export function TaskList({ n }) {
     return (
       <section className={'grp s-' + X.colorOf[g.name]} key={g.name}>
         <div className="grp-h">
-          <h3>{g.name}</h3>
+          <h3>{t(g.name)}</h3>
           <span className={'small num ' + (done === g.items.length ? 'ok' : 'muted')}>{done}/{g.items.length}</span>
         </div>
         {g.items.map((x) => {
@@ -29,20 +32,20 @@ export function TaskList({ n }) {
                 <input type="checkbox" checked={!!state.done[k]}
                   onChange={(e) => update((s) => { if (e.target.checked) s.done[k] = 1; else delete s.done[k] })} />
                 <span className="box" />
-                <span className="tx">{x.label}{x.subs && <span className="tiny muted subcount"> · {sd}/{x.subs.length}</span>}</span>
-                <span className="tm">{x.t}</span>
+                <span className="tx">{planT(t, x.label)}{x.subs && <span className="tiny muted subcount"> · {sd}/{x.subs.length}</span>}</span>
+                <span className="tm">{t(x.t)}</span>
               </label>
               {x.subs && (
-                <ul className="subtasks" aria-label={'Sub-topics of ' + x.label}>
+                <ul className="subtasks" aria-label={t('Sub-topics of {name}', { name: planT(t, x.label) })}>
                   {x.subs.map((st, j) => {
                     const sk = k + '.' + j
                     return (
                       <li key={sk} className="subt">
-                        <label className="subchk" aria-label={'Mark ' + st + ' as done'}>
+                        <label className="subchk" aria-label={t('Mark {name} as done', { name: t(st) })}>
                           <input type="checkbox" checked={!!state.subdone[sk]} onChange={(e) => update((s) => toggleSub(s, X, n, x.i, j, e.target.checked))} />
                           <span className="sbox" />
                         </label>
-                        <a className="sublink" href={'#/lesson/' + sk}>{st}</a>
+                        <a className="sublink" href={'#/lesson/' + sk}>{t(st)}</a>
                       </li>
                     )
                   })}
@@ -67,11 +70,12 @@ export function Check({ checked, onChange, children }) {
 }
 
 export function Table({ rows }) {
+  const t = useT()
   return (
     <div className="tbl">
       <table>
-        <thead><tr>{rows[0].map((c, i) => <th key={i}>{c}</th>)}</tr></thead>
-        <tbody>{rows.slice(1).map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j}>{c}</td>)}</tr>)}</tbody>
+        <thead><tr>{rows[0].map((c, i) => <th key={i}>{t(c)}</th>)}</tr></thead>
+        <tbody>{rows.slice(1).map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j}>{t(c)}</td>)}</tr>)}</tbody>
       </table>
     </div>
   )

@@ -18,10 +18,28 @@ This creates the tables and access rules. Nobody can read another person's saved
 1. **Authentication → Providers**: Email is on by default (people get a sign-in link by email). Turn off "Confirm email" only if you want to skip it; the link flow works either way.
 2. **Authentication → URL Configuration**:
    - Site URL: `https://vp171097.github.io/RRB/`
-   - Redirect URLs: add `https://vp171097.github.io/RRB/` and `http://localhost:5173/` (for running it on your computer).
+   - Redirect URLs: add `https://vp171097.github.io/RRB/app/` and `http://localhost:5173/app/` (for running it on your computer).
 3. Optional, Google sign-in: **Authentication → Providers → Google**, paste a Client ID and secret from Google Cloud Console (OAuth client of type Web, with the callback URL Supabase shows you).
 
 Heads up: Supabase's built-in email sender allows only a few emails an hour. For a real group, either enable Google sign-in or add a custom SMTP service under **Authentication → SMTP Settings**.
+
+### Sign in with a password
+The site offers **Sign in / Create account** with email and password, plus a "forgot password" link and an email-link option.
+
+By default Supabase asks every new person to confirm their email before they can sign in, and its built-in email sender is limited to a few messages an hour. For a small private group, the simplest setup is:
+
+- **Authentication → Providers → Email → turn off "Confirm email".** New accounts then work straight away, with no email needed.
+- Leave "Secure password change" and the minimum length at their defaults. The site asks for at least 8 characters.
+
+Trade-off: with confirmation off, nobody checks that an email address is really theirs. That is fine for friends sharing a group code. If you want verified emails, keep confirmation on and add a custom SMTP service under **Authentication → SMTP Settings**.
+
+Password resets always need email, so they also depend on the email limit above.
+
+### Sign in with a phone number (no SMS, no OTP)
+The site accepts a phone number plus password (a 10-digit number is read as +91). It does **not** use Supabase's Phone provider: the number is stored as a private login name like `919876543210@phone.mission90.app`, so only the **Email** provider has to be on.
+
+- **Authentication → Sign In / Providers → Email → turn off "Confirm email"**, otherwise phone accounts can never be confirmed (no email exists for them). Email accounts then sign in straight away too.
+- Nobody proves a number is theirs, and a phone account cannot reset a forgotten password. Fine for a small private group; tell people to remember their password, or use their email.
 
 ## 4. Connect the site
 1. **Project Settings → API**. Copy the **Project URL** and the **anon public** key.

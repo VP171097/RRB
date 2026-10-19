@@ -23,3 +23,7 @@ export function loadExam(id) {
   }
   return cache[e.id]
 }
+
+// Hindi content packs load on demand. Graduate's pack is the base layer for every exam (the others reuse its lessons, tricks and quiz).
+const HI = { graduate: () => import('../../RRB_Graduate/hi/index.js'), undergraduate: () => import('../../RRB_UnderGraduate/hi/index.js'), groupd: () => import('../../RRB_GroupD/hi/index.js') }
+export const loadHiPacks = (id) => Promise.all([HI.graduate(), id === 'graduate' ? null : HI[id]?.()]).then((m) => m.filter(Boolean).map((x) => x.default))

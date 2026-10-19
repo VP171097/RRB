@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { GlobalProvider, useGlobal } from './global.jsx'
 import { ExamCtx } from './exam.jsx'
-import { EXAM_LIST, loadExam } from './exams.js'
+import { EXAM_LIST, loadExam, loadHiPacks } from './exams.js'
+import { I18nProvider, useI18n, localizeExam } from './i18n.jsx'
 import { Provider } from './store.jsx'
 import { NAV, groupOf } from './nav.js'
 import { Toaster } from './fx.jsx'
@@ -29,6 +30,7 @@ import Community from './pages/Community.jsx'
 import { CloudProvider } from './cloud.jsx'
 import CloudSync from './CloudSync.jsx'
 import SyncDot from './SyncDot.jsx'
+import { LangSync } from './LangPicker.jsx'
 
 const PAGES = {
   today: Dashboard, mission: Mission, days: Days, topics: Topics, syllabus: Syllabus, tricks: Tricks, notes: Notes, pyq: Pyq, library: Library,
@@ -40,8 +42,14 @@ const readHash = () => {
 }
 
 function Shell() {
+  const { g } = useGlobal()
+  return <I18nProvider lang={g.lang} examId={g.exam} loadPacks={loadHiPacks}><Inner /></I18nProvider>
+}
+
+function Inner() {
   const { g, set } = useGlobal()
-  const X = useMemo(() => loadExam(g.exam), [g.exam])
+  const { t, packs } = useI18n()
+  const X = useMemo(() => localizeExam(loadExam(g.exam), packs), [g.exam, packs])
   const [route, setRoute] = useState(readHash)
   const { page, param } = route
   useEffect(() => {
@@ -49,7 +57,7 @@ function Shell() {
     window.addEventListener('hashchange', on)
     return () => window.removeEventListener('hashchange', on)
   }, [])
-  useEffect(() => { document.title = `Mission 90 · ${X.name}` }, [X.name])
+  useEffect(() => { document.title = `Mission 90 · ${t(X.name)}` }, [X.name, t])
   const go = (p) => { window.location.hash = '#/' + p; window.scrollTo(0, 0) }
   const grp = groupOf(page === 'lesson' ? 'days' : page)
   const Page = PAGES[page]
@@ -60,24 +68,25 @@ function Shell() {
         <header className="top">
           <div className="brand">
             <h1>Mission 90 <SyncDot go={go} /></h1>
-            <label className="examsel"><span className="sr">Exam</span>
-              <select value={g.exam} onChange={(e) => set({ exam: e.target.value })} aria-label="Choose exam">
-                {EXAM_LIST.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
+            <label className="examsel"><span className="sr">{t('Exam')}</span>
+              <select value={g.exam} onChange={(e) => set({ exam: e.target.value })} aria-label={t('Choose exam')}>
+                {EXAM_LIST.map((e) => <option key={e.id} value={e.id}>{t(e.name)}</option>)}
               </select>
             </label>
           </div>
-          <nav className="tabs" role="tablist" aria-label="Sections">
-            {NAV.map((n) => <button key={n.id} role="tab" aria-selected={grp.id === n.id} onClick={() => go(n.subs[0][0])}>{n.label}</button>)}
+          <nav className="tabs" role="tablist" aria-label={t('Sections')}>
+            {NAV.map((n) => <button key={n.id} role="tab" aria-selected={grp.id === n.id} onClick={() => go(n.subs[0][0])}>{t(n.label)}</button>)}
           </nav>
         </header>
         <div className="wrap">
-          <nav className="subnav" aria-label={grp.label + ' pages'}>
-            {grp.subs.map(([k, l]) => <button key={k} aria-current={(page === 'lesson' ? 'days' : page) === k ? 'page' : undefined} onClick={() => go(k)}>{l}</button>)}
+          <nav className="subnav" aria-label={t('{section} pages', { section: t(grp.label) })}>
+            {grp.subs.map(([k, l]) => <button key={k} aria-current={(page === 'lesson' ? 'days' : page) === k ? 'page' : undefined} onClick={() => go(k)}>{t(l)}</button>)}
           </nav>
           <main key={page + param}><Page go={go} param={param} /></main>
         </div>
         <Toaster />
         <CloudSync />
+        <LangSync />
       </Provider>
     </ExamCtx.Provider>
   )

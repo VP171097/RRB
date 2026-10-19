@@ -7,6 +7,7 @@ import { intent } from '../nav.js'
 import { Ext } from '../ui.jsx'
 import { sfx } from '../fx.jsx'
 import { toggleSub } from '../subs.js'
+import { useT } from '../i18n.jsx'
 
 // Shows x^2 as x with a superscript 2.
 function Rich({ text }) {
@@ -28,20 +29,22 @@ function noteFor(X, g, topic) {
 }
 
 function DrillQ({ title, l }) {
+  const t = useT()
   const [open, setOpen] = useState(false)
   return (
     <div className="res">
-      <span className="tiny muted">{title}</span>
-      <span>{l.q ? <Rich text={l.q} /> : `Recall the key points of "${title}" without looking.`}</span>
+      <span className="tiny muted">{t(title)}</span>
+      <span>{l.q ? <Rich text={l.q} /> : t('Recall the key points of "{title}" without looking.', { title: t(title) })}</span>
       {open
-        ? (l.q ? <span className="sol small"><b>Worked: </b><Rich text={l.a} /></span> : <ul className="keypts small">{l.points.map((p, k) => <li key={k}><Rich text={p} /></li>)}</ul>)
-        : <button className="btn ghost sm" style={{ width: 'fit-content' }} onClick={() => setOpen(true)}>{l.q ? 'Show answer' : 'Check my recall'}</button>}
+        ? (l.q ? <span className="sol small"><b>{t('Worked:')} </b><Rich text={l.a} /></span> : <ul className="keypts small">{l.points.map((p, k) => <li key={k}><Rich text={p} /></li>)}</ul>)
+        : <button className="btn ghost sm" style={{ width: 'fit-content' }} onClick={() => setOpen(true)}>{l.q ? t('Show answer') : t('Check my recall')}</button>}
     </div>
   )
 }
 
 // param is the sub-topic key "<day>.<task index>.<sub-topic index>" from the plan.
 export default function Lesson({ param, go }) {
+  const t = useT()
   const { state, update } = useApp()
   const X = useExam()
   const [show, setShow] = useState(false)
@@ -49,7 +52,7 @@ export default function Lesson({ param, go }) {
   const task = X.DAYS[n - 1]?.tasks[i]
   const sub = task?.subs?.[j]
   if (!task || sub === undefined) {
-    return <><h2>Lesson not found</h2><button className="btn" onClick={() => go('days')}>Back to the plan</button></>
+    return <><h2>{t('Lesson not found')}</h2><button className="btn" onClick={() => go('days')}>{t('Back to the plan')}</button></>
   }
   const key = `${n}.${i}.${j}`
   const topic = task.topic || task.l
@@ -59,7 +62,7 @@ export default function Lesson({ param, go }) {
   const extraQs = task.drill ? drillsFor(X.DRILLS, topic) : []
   const done = !!state.subdone[key]
   const words = topic.toLowerCase().split(/[^a-z]+/).filter((w) => w.length > 3 && !SKIP.includes(w))
-  const tricks = X.TRICKS.filter((t) => words.some((w) => (t.topic + ' ' + t.title).toLowerCase().includes(w))).slice(0, 3)
+  const tricks = X.TRICKS.filter((tk) => words.some((w) => (tk.topic + ' ' + tk.title).toLowerCase().includes(w))).slice(0, 3)
   const noteId = noteFor(X, task.g, topic)
   const note = X.NOTES.find((x) => x.id === noteId)
   const prev = j > 0 ? j - 1 : null
@@ -70,66 +73,66 @@ export default function Lesson({ param, go }) {
   return (
     <article className={'lesson ' + cls}>
       <div className="lesson-nav">
-        <button className="btn ghost sm" onClick={() => go('days')}>‹ Back to plan</button>
-        <span className="small muted">Day {n} · {task.g}</span>
+        <button className="btn ghost sm" onClick={() => go('days')}>{t('‹ Back to plan')}</button>
+        <span className="small muted">{t('Day {n}', { n })} · {t(task.g)}</span>
       </div>
       <div style={{ margin: '14px 0 12px' }}>
-        <span className="lab2" style={{ color: 'var(--sc)' }}>{topic} · sub-topic {j + 1} of {task.subs.length}</span>
-        <h1>{sub}</h1>
+        <span className="lab2" style={{ color: 'var(--sc)' }}>{t('{topic} · sub-topic {j} of {total}', { topic: t(topic), j: j + 1, total: task.subs.length })}</span>
+        <h1>{t(sub)}</h1>
       </div>
       <section className="card">
         {lesson ? (
           <>
             <div className="body">{lesson.body.map((p, k) => <p key={k}><Rich text={p} /></p>)}</div>
-            {lesson.points.length > 0 && (<><h3 style={{ margin: '4px 0 8px' }}>Key points</h3><ul className="keypts">{lesson.points.map((p, k) => <li key={k}><Rich text={p} /></li>)}</ul></>)}
+            {lesson.points.length > 0 && (<><h3 style={{ margin: '4px 0 8px' }}>{t('Key points')}</h3><ul className="keypts">{lesson.points.map((p, k) => <li key={k}><Rich text={p} /></li>)}</ul></>)}
           </>
         ) : parts.length ? (
           <>
-            <p style={{ margin: '0 0 8px' }}>Revise each part of this topic. Open a part to read its key points.</p>
+            <p style={{ margin: '0 0 8px' }}>{t('Revise each part of this topic. Open a part to read its key points.')}</p>
             {parts.map(({ title, lesson: l }) => (
               <details key={title}>
-                <summary><b>{title}</b></summary>
+                <summary><b>{t(title)}</b></summary>
                 <div className="in">
                   {l.body.map((p, k) => <p key={k} style={{ margin: '0 0 8px' }}><Rich text={p} /></p>)}
                   <ul className="keypts">{l.points.map((p, k) => <li key={k}><Rich text={p} /></li>)}</ul>
-                  {l.q && <p className="small" style={{ margin: '8px 0 0' }}><b>Try:</b> <Rich text={l.q} /> <span className="muted">Answer: <Rich text={l.a} /></span></p>}
+                  {l.q && <p className="small" style={{ margin: '8px 0 0' }}><b>{t('Try:')}</b> <Rich text={l.q} /> <span className="muted">{t('Answer:')} <Rich text={l.a} /></span></p>}
                 </div>
               </details>
             ))}
           </>
-        ) : <p style={{ margin: 0 }}>A full lesson is not written for this sub-topic yet. Use the links below, and the sheets in Notes.</p>}
+        ) : <p style={{ margin: 0 }}>{t('A full lesson is not written for this sub-topic yet. Use the links below, and the sheets in Notes.')}</p>}
       </section>
       {lesson?.q && (
         <section className="card tryit" style={{ marginTop: 12 }}>
-          <span className="lab2">Try it</span>
+          <span className="lab2">{t('Try it')}</span>
           <p style={{ margin: '4px 0 8px' }}><Rich text={lesson.q} /></p>
-          {show ? <p className="sol"><b>Worked: </b><Rich text={lesson.a} /></p> : <button className="btn ghost sm" onClick={() => { setShow(true); sfx('tick') }}>Show solution</button>}
+          {show ? <p className="sol"><b>{t('Worked:')} </b><Rich text={lesson.a} /></p> : <button className="btn ghost sm" onClick={() => { setShow(true); sfx('tick') }}>{t('Show solution')}</button>}
         </section>
       )}
       {(extraQs.length > 0 || drillQs.length > 0) && (
         <details>
-          <summary><h3>Drill: {extraQs.length + drillQs.length} questions on {topic}</h3></summary>
+          <summary><h3>{t('Drill: {n} questions on {topic}', { n: extraQs.length + drillQs.length, topic: t(topic) })}</h3></summary>
           <div className="in">
-            <p className="small muted" style={{ margin: '0 0 8px' }}>Try each before you open the answer. Then add 20 more questions from a book, a mock or your error log.</p>
-            {extraQs.map((d, k) => <DrillQ key={'x' + k} title={'Practice ' + (k + 1)} l={{ q: d.q, a: d.a, points: [] }} />)}
+            <p className="small muted" style={{ margin: '0 0 8px' }}>{t('Try each before you open the answer. Then add 20 more questions from a book, a mock or your error log.')}</p>
+            {extraQs.map((d, k) => <DrillQ key={'x' + k} title={t('Practice {n}', { n: k + 1 })} l={{ q: d.q, a: d.a, points: [] }} />)}
             {drillQs.map(({ title, lesson: l }) => <DrillQ key={title} title={title} l={l} />)}
           </div>
         </details>
       )}
       <div className="row" style={{ margin: '14px 0' }}>
-        <button className="btn" aria-pressed={done} onClick={() => { update((s) => toggleSub(s, X, n, i, j, !s.subdone[key])); if (!done) sfx('ok') }}>{done ? 'Marked as done' : 'Mark as done'}</button>
-        {next !== null ? <button className="btn ghost" onClick={() => nav(next)}>Next: {task.subs[next]} ›</button> : <button className="btn ghost" onClick={() => go('days')}>Finish topic</button>}
-        {prev !== null && <button className="btn ghost" onClick={() => nav(prev)}>‹ Previous</button>}
+        <button className="btn" aria-pressed={done} onClick={() => { update((s) => toggleSub(s, X, n, i, j, !s.subdone[key])); if (!done) sfx('ok') }}>{done ? t('Marked as done') : t('Mark as done')}</button>
+        {next !== null ? <button className="btn ghost" onClick={() => nav(next)}>{t('Next: {name} ›', { name: t(task.subs[next]) })}</button> : <button className="btn ghost" onClick={() => go('days')}>{t('Finish topic')}</button>}
+        {prev !== null && <button className="btn ghost" onClick={() => nav(prev)}>{t('‹ Previous')}</button>}
       </div>
 
       <details className="related">
-        <summary><h3>Go deeper</h3></summary>
+        <summary><h3>{t('Go deeper')}</h3></summary>
         <div className="in">
-          {tricks.length > 0 && <div style={{ marginBottom: 8 }}><span className="lab2">Related tricks</span>{tricks.map((t) => <a key={t.id} className="link" href="#/tricks" onClick={() => { intent.trickQuery = t.title }}>{t.title}</a>)}</div>}
-          {note && <div style={{ marginBottom: 8 }}><span className="lab2">Notes sheet</span><a className="link" href="#/notes" onClick={() => { intent.noteId = noteId }}>{note.title}</a></div>}
-          <div><span className="lab2">Search online</span>
-            <Ext href={videoLink(`${sub} ${topic} ${X.RES.q}`)}>Video lessons</Ext>{' '}
-            <Ext href={searchLink(`${sub} ${topic} ${X.RES.q} questions pdf`)}>Practice questions</Ext>
+          {tricks.length > 0 && <div style={{ marginBottom: 8 }}><span className="lab2">{t('Related tricks')}</span>{tricks.map((tk) => <a key={tk.id} className="link" href="#/tricks" onClick={() => { intent.trickQuery = tk.title }}>{t(tk.title)}</a>)}</div>}
+          {note && <div style={{ marginBottom: 8 }}><span className="lab2">{t('Notes sheet')}</span><a className="link" href="#/notes" onClick={() => { intent.noteId = noteId }}>{t(note.title)}</a></div>}
+          <div><span className="lab2">{t('Search online')}</span>
+            <Ext href={videoLink(`${sub} ${topic} ${X.RES.q}`)}>{t('Video lessons')}</Ext>{' '}
+            <Ext href={searchLink(`${sub} ${topic} ${X.RES.q} questions pdf`)}>{t('Practice questions')}</Ext>
           </div>
         </div>
       </details>

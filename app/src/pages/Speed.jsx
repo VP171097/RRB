@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useApp } from '../store.jsx'
+import { useT } from '../i18n.jsx'
 import { confetti, sfx } from '../fx.jsx'
 import { intent } from '../nav.js'
 import { todayIso } from '../lib.js'
@@ -11,7 +12,7 @@ const GEN = {
   sq: () => { const n = ri(11, 50); return { q: `${n}²`, a: n * n } },
   cu: () => { const n = ri(3, 20); return { q: `${n}³`, a: n ** 3 } },
   mul: () => { const a = ri(12, 49), b = ri(3, 9); return { q: `${a} × ${b}`, a: a * b } },
-  fp: () => { const [a, b, p] = FP[ri(0, FP.length - 1)]; return { q: `${a}/${b} as a percent`, a: p, tol: 0.05 } },
+  fp: () => { const [a, b, p] = FP[ri(0, FP.length - 1)]; return { q: `${a}/${b} as a percent`, fp: { a, b }, a: p, tol: 0.05 } },
   pc: () => { const p = PCS[ri(0, PCS.length - 1)], n = 40 * ri(1, 20); return { q: `${p}% of ${n}`, a: (n * p) / 100 } },
   sr: () => { const m = ri(11, 50); return { q: `√${m * m}`, a: m } },
 }
@@ -20,6 +21,7 @@ const MODES = [['mix', 'Mixed'], ['sq', 'Squares'], ['cu', 'Cubes'], ['mul', 'Mu
 const SECONDS = 60
 
 export default function Speed() {
+  const t = useT()
   const { state, update } = useApp()
   const [mode, setMode] = useState(intent.speedMode || 'mix')
   useEffect(() => { intent.speedMode = null }, [])
@@ -74,16 +76,16 @@ export default function Speed() {
     return (
       <>
         <section className="card">
-          <h3>Speed Maths sprint</h3>
-          <p className="small muted" style={{ margin: '4px 0 12px' }}>60 seconds. Type the answer and press Enter. Each correct answer scores 10, and every 5 in a row raises your multiplier up to 4x. A miss resets the combo. Build the calculation speed you need in the 30-question Maths section.</p>
-          <div className="seg" role="group" aria-label="Drill type">
-            {MODES.map(([k, l]) => <button key={k} className="btn ghost sm" aria-pressed={mode === k} onClick={() => setMode(k)}>{l}</button>)}
+          <h3>{t('Speed Maths sprint')}</h3>
+          <p className="small muted" style={{ margin: '4px 0 12px' }}>{t('60 seconds. Type the answer and press Enter. Each correct answer scores 10, and every 5 in a row raises your multiplier up to 4x. A miss resets the combo. Build the calculation speed you need in the 30-question Maths section.')}</p>
+          <div className="seg" role="group" aria-label={t('Drill type')}>
+            {MODES.map(([k, l]) => <button key={k} className="btn ghost sm" aria-pressed={mode === k} onClick={() => setMode(k)}>{t(l)}</button>)}
           </div>
-          <div className="row" style={{ margin: '12px 0' }}><span className="small muted">Your best in this drill:</span><b className="num">{state.speed.best[mode] || 0}</b></div>
-          <button className="btn big-btn" onClick={start}>Start sprint</button>
+          <div className="row" style={{ margin: '12px 0' }}><span className="small muted">{t('Your best in this drill:')}</span><b className="num">{state.speed.best[mode] || 0}</b></div>
+          <button className="btn big-btn" onClick={start}>{t('Start sprint')}</button>
         </section>
-        <section className="card"><h3>Personal bests</h3>
-          {MODES.map(([k, l]) => <div className="row small" key={k} style={{ justifyContent: 'space-between' }}><span>{l}</span><b className="num">{state.speed.best[k] || 0}</b></div>)}</section>
+        <section className="card"><h3>{t('Personal bests')}</h3>
+          {MODES.map(([k, l]) => <div className="row small" key={k} style={{ justifyContent: 'space-between' }}><span>{t(l)}</span><b className="num">{state.speed.best[k] || 0}</b></div>)}</section>
       </>
     )
   }
@@ -92,28 +94,28 @@ export default function Speed() {
     return (
       <section className={'card speed flash-' + (flash || 'none')}>
         <div className="row" style={{ justifyContent: 'space-between' }}>
-          <div><div className="lab2">Score</div><b className="sc num">{stats.score}</b></div>
-          <div style={{ textAlign: 'center' }}><div className="lab2">Combo</div><b className="sc num">{stats.combo}{mult > 1 && <span className="mult"> x{mult}</span>}</b></div>
-          <div style={{ textAlign: 'right' }}><div className="lab2">Time</div><b className="sc num" style={{ color: left < 10 ? 'var(--bad)' : undefined }}>{Math.ceil(left)}</b></div>
+          <div><div className="lab2">{t('Score')}</div><b className="sc num">{stats.score}</b></div>
+          <div style={{ textAlign: 'center' }}><div className="lab2">{t('Combo')}</div><b className="sc num">{stats.combo}{mult > 1 && <span className="mult"> x{mult}</span>}</b></div>
+          <div style={{ textAlign: 'right' }}><div className="lab2">{t('Time')}</div><b className="sc num" style={{ color: left < 10 ? 'var(--bad)' : undefined }}>{Math.ceil(left)}</b></div>
         </div>
         <div className="bar" style={{ marginTop: 8 }}><i style={{ width: (left / SECONDS) * 100 + '%', background: left < 10 ? 'var(--bad)' : 'var(--accent)', transition: 'none' }} /></div>
-        <div className="sq" aria-live="polite">{q.q}</div>
+        <div className="sq" aria-live="polite">{q.fp ? t('{a}/{b} as a percent', q.fp) : q.q}</div>
         <form onSubmit={submit} className="row" style={{ flexWrap: 'nowrap' }}>
-          <input ref={inp} className="speed-in" type="text" inputMode="decimal" autoComplete="off" autoFocus value={val} onChange={(e) => setVal(e.target.value)} placeholder="Answer" aria-label="Answer" />
-          <button className="btn" type="submit">Enter</button>
+          <input ref={inp} className="speed-in" type="text" inputMode="decimal" autoComplete="off" autoFocus value={val} onChange={(e) => setVal(e.target.value)} placeholder={t('Answer')} aria-label={t('Answer')} />
+          <button className="btn" type="submit">{t('Enter')}</button>
         </form>
-        <div className="row small muted" style={{ justifyContent: 'space-between', marginTop: 10 }}><span>{stats.ok} right · {stats.bad} wrong</span><button className="linkbtn" onClick={() => { setStats((s) => ({ ...s, combo: 0 })); setQ(GEN[mode]()); setVal(''); inp.current?.focus() }}>Skip</button></div>
+        <div className="row small muted" style={{ justifyContent: 'space-between', marginTop: 10 }}><span>{t('{ok} right · {bad} wrong', stats)}</span><button className="linkbtn" onClick={() => { setStats((s) => ({ ...s, combo: 0 })); setQ(GEN[mode]()); setVal(''); inp.current?.focus() }}>{t('Skip')}</button></div>
       </section>
     )
   }
   const acc = fin.ok + fin.bad ? Math.round((fin.ok * 100) / (fin.ok + fin.bad)) : 0
   return (
     <section className="card result">
-      <div className="lab2">Sprint over{fin.record ? ' · new personal best' : ''}</div>
+      <div className="lab2">{t('Sprint over')}{fin.record ? ' · ' + t('new personal best') : ''}</div>
       <div className="sc num" style={{ fontSize: 56 }}>{fin.score}</div>
-      <p className="small muted" style={{ margin: 0 }}>{fin.ok} right · {fin.bad} wrong · {acc}% accuracy · best combo {fin.maxCombo} · +{Math.round(fin.score / 20)} XP</p>
-      <p className="small" style={{ margin: '8px 0 0' }}>{fin.ok} answers in 60 s is {(60 / Math.max(1, fin.ok + fin.bad)).toFixed(1)} s per question. The exam gives you about 70 s per Maths question, so aim to answer simple calculations in under 5 s.</p>
-      <div className="row" style={{ marginTop: 12 }}><button className="btn" onClick={start}>Go again</button><button className="btn ghost" onClick={() => setPhase('setup')}>Change drill</button></div>
+      <p className="small muted" style={{ margin: 0 }}>{t('{ok} right · {bad} wrong · {acc}% accuracy · best combo {maxCombo} · +{xp} XP', { ...fin, acc, xp: Math.round(fin.score / 20) })}</p>
+      <p className="small" style={{ margin: '8px 0 0' }}>{t('{ok} answers in 60 s is {per} s per question. The exam gives you about 70 s per Maths question, so aim to answer simple calculations in under 5 s.', { ok: fin.ok, per: (60 / Math.max(1, fin.ok + fin.bad)).toFixed(1) })}</p>
+      <div className="row" style={{ marginTop: 12 }}><button className="btn" onClick={start}>{t('Go again')}</button><button className="btn ghost" onClick={() => setPhase('setup')}>{t('Change drill')}</button></div>
     </section>
   )
 }

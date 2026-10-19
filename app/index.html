@@ -1,17 +1,211 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
-    <title>Mission 90</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b3d91'/%3E%3Cpath d='M9 22V10h5l4 7V10h5v12h-5l-4-7v7z' fill='%23fff'/%3E%3C/svg%3E" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mission 90 – RRB NTPC study plan</title>
+<meta name="description" content="A free 91-day plan, lessons, tricks, quizzes and mock tracker for RRB NTPC Graduate, Undergraduate and Group D. Study like a game and aim for 90+." />
+<meta property="og:title" content="Mission 90 – RRB NTPC study plan" />
+<meta property="og:description" content="91 days, 340+ lessons, tricks, quizzes and a game that keeps you on track." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://vp171097.github.io/RRB/landing/trains/vande-bharat.jpg" />
+<meta name="theme-color" content="#0b3d91" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b3d91'/%3E%3Cpath d='M9 22V10h5l4 7V10h5v12h-5l-4-7v7z' fill='%23fff'/%3E%3C/svg%3E" />
+<script>
+// Old links like /RRB/#/today now live under /app/
+if (/^#\/./.test(location.hash)) location.replace('./app/' + location.hash)
+</script>
+<style>
+:root{--bg:#f6f8fc;--card:#fff;--ink:#111a2e;--mute:#56627a;--line:#e2e8f3;--brand:#0b3d91;--brand2:#1d6bff;--accent:#ff9f1c;--ok:#16a34a;--hero1:#0b3d91;--hero2:#07204f;--shadow:0 18px 50px rgba(11,61,145,.14)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0a1020;--card:#121a2f;--ink:#eaf0ff;--mute:#9aa8c7;--line:#223055;--brand:#7aa7ff;--brand2:#5b8cff;--shadow:0 18px 50px rgba(0,0,0,.45)}}
+:root[data-theme=dark]{--bg:#0a1020;--card:#121a2f;--ink:#eaf0ff;--mute:#9aa8c7;--line:#223055;--brand:#7aa7ff;--brand2:#5b8cff;--shadow:0 18px 50px rgba(0,0,0,.45)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:14px;height:58px}
+.logo{font-weight:800;letter-spacing:-.02em;text-decoration:none;display:flex;gap:8px;align-items:center}
+.logo b{background:var(--brand);color:#fff;border-radius:8px;padding:2px 8px;font-size:14px}
+.nav .sp{flex:1}
+.nav a.l{color:var(--mute);text-decoration:none;font-size:14px}
+.nav a.l:hover{color:var(--ink)}
+@media(max-width:700px){.nav a.l{display:none}}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:12px 20px;font:600 16px/1 inherit;background:var(--accent);color:#1b1200;text-decoration:none;cursor:pointer;box-shadow:0 8px 22px rgba(255,159,28,.35);transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.sm{padding:9px 14px;font-size:14px;box-shadow:none}
+.btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45);box-shadow:none}
+.tg{background:none;border:1px solid var(--line);color:var(--ink);border-radius:10px;width:36px;height:36px;cursor:pointer;font-size:16px}
+.hero{position:relative;color:#fff;background:linear-gradient(100deg,rgba(7,32,79,.93) 8%,rgba(7,32,79,.62) 55%,rgba(7,32,79,.25)),url(./landing/trains/vande-bharat.jpg) center/cover;padding:84px 0 96px;overflow:hidden}
+.hero h1{font-size:clamp(34px,6vw,60px);line-height:1.05;letter-spacing:-.03em;margin:0 0 16px;max-width:15ch}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lead{font-size:clamp(16px,2.2vw,20px);max-width:52ch;color:#dbe6ff;margin:0 0 26px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+.hero .ph{justify-self:end;width:min(260px,70vw);border-radius:30px;border:6px solid #0d1426;box-shadow:0 30px 70px rgba(0,0,0,.55);transform:rotate(3deg);background:#0d1426}
+.hero .ph img{border-radius:24px}
+@media(max-width:820px){.hero .grid{grid-template-columns:1fr}.hero .ph{display:none}.hero{padding:56px 0 64px}}
+.stats{margin-top:-44px;position:relative;z-index:2}
+.stats .row{display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.stat{padding:20px 14px;text-align:center;border-right:1px solid var(--line)}
+.stat:last-child{border:0}
+.stat b{display:block;font-size:clamp(24px,4vw,34px);letter-spacing:-.02em;color:var(--brand)}
+.stat span{font-size:13px;color:var(--mute)}
+@media(max-width:620px){.stats .row{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+section{padding:72px 0}
+h2{font-size:clamp(26px,4vw,38px);letter-spacing:-.02em;line-height:1.15;margin:0 0 10px}
+.sub{color:var(--mute);max-width:60ch;margin:0 0 34px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand2);font-weight:700;margin-bottom:8px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.card h3{margin:0 0 6px;font-size:19px}
+.card p{margin:0 0 14px;color:var(--mute);font-size:15px}
+.card ul{margin:0 0 16px;padding-left:18px;color:var(--mute);font-size:14px}
+.chip{display:inline-block;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;background:color-mix(in srgb,var(--brand2) 14%,transparent);color:var(--brand)}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:64px}
+.feat.rev .shot{order:2}
+@media(max-width:860px){.feat,.feat.rev{grid-template-columns:1fr;gap:22px}.feat.rev .shot{order:0}}
+.shot{display:flex;justify-content:center;gap:14px}
+.phone{width:min(240px,44vw);border-radius:28px;border:6px solid #0d1426;background:#0d1426;box-shadow:var(--shadow)}
+.phone img{border-radius:22px}
+.phone.b{margin-top:34px}
+.laptop{width:100%;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;background:var(--card)}
+.laptop:before{content:"";display:block;height:26px;background:linear-gradient(var(--line),var(--line)) 0 100%/100% 1px no-repeat,var(--card)}
+.feat h3{font-size:26px;letter-spacing:-.02em;margin:0 0 10px}
+.feat p{color:var(--mute);margin:0 0 14px}
+.feat ul{padding:0;margin:0;list-style:none;display:grid;gap:8px}
+.feat li{padding-left:26px;position:relative;font-size:15px}
+.feat li:before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:800}
+.band{position:relative;color:#fff;background:linear-gradient(rgba(7,32,79,.78),rgba(7,32,79,.88)),url(./landing/trains/wap7.jpg) center 40%/cover;text-align:center}
+.band h2{color:#fff}
+.band .sub{color:#d3defa;margin-inline:auto}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:left}
+@media(max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.steps{grid-template-columns:1fr}}
+.step{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:18px;backdrop-filter:blur(4px)}
+.step i{font-style:normal;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#1b1200;font-weight:800;margin-bottom:10px}
+.step h4{margin:0 0 4px}.step p{margin:0;font-size:14px;color:#d3defa}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+details p{color:var(--mute);margin:10px 0 0}
+.final{text-align:center}
+footer{border-top:1px solid var(--line);padding:30px 0;color:var(--mute);font-size:13px}
+footer p{margin:0 0 8px;max-width:90ch}
+footer a{color:var(--brand)}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="logo" href="#top"><b>M90</b> Mission 90</a><span class="sp"></span>
+  <a class="l" href="#exams">Exams</a><a class="l" href="#features">Features</a><a class="l" href="#how">How it works</a><a class="l" href="#faq">FAQ</a>
+  <button class="tg" id="tg" aria-label="Toggle dark mode">◐</button>
+  <a class="btn sm" href="./app/">Open the app</a>
+</div></header>
+
+<main id="top">
+<div class="hero"><div class="wrap grid">
+  <div>
+    <div class="eyebrow" style="color:#ffd089">RRB NTPC · Graduate · Undergraduate · Group D</div>
+    <h1>Ride the plan. <em>Score 90+.</em></h1>
+    <p class="lead">A free 91-day journey with daily tasks, step-by-step lessons, maths and reasoning tricks, quizzes and a mock tracker. Every day you finish moves your train one station closer to the exam.</p>
+    <div class="cta"><a class="btn" href="./app/">Start the journey →</a><a class="btn ghost" href="#features">See what's inside</a></div>
+  </div>
+  <div class="ph"><img src="./landing/today.jpg" alt="Today screen of the Mission 90 app" width="780" height="1688" /></div>
+</div></div>
+
+<div class="wrap stats"><div class="row">
+  <div class="stat"><b>91</b><span>days, 3 phases</span></div>
+  <div class="stat"><b>340+</b><span>sub-topic lessons</span></div>
+  <div class="stat"><b>80+</b><span>maths &amp; reasoning tricks</span></div>
+  <div class="stat"><b>250+</b><span>drill questions</span></div>
+</div></div>
+
+<section id="exams"><div class="wrap">
+  <div class="eyebrow">Pick your track</div>
+  <h2>One site, three exams</h2>
+  <p class="sub">Each exam has its own plan, syllabus, lessons and PDFs. Switch any time from the menu; your progress is saved separately for each.</p>
+  <div class="cards">
+    <div class="card"><span class="chip">Default</span><h3>NTPC Graduate</h3><p>CBT 1, CBT 2 and the aptitude test for posts like Station Master and Goods Guard.</p><ul><li>80 topics, 341 lessons</li><li>7 note sheets, 83 tricks</li><li>Station Master focus plan</li></ul><a class="btn sm" href="./app/">Open Graduate</a></div>
+    <div class="card"><span class="chip">Undergraduate</span><h3>NTPC Undergraduate</h3><p>Clerk and typist style posts with typing skill and Class 12 level subjects.</p><ul><li>104 topics, 417 lessons</li><li>10 note sheets, 91 tricks</li><li>Typing practice plan</li></ul><a class="btn sm" href="./app/">Open Undergraduate</a></div>
+    <div class="card"><span class="chip">Level 1</span><h3>RRB Group D</h3><p>Maths, reasoning, general science and current affairs, built around the Level 1 pattern.</p><ul><li>106 topics, 422 lessons</li><li>8 note sheets, 83 tricks</li><li>Science-heavy schedule</li></ul><a class="btn sm" href="./app/">Open Group D</a></div>
+  </div>
+</div></section>
+
+<section id="features" style="padding-top:20px"><div class="wrap">
+  <div class="eyebrow">What's inside</div>
+  <h2>Everything for the 3 months, in one place</h2>
+  <p class="sub">Open it on your phone or laptop. No sign-up needed to start; it saves your progress on your device.</p>
+
+  <div class="feat">
+    <div class="shot"><div class="phone"><img loading="lazy" src="./landing/today.jpg" alt="Today's tasks grouped by subject" width="780" height="1688" /></div><div class="phone b"><img loading="lazy" src="./landing/days.jpg" alt="91-day tracker" width="780" height="1688" /></div></div>
+    <div><h3>A day-by-day plan that never leaves you guessing</h3><p>Today's tasks are grouped by subject and topic, with sub-topics to tick off. Finish all sub-topics and the topic completes itself.</p>
+    <ul><li>91 days: Foundation, Practice, then Mocks</li><li>Topic-wise and day-wise trackers</li><li>Daily quests and a fuel gauge to build the habit</li></ul></div>
+  </div>
+
+  <div class="feat rev">
+    <div class="shot"><div class="phone"><img loading="lazy" src="./landing/lesson.jpg" alt="A lesson page" width="780" height="1688" /></div><div class="phone b"><img loading="lazy" src="./landing/quiz.jpg" alt="Daily quiz" width="780" height="1688" /></div></div>
+    <div><h3>Tap a sub-topic, learn it properly</h3><p>Each sub-topic opens a short lesson with the idea, worked examples, related tricks and recall questions. Then test yourself in the daily quiz.</p>
+    <ul><li>Lessons for every sub-topic in the plan</li><li>Drill questions with answers</li><li>Quick search links when you want more depth</li></ul></div>
+  </div>
+
+  <div class="feat">
+    <div class="shot"><div class="phone"><img loading="lazy" src="./landing/mission.jpg" alt="Mission 90 map with stations" width="780" height="1688" /></div><div class="phone b"><img loading="lazy" src="./landing/rewards.jpg" alt="Ranks and badges" width="780" height="1688" /></div></div>
+    <div><h3>A game you actually want to win</h3><p>Earn XP for every task, climb railway ranks from Trainee to Station Master, unlock badges and clear 13 stations, each ending in a boss test.</p>
+    <ul><li>XP, ranks, streaks and badges</li><li>13 stations on the Mission 90 route</li><li>Sound and themes you can switch off</li></ul></div>
+  </div>
+
+  <div class="feat rev">
+    <div class="shot"><div class="phone"><img loading="lazy" src="./landing/speed.jpg" alt="Speed drill" width="780" height="1688" /></div><div class="phone b"><img loading="lazy" src="./landing/mocks.jpg" alt="Mock test tracker" width="780" height="1688" /></div></div>
+    <div><h3>Speed drills, mocks and an error log</h3><p>Sharpen calculation speed, log every mock score on a trend chart and keep a notebook of mistakes so the same one never costs you twice.</p>
+    <ul><li>Timed speed drills</li><li>Mock score trend toward your 90 target</li><li>Error log to revisit before the exam</li></ul></div>
+  </div>
+
+  <div class="feat">
+    <div class="shot"><div class="laptop"><img loading="lazy" src="./landing/desk-today.jpg" alt="Desktop view" width="2720" height="1720" /></div></div>
+    <div><h3>Study with friends, and bring your PDFs</h3><p>Optional sign-in with email or phone number plus a password lets you sync across devices and join a private group with a leaderboard. A built-in library keeps syllabus and PYQ PDFs in one folder.</p>
+    <ul><li>Works great on mobile and desktop, light or dark</li><li>Private study groups and a friendly leaderboard</li><li>Syllabus, PYQ and notes PDFs, one tap to download</li></ul></div>
+  </div>
+</div></section>
+
+<section class="band" id="how"><div class="wrap">
+  <div class="eyebrow" style="color:#ffd089">How it works</div>
+  <h2>Four steps, every day</h2>
+  <p class="sub">Fifteen focused minutes to start. The plan does the thinking so you can do the studying.</p>
+  <div class="steps">
+    <div class="step"><i>1</i><h4>Pick your exam</h4><p>Graduate, Undergraduate or Group D.</p></div>
+    <div class="step"><i>2</i><h4>Open today</h4><p>See your tasks by subject and topic.</p></div>
+    <div class="step"><i>3</i><h4>Learn and tick</h4><p>Read the lesson, finish the drills, tick sub-topics.</p></div>
+    <div class="step"><i>4</i><h4>Level up</h4><p>Earn XP, keep your streak and log your mocks.</p></div>
+  </div>
+</div></section>
+
+<section id="faq"><div class="wrap" style="max-width:760px">
+  <div class="eyebrow">FAQ</div><h2>Good to know</h2><p class="sub">Short answers to the usual questions.</p>
+  <details><summary>Is it free?</summary><p>Yes. It is a free static website with no ads.</p></details>
+  <details><summary>Do I need an account?</summary><p>No. Your progress is saved in your browser. Sign in only if you want sync across devices or a study group.</p></details>
+  <details><summary>Can I sign in with a phone number?</summary><p>Yes: enter either an email or a phone number with a password. There are no OTP messages. A phone account can't reset a forgotten password, so remember it.</p></details>
+  <details><summary>Is this official?</summary><p>No. This is an independent study aid. Always confirm dates, vacancies and the syllabus on the official RRB notice.</p></details>
+  <details><summary>Will it guarantee 90+?</summary><p>Nothing can. It gives you a clear plan and daily structure; the marks come from you doing the work, so keep showing up.</p></details>
+</div></section>
+
+<section class="final" style="padding-top:0"><div class="wrap">
+  <h2>Your train is on the platform</h2>
+  <p class="sub" style="margin-inline:auto">Day 1 takes about an hour. Open the app and board.</p>
+  <a class="btn" href="./app/">Start Day 1 →</a>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p><b>Disclaimer.</b> Mission 90 is an independent study tool. It is not affiliated with, endorsed by or connected to Indian Railways or any Railway Recruitment Board. Verify all official details on the RRB websites.</p>
+  <p><b>Photo credits</b> (Wikimedia Commons): <a href="https://commons.wikimedia.org/wiki/File:Ahmedabad–Okha_Vande_Bharat_Express.jpg" target="_blank" rel="noopener">Vande Bharat Express at a platform</a>, licence CC BY-SA 4.0; <a href="https://commons.wikimedia.org/wiki/File:WAP-7_Locomotive_outside_Mumbai_Central_Passenger_station.jpg" target="_blank" rel="noopener">WAP-7 locomotive at Mumbai Central</a>, CC0. Images are resized and darkened for the page; author names are on each file page. App screenshots use sample data.</p>
+</div></footer>
+<script>
+const r=document.documentElement,k='mission90-landing-theme';let t;try{t=localStorage.getItem(k)}catch(e){}
+if(t)r.dataset.theme=t
+document.getElementById('tg').onclick=()=>{const d=(r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'))==='dark'?'light':'dark';r.dataset.theme=d;try{localStorage.setItem(k,d)}catch(e){}}
+</script>
+</body>
 </html>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useT } from './i18n.jsx'
 
 // Splits a list into pages. The page resets to 1 when the list shrinks past it.
 export function usePaged(list, size, start = 1) {
@@ -19,16 +20,17 @@ const windowed = (page, pages) => {
 }
 
 export function Pager({ pg, label = 'Page', unit, info = true }) {
+  const t = useT()
   if (pg.pages <= 1) return null
   const go = (n) => { pg.setPage(n); window.scrollTo({ top: 0, behavior: 'smooth' }) }
   return (
-    <nav className="pager" aria-label={label + ' navigation'}>
-      <button className="pg" onClick={() => go(pg.page - 1)} disabled={pg.page <= 1} aria-label="Previous page">‹</button>
+    <nav className="pager" aria-label={t('{label} navigation', { label: t(label) })}>
+      <button className="pg" onClick={() => go(pg.page - 1)} disabled={pg.page <= 1} aria-label={t('Previous page')}>‹</button>
       {windowed(pg.page, pg.pages).map((n, i) => n === '…'
         ? <span key={'e' + i} className="pg-gap" aria-hidden="true">…</span>
-        : <button key={n} className="pg" aria-current={n === pg.page ? 'page' : undefined} aria-label={`${label} ${n}`} onClick={() => go(n)}>{unit ? unit + ' ' + n : n}</button>)}
-      <button className="pg" onClick={() => go(pg.page + 1)} disabled={pg.page >= pg.pages} aria-label="Next page">›</button>
-      {info && <span className="pg-info tiny muted">{pg.from}–{pg.to} of {pg.total}</span>}
+        : <button key={n} className="pg" aria-current={n === pg.page ? 'page' : undefined} aria-label={`${t(label)} ${n}`} onClick={() => go(n)}>{unit ? t(unit) + ' ' + n : n}</button>)}
+      <button className="pg" onClick={() => go(pg.page + 1)} disabled={pg.page >= pg.pages} aria-label={t('Next page')}>›</button>
+      {info && <span className="pg-info tiny muted">{t('{from}–{to} of {total}', { from: pg.from, to: pg.to, total: pg.total })}</span>}
     </nav>
   )
 }
