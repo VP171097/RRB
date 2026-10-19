@@ -24,25 +24,30 @@ import Mocks from './pages/Mocks.jsx'
 import Errors from './pages/Errors.jsx'
 import Rewards from './pages/Rewards.jsx'
 import Settings from './pages/Settings.jsx'
+import Lesson from './pages/Lesson.jsx'
 
 const PAGES = {
   today: Dashboard, mission: Mission, days: Days, topics: Topics, syllabus: Syllabus, tricks: Tricks, notes: Notes, pyq: Pyq, library: Library,
-  resources: Resources, exam: Exam, quiz: Quiz, speed: Speed, cards: Cards, focus: Focus, mocks: Mocks, errors: Errors, rewards: Rewards, settings: Settings,
+  resources: Resources, exam: Exam, lesson: Lesson, quiz: Quiz, speed: Speed, cards: Cards, focus: Focus, mocks: Mocks, errors: Errors, rewards: Rewards, settings: Settings,
 }
-const readHash = () => { const h = window.location.hash.replace('#/', '').replace('#', ''); return PAGES[h] ? h : 'today' }
+const readHash = () => {
+  const [p, ...rest] = window.location.hash.replace('#/', '').replace('#', '').split('/')
+  return PAGES[p] ? { page: p, param: rest.join('/') } : { page: 'today', param: '' }
+}
 
 function Shell() {
   const { g, set } = useGlobal()
   const X = useMemo(() => loadExam(g.exam), [g.exam])
-  const [page, setPage] = useState(readHash)
+  const [route, setRoute] = useState(readHash)
+  const { page, param } = route
   useEffect(() => {
-    const on = () => setPage(readHash())
+    const on = () => { setRoute(readHash()); window.scrollTo(0, 0) }
     window.addEventListener('hashchange', on)
     return () => window.removeEventListener('hashchange', on)
   }, [])
   useEffect(() => { document.title = `Mission 90 · ${X.name}` }, [X.name])
   const go = (p) => { window.location.hash = '#/' + p; window.scrollTo(0, 0) }
-  const grp = groupOf(page)
+  const grp = groupOf(page === 'lesson' ? 'days' : page)
   const Page = PAGES[page]
 
   return (
@@ -63,9 +68,9 @@ function Shell() {
         </header>
         <div className="wrap">
           <nav className="subnav" aria-label={grp.label + ' pages'}>
-            {grp.subs.map(([k, l]) => <button key={k} aria-current={page === k ? 'page' : undefined} onClick={() => go(k)}>{l}</button>)}
+            {grp.subs.map(([k, l]) => <button key={k} aria-current={(page === 'lesson' ? 'days' : page) === k ? 'page' : undefined} onClick={() => go(k)}>{l}</button>)}
           </nav>
-          <main key={page}><Page go={go} /></main>
+          <main key={page + param}><Page go={go} param={param} /></main>
         </div>
         <Toaster />
       </Provider>

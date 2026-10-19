@@ -4,6 +4,8 @@ import { NOTES } from './notes.js'
 import { TRICKS } from './tricks.js'
 import { QUIZ } from './quiz.js'
 import resources from './resources.js'
+import ownLessons from './lessons/index.js'
+import graduateLessons from '../RRB_Graduate/lessons/index.js'
 
 const pattern = [
   { title: 'CBT (Level 1 posts)', note: '90 minutes (120 for PwBD candidates eligible for a scribe). Each question carries 1 mark; 1/3 mark off for each wrong answer. Based on recent Group D notifications: confirm in the current one.',
@@ -33,4 +35,5 @@ export default {
     'Final week. Score 90, and keep up your PET practice.',
   ],
   plan, syllabus: SYLLABUS, notes: NOTES, tricks: TRICKS, quiz: QUIZ, resources,
+  lessons: ownLessons + '\n' + graduateLessons,
 }

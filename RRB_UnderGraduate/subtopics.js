@@ -1,6 +1,6 @@
 // Typing sub-topics. Maths, Reasoning and GA sub-topics come from the Graduate file.
 export default {
- "Posture, finger placement and home row": "Sitting posture; Finger positions; Home row ASDF JKL;; Using the F and J bumps",
+ "Posture, finger placement and home row": "Sitting posture; Finger positions; Home row (ASDF and JKL); Using the F and J bumps",
  "Top row keys": "Q to P reach; Finger assignments; Top-row drills",
  "Bottom row keys": "Z to M reach; Finger assignments; Bottom-row drills",
  "Number row without looking": "Finger assignments; Number drills; Symbols above numbers",

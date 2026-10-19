@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { intent } from '../nav.js'
 import { useApp } from '../store.jsx'
 import { useExam } from '../exam.jsx'
 import { Table } from '../ui.jsx'
@@ -16,7 +17,8 @@ function Block({ b }) {
 export default function Notes() {
   const { state, update } = useApp()
   const { NOTES } = useExam()
-  const [id, setId] = useState(NOTES[0].id)
+  const [id, setId] = useState(NOTES.some((n) => n.id === intent.noteId) ? intent.noteId : NOTES[0].id)
+  useEffect(() => { intent.noteId = null }, [])
   const sheets = [...NOTES.map((n) => ({ id: n.id, title: n.title })), { id: 'ca', title: 'Current affairs' }]
   const cur = NOTES.find((n) => n.id === id)
   return (

@@ -4,6 +4,7 @@ import { NOTES } from './notes.js'
 import { TRICKS } from './tricks.js'
 import { QUIZ } from './quiz.js'
 import resources from './resources.js'
+import lessons from './lessons/index.js'
 
 export const GRAD_PATTERN = [
   { title: '1st stage CBT (graduate posts)', note: '90 minutes (120 for PwBD candidates eligible for a scribe). Each question carries 1 mark. The section split is indicative, so a paper can vary slightly. Objective, multiple choice. 1/3 mark off for each wrong answer; unattempted questions score 0.',
@@ -27,5 +28,5 @@ export default {
   id: 'graduate', folder: 'RRB_Graduate', name: 'NTPC Graduate', brand: 'RRB NTPC · Graduate', notice: 'CEN 06/2026',
   sections: SECTIONS_NTPC, total: { q: 100, minutes: 90 },
   pattern: GRAD_PATTERN, stationFocus: null,
-  plan, syllabus: SYLLABUS, notes: NOTES, tricks: TRICKS, quiz: QUIZ, resources,
+  plan, syllabus: SYLLABUS, notes: NOTES, tricks: TRICKS, quiz: QUIZ, resources, lessons,
 }

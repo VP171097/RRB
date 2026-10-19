@@ -4,6 +4,8 @@ import { NOTES } from './notes.js'
 import { TRICKS } from './tricks.js'
 import { QUIZ } from './quiz.js'
 import resources from './resources.js'
+import graduateLessons from '../RRB_Graduate/lessons/index.js'
+import typingLessons from './lessons/index.js'
 import { GRAD_PATTERN, SECTIONS_NTPC } from '../RRB_Graduate/index.js'
 
 const pattern = [
@@ -27,4 +29,5 @@ export default {
     'Final week. Score 90 in a mock and keep your typing warm.',
   ],
   plan, syllabus: SYLLABUS, notes: NOTES, tricks: TRICKS, quiz: QUIZ, resources,
+  lessons: typingLessons + '\n' + graduateLessons,
 }

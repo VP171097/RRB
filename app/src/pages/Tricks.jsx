@@ -40,7 +40,7 @@ export default function Tricks({ go }) {
   const SUBJECTS = useMemo(() => Array.from(new Set(TRICKS.map((t) => t.sub))), [TRICKS])
   const [sub, setSub] = useState('Maths')
   const [topic, setTopic] = useState('All')
-  const [q, setQ] = useState('')
+  const [q, setQ] = useState(() => { const x = intent.trickQuery || ''; intent.trickQuery = null; return x })
   const [only, setOnly] = useState('all')
   const topics = useMemo(() => Array.from(new Set(TRICKS.filter((t) => t.sub === sub).map((t) => t.topic))), [TRICKS, sub])
   const list = useMemo(() => {

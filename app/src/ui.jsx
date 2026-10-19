@@ -36,11 +36,12 @@ export function TaskList({ n }) {
                   {x.subs.map((st, j) => {
                     const sk = k + '.' + j
                     return (
-                      <li key={sk}>
-                        <label className="subt">
+                      <li key={sk} className="subt">
+                        <label className="subchk" aria-label={'Mark ' + st + ' as done'}>
                           <input type="checkbox" checked={!!state.subdone[sk]} onChange={(e) => update((s) => { if (e.target.checked) s.subdone[sk] = 1; else delete s.subdone[sk] })} />
-                          <span className="sbox" /><span>{st}</span>
+                          <span className="sbox" />
                         </label>
+                        <a className="sublink" href={'#/lesson/' + sk}>{st}</a>
                       </li>
                     )
                   })}
