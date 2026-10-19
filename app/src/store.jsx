@@ -100,22 +100,32 @@ export function Provider({ children }) {
   const born = useRef(Date.now())
   useEffect(() => {
     const cur = Math.max(1, Math.min(derived.today, TOTAL))
-    const snap = { xp: xpInfo.total, rank: rank.idx, full: derived.dayFull(cur), cur, cleared: game.cleared, won: game.won }
+    const subTasksDone = DAYS.reduce((a, d) => a + d.tasks.reduce((c, tk, i) => c + (tk.subs && state.done[d.n + '.' + i] ? 1 : 0), 0), 0)
+    const snap = {
+      xp: xpInfo.total, rank: rank.idx, full: derived.dayFull(cur), cur, cleared: game.cleared, won: game.won,
+      subs: Object.keys(state.subdone).length, syl: Object.keys(state.syl).length, topicTasks: subTasksDone, learned: derived.learned,
+    }
     const p = prev.current
     prev.current = snap
     const live = Date.now() - born.current > 1500
+    // One sound per change, the biggest one wins: win > milestone > topic > sub-topic > XP tick.
+    let sound = '', rankOf = { win: 5, celebrate: 4, topic: 3, sub: 2, tick: 1 }
+    const play = (k) => { if (rankOf[k] > (rankOf[sound] || 0)) sound = k }
     const newly = BADGES.filter((b) => !state.badges[b.id] && b.test({ s: state, X, streak: derived.streak, dayFull: derived.dayFull, game }))
     if (newly.length) {
       const stamp = todayIso()
       update((s) => { newly.forEach((b) => { s.badges[b.id] = stamp }) })
-      if (p && live) { newly.forEach((b) => notify('Badge unlocked: {name}', 'badge', { name: t(b.name) })); confetti(90); sfx('level') }
+      if (p && live) { newly.forEach((b) => notify('Badge unlocked: {name}', 'badge', { name: t(b.name) })); confetti(90); play('celebrate') }
     }
     if (!p || !live) return
-    if (snap.xp > p.xp) { notify('+{n} XP', 'xp', { n: snap.xp - p.xp }); sfx('tick') }
-    if (snap.rank > p.rank) { notify('Rank up: {name}', 'badge', { name: t(rank.name) }); confetti(200); sfx('level') }
-    if (snap.cleared > p.cleared) { notify('Station cleared: {name}', 'badge', { name: t(game.stations.filter((s) => s.cleared).at(-1)?.name || '') }); confetti(180); sfx('level') }
-    if (snap.won && !p.won) { notify('YOU WIN. The 90 Dragon is down.', 'badge'); confetti(400); sfx('level') }
-    if (snap.cur === p.cur && snap.full && !p.full) { notify('Day {n} complete. Well run.', 'badge', { n: cur }); confetti(160); sfx('done') }
+    if (snap.xp > p.xp) { notify('+{n} XP', 'xp', { n: snap.xp - p.xp }); play('tick') }
+    if (snap.subs > p.subs || snap.syl > p.syl) play('sub')
+    if (snap.topicTasks > p.topicTasks || snap.learned > p.learned) { notify('Topic complete', 'badge'); confetti(70); play('topic') }
+    if (snap.rank > p.rank) { notify('Rank up: {name}', 'badge', { name: t(rank.name) }); confetti(200); play('celebrate') }
+    if (snap.cleared > p.cleared) { notify('Station cleared: {name}', 'badge', { name: t(game.stations.filter((s) => s.cleared).at(-1)?.name || '') }); confetti(180); play('celebrate') }
+    if (snap.won && !p.won) { notify('YOU WIN. The 90 Dragon is down.', 'badge'); confetti(400); play('win') }
+    if (snap.cur === p.cur && snap.full && !p.full) { notify('Day {n} complete. Well run.', 'badge', { n: cur }); confetti(160); play('celebrate') }
+    if (sound) sfx(sound)
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const value = useMemo(() => ({ state, update, replace, saveError, xp: xpInfo, rank, game, ...derived }), [state, update, replace, saveError, xpInfo, rank, game, derived])

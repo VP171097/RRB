@@ -64,7 +64,7 @@ export default function Focus() {
     if (m > 0) add(todayIso(), run.sub, m)
     persist(null)
     try { if (document.fullscreenElement) document.exitFullscreen() } catch { /* ignore */ }
-    if (auto) { notify('Session complete: {m} min of {sub}', 'badge', { m, sub: t(run.sub) }); confetti(90); sfx('done') }
+    if (auto) { notify('Session complete: {m} min of {sub}', 'badge', { m, sub: t(run.sub) }); confetti(120); sfx('celebrate'); try { navigator.vibrate?.([200, 100, 200]) } catch { /* ignore */ } }
   }
   const elapsed = run ? secs(run, Math.max(now, run.since || 0)) : 0
   const left = run && run.dur ? Math.max(0, run.dur - elapsed) : 0

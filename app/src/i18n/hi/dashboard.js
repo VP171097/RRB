@@ -1,4 +1,6 @@
 export default {
+  'Topic complete': 'टॉपिक पूरा हुआ!',
+
   // Dashboard
   'Skip any question that eats more than 90 seconds. Flag it and move on.': 'जो प्रश्न 90 सेकंड से ज़्यादा ले, उसे छोड़ दें। निशान लगाएँ और आगे बढ़ें।',
   'A wrong answer costs 1.33 marks compared with skipping. Guess only after removing two options.': 'प्रश्न छोड़ने की तुलना में गलत उत्तर से 1.33 अंक ज़्यादा कटते हैं। अंदाज़ा तभी लगाएँ जब दो विकल्प हटा दिए हों।',
