@@ -3,7 +3,7 @@ import { DEFAULT_EXAM, EXAM_LIST } from './exams.js'
 import { setSound } from './fx.jsx'
 
 const KEY = 'mission90-global'
-const base = () => ({ exam: DEFAULT_EXAM, theme: 'system', palette: 'ocean', sound: true })
+const base = () => ({ exam: DEFAULT_EXAM, theme: 'system', palette: 'ocean', sound: true, lang: 'en' })
 
 function load() {
   try {

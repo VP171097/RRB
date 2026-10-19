@@ -6,6 +6,9 @@ import { Pager, usePaged } from '../pager.jsx'
 import { Table } from '../ui.jsx'
 import { notify } from '../fx.jsx'
 import { fmt, round1 } from '../lib.js'
+import { useGlobal } from '../global.jsx'
+import { useT } from '../i18n.jsx'
+import { LangPicker } from '../LangPicker.jsx'
 
 function SetupCard() {
   return (
@@ -24,6 +27,8 @@ function SetupCard() {
 const MIN_PW = 8
 
 function SignIn({ cloud }) {
+  const { g, set } = useGlobal()
+  const t = useT()
   const [mode, setMode] = useState('in')            // in | up | link | reset
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -41,7 +46,7 @@ function SignIn({ cloud }) {
       else if (mode === 'in') await cloud.signInPassword(id, password)
       else if (mode === 'up') {
         if (password.length < MIN_PW) { cloud.setError(`Choose a password of at least ${MIN_PW} characters.`) }
-        else { const r = await cloud.signUp(id, password, name); if (r.needsConfirm) setNote(id.phone ? 'Account created, but this site still asks for confirmation. Ask the site owner to turn off "Confirm email", or sign up with your email.' : 'Account created. Check your email and open the confirmation link in this browser, then sign in.') }
+        else { const r = await cloud.signUp(id, password, name, g.lang); if (r.needsConfirm) setNote(id.phone ? 'Account created, but this site still asks for confirmation. Ask the site owner to turn off "Confirm email", or sign up with your email.' : 'Account created. Check your email and open the confirmation link in this browser, then sign in.') }
       } else if (mode === 'link') { await cloud.signInEmail(id.email); setNote('Check your email for a sign-in link. Open it in this same browser.') }
       else { await cloud.resetPassword(id.email); setNote('If that email has an account, a reset link is on its way. Open it in this same browser.') }
     } catch { /* the message is shown below */ }
@@ -59,6 +64,7 @@ function SignIn({ cloud }) {
         </div>
       )}
       <form className="fgrid" onSubmit={submit}>
+        {mode === 'up' && <div className="f" style={{ gridColumn: '1/-1' }}>{t('Language')}<LangPicker value={g.lang} onChange={(lang) => set({ lang })} label={t('Language')} /></div>}
         {mode === 'up' && <label className="f" style={{ gridColumn: '1/-1' }}>Name on leaderboards<input type="text" maxLength={24} value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Asha" autoComplete="nickname" /></label>}
         <label className="f" style={{ gridColumn: '1/-1' }}>{mode === 'link' || mode === 'reset' ? 'Email' : 'Email or phone number'}<input type="text" inputMode={mode === 'link' || mode === 'reset' ? 'email' : 'text'} required value={email} onChange={(e) => setEmail(e.target.value)} placeholder={mode === 'link' || mode === 'reset' ? 'you@example.com' : 'you@example.com or 98765 43210'} autoComplete="username" autoCapitalize="none" spellCheck="false" />
           {(mode === 'in' || mode === 'up') && <span className="tiny muted" style={{ textTransform: 'none', letterSpacing: 0, fontFamily: 'var(--f-body)', fontWeight: 400 }}>A 10-digit number is read as an Indian mobile (+91). Use +country code for others.</span>}</label>

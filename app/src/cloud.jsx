@@ -75,8 +75,8 @@ export function CloudProvider({ children }) {
     const wrap = async (fn) => { setError(''); try { return await fn() } catch (e) { setError(friendly(e.message)); throw e } }
     return {
       signInEmail: (email) => wrap(async () => { const { error: e } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: redirect } }); if (e) throw e }),
-      signUp: (id, password, nickname) => wrap(async () => {
-        const { data, error: e } = await client.auth.signUp({ ...idKey(id), password, options: { data: { nickname: cleanName(nickname) }, emailRedirectTo: redirect } })
+      signUp: (id, password, nickname, language) => wrap(async () => {
+        const { data, error: e } = await client.auth.signUp({ ...idKey(id), password, options: { data: { nickname: cleanName(nickname), ...(language ? { language } : {}) }, emailRedirectTo: redirect } })
         if (e) throw e
         return { needsConfirm: !data.session }
       }),

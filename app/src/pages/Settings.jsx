@@ -3,6 +3,8 @@ import { useApp } from '../store.jsx'
 import { useExam } from '../exam.jsx'
 import { useGlobal } from '../global.jsx'
 import { fmt } from '../lib.js'
+import { useT } from '../i18n.jsx'
+import { LangPicker, useSetLang } from '../LangPicker.jsx'
 
 const PALETTES = [['ocean', 'Ocean', '#0b3d91'], ['sunrise', 'Sunrise', '#c2410c'], ['forest', 'Forest', '#15803d'], ['violet', 'Violet', '#6d28d9'], ['rose', 'Rose', '#be185d']]
 
@@ -10,6 +12,8 @@ export default function Settings() {
   const { state, update, replace, saveError, dateOf } = useApp()
   const { TOTAL, name, id } = useExam()
   const { g, set } = useGlobal()
+  const t = useT()
+  const setLang = useSetLang()
   const file = useRef(null)
   const [msg, setMsg] = useState('')
   const [confirm, setConfirm] = useState(false)
@@ -48,6 +52,12 @@ export default function Settings() {
           <label className="f">Study hours a day<input type="number" min="1" max="16" step="0.5" value={state.settings.dailyHours} onChange={(e) => update((s) => { s.settings.dailyHours = Math.max(1, +e.target.value || 1) })} /></label>
         </div>
         <p className="small muted" style={{ margin: '10px 0 0' }}>Day {TOTAL} falls on {fmt(dateOf(TOTAL))}. Ticks stay attached to their day number if you change the start date.</p>
+      </section>
+
+      <section className="card">
+        <h3>{t('Language')}</h3>
+        <p className="small muted" style={{ margin: '2px 0 8px' }}>{t('Everything on the site, including lessons, switches to this language. It is saved on your account if you are signed in.')}</p>
+        <LangPicker value={g.lang} onChange={setLang} label={t('Language')} />
       </section>
 
       <section className="card">
