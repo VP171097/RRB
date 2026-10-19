@@ -470,3 +470,5 @@ body.focus-open{overflow:hidden}
 .ff-discard{background:none;border:0;color:rgba(255,255,255,.65);text-decoration:underline;font:500 14px var(--f-body);cursor:pointer}
 .focus-full .ring circle:first-of-type{stroke:rgba(255,255,255,.22)}
 .focus-full .ff-actions .btn:not(.ghost){background:#fff;color:#0b1330}
+.focus-full.paused .ff-time{animation:ffblink 1.2s ease-in-out infinite}
+@keyframes ffblink{50%{opacity:.35}}

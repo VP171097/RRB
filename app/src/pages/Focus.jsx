@@ -54,7 +54,7 @@ export default function Focus() {
   const add = (day, s, m) => update((st) => { const d = (st.log[day] ||= {}); d[s] = (d[s] || 0) + m })
   const persist = (r) => { try { r ? localStorage.setItem(TKEY, JSON.stringify(r)) : localStorage.removeItem(TKEY) } catch { /* ignore */ } setRun(r) }
   const secs = (r, at) => Math.floor((r.acc || 0) + (r.since ? (at - r.since) / 1000 : 0))
-  const start = () => { persist({ sub, dur: mins * 60, acc: 0, since: Date.now() }); setNow(Date.now()) }
+  const start = () => { try { document.documentElement.requestFullscreen?.({ navigationUI: 'hide' }).catch(() => {}) } catch { /* not allowed here */ } persist({ sub, dur: mins * 60, acc: 0, since: Date.now() }); setNow(Date.now()) }
   const pause = () => persist({ ...run, acc: secs(run, Date.now()), since: null })
   const resume = () => { persist({ ...run, since: Date.now() }); setNow(Date.now()) }
   const finish = (auto) => {
@@ -62,6 +62,7 @@ export default function Focus() {
     const m = Math.max(0, Math.round((run.dur ? Math.min(sec, run.dur) : sec) / 60))
     if (m > 0) add(todayIso(), run.sub, m)
     persist(null)
+    try { if (document.fullscreenElement) document.exitFullscreen() } catch { /* ignore */ }
     if (auto) { notify('Session complete: {m} min of {sub}', 'badge', { m, sub: t(run.sub) }); confetti(90); sfx('done') }
   }
   const elapsed = run ? secs(run, Math.max(now, run.since || 0)) : 0
@@ -83,18 +84,13 @@ export default function Focus() {
     <>
       {run && createPortal(
         <div className={'focus-full s-' + sc + (paused ? ' paused' : '')} role="dialog" aria-modal="true" aria-label={t('Focus timer')}>
-          <div className="ff-top">
-            <span className="ff-sub">{t(run.sub)}</span>
-            <span className="ff-state">{paused ? t('Paused') : run.dur ? t('Stay with it') : t('stopwatch')}</span>
-          </div>
           <Ring value={progress} size={Math.min(360, Math.round(Math.min(window.innerWidth, window.innerHeight) * 0.72))} stroke={16} color="#ffffff" label={t('Focus timer')}>
-            <div className="ff-time">{run.dur ? mmss(left) : mmss(elapsed)}</div>
+            <div className="ff-time" aria-label={t(run.sub)}>{run.dur ? mmss(left) : mmss(elapsed)}</div>
           </Ring>
           <div className="ff-actions">
             <button className="btn big-btn" onClick={paused ? resume : pause}>{paused ? t('Resume') : t('Pause')}</button>
             <button className="btn ghost big-btn" onClick={() => finish(false)}>{run.dur ? t('End and save') : t('Stop and save')}</button>
           </div>
-          <button className="ff-discard" onClick={() => persist(null)}>{t('Discard without saving')}</button>
         </div>,
         document.body
       )}
